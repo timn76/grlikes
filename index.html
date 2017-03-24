@@ -1,62 +1,444 @@
 <!DOCTYPE html>
 <html>
- <head>
-  <meta charset="utf-8">
-  <title>пример</title>
-<style>
- .korpus > div,
- .korpus > input { display: none; }
- .korpus label { padding: 5px; border: 1px solid #aaa; line-height: 28px; cursor: pointer; position: relative; bottom: 1px; background: #fff; }
- .korpus input[type="radio"]:checked + label { border-bottom: 2px solid #fff; }
- .korpus > input:nth-of-type(1):checked ~ div:nth-of-type(1),
- .korpus > input:nth-of-type(2):checked ~ div:nth-of-type(2),
- .korpus > input:nth-of-type(3):checked ~ div:nth-of-type(3) { display: block; padding: 5px; border: 1px solid #aaa; } 
-</style>
- </head>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="width=device-width,user-scalable=no" />
+		<title>html5 page</title>
+	</head>
+
+
+<script src="https://vk.com/js/api/xd_connection.js?2"  type="text/javascript"></script>
+
+<!--
+<script type="text/javascript">
+'use strict'
+  var Status = false;
+  console.log('VK.Init...');
+  VK.init( function() {	console.log('Ok'); Status = true; }
+  			, function() { console.log('Error'); }
+  			, '5.62' );
+  //VK.callMethod("showSettingsBox", 8214);
+  
+  function Go() 
+  {
+  		console.log('Go..');
+  		document.body.append('<p><b/>!!!!!!!!!!!</p>');
+  }
+</script>
+
+ style='text-align:center;padding-top:50px;' -->
  
- <body>
-body1
-<p>p1</p>
-<aside>aside1</aside>
- <header>
- header1
-<p>p2</p>
- <aside>aside2</aside>
- <p>p3</p>
-<nav>nav1
- <ul>
- ul1
- <li>li1</li>
- <li>li2</li>
- <li>li3</li>
- ul2
- </ul>nav2
- </nav>
- header2
-  </header>
-  <p>p4</p>
+<style>
+	div
+	{
+		overflow: 	auto;
+		max-height: 500px;
+		border: 		1px solid #ccc;
+	}
+	div.text
+	{
+		overflow: 	auto;
+		min-height: 100px;
+		max-height: 120px;
+		width: 		470px;
+		border: 		1px solid #ccc;
+	}
+	div.date
+	{
+		overflow: 	hidden;
+		min-height: 100px;
+		max-height: 400px;
+		min-width: 	130px;
+		/* border: solid 1px black; */
+	}
+	img
+	{
+		max-width: 	180px;
+		max-height: 250px;
+	}
+	p
+	{
+		font-size: 	14px;
+		padding: 0px 2px;
+	}
+	p.date
+	{
+		font-size:	9px;
+		min-width: 	85px;
+	}
+	p.green
+	{
+		color:	green;
+	}	a
+	{
+		font-size:	14px;
+	}
+	button
+	{
+    	background-color: #ccc;
+    	float: left;
+    	border: none;
+    	outline: none;
+    	cursor: pointer;
+    	padding: 2px 8px;
+    	transition: 0.3s;
+	}
+	button:hover
+	{
+   	background-color: #ddd;
+	}
 
-  <aside>aside3</aside>
-  <p>p5</p>
+	tr
+	{
+   	border: none;
+   	padding: 0px 0px;
+	}
+	td
+	{
+   	background-color: #eee;
+   	padding: 0px 0px;
+   	border: 		1px solid #ccc;
+   	text-align:	center;
+	}
+	header
+	{
+   	background-color: #ccc;
+   	padding: 2px 6px;
+   	text-align:	center;
+	}
+	section
+	{
+		padding: 2px 6px;
+   	text-align:	center;
+	}
 
-  <section>
-  section1
-  <p>p6</p>
+			
+</style>
 
-  <aside>aside4</aside>
-  <p>p7</p>
 
-  </section>
-body2
 
- <div class="korpus">
-		<input type="radio" name="t1" checked="checked" id="vkl1"/><label for="vkl1">CSS</label>
-		<input type="radio" name="t1" id="vkl2"/><label for="vkl2">HTML</label>
-		<input type="radio" name="t1" id="vkl3"/><label for="vkl3">Дополнительно</label>
-		<div>первая вкладка</div> <div>вторая вкладка</div> <div>третья вкладка</div>
-	</div>
- </body>
+<script type="text/javascript" charset="cp1251" >
+'use strict'
+
+//------------------------------------------------------------------------------------------------------------------------------------------
+var User;
+var Group;
+//------------------------------------------------------------------------------------------------------------------------------------------
+
+function D2S(d)
+{
+	var dtf = new Intl.DateTimeFormat("ru-RU", {   year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "numeric" /*, second: "numeric"*/} );
+	return (dtf.format(d));
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+
+function GetFriends (id)
+{
+	console.log('GetFriends(' + id + ')');
+	document.getElementById('friends_data').innerHTML = '';	
+	Select(null, 'friends_data','friends');
+	
+// id,first_name,last_name,deactivated,hidden,about,activities,bdate,blacklisted,blacklisted_by_me,books,can_post,can_see_all_posts,can_see_audio,can_send_friend_request,can_write_private_message,career,city,common_count,connections,contacts,counters,country,crop_photo,domain,education,exports,first_name_nom,first_name_gen,first_name_dat,first_name_acc,first_name_ins,first_name_abl,followers_count,friend_status,games,has_mobile,has_photo,home_town,interests,is_favorite,is_friend,is_hidden_from_feed,last_name_nom,last_name_gen,last_name_dat,last_name_acc,last_name_ins,last_name_abl,last_seen,lists,maiden_name,military,movies,music,nickname,occupation,online,online_mobile,online_app,personal,photo_50,photo_100,photo_200_orig,photo_200,photo_400_orig,photo_id,photo_max,photo_max_orig,quotes,relatives,relation,schools,screen_name,sex,site,status,timezone,tv,universities,verified,wall_comments
+  	VK.api('friends.get', {user_id:id, fields:"id,uid,first_name,last_name,deactivated,hidden,about,activities,bdate,blacklisted,blacklisted_by_me,books,can_post,can_see_all_posts,can_see_audio,can_send_friend_request,can_write_private_message,career,city,common_count,connections,contacts,counters,country,crop_photo,domain,education,exports,first_name_nom,first_name_gen,first_name_dat,first_name_acc,first_name_ins,first_name_abl,followers_count,friend_status,games,has_mobile,has_photo,home_town,interests,is_favorite,is_friend,is_hidden_from_feed,last_name_nom,last_name_gen,last_name_dat,last_name_acc,last_name_ins,last_name_abl,last_seen,lists,maiden_name,military,movies,music,nickname,occupation,online,online_mobile,online_app,personal,photo_50,photo_100,photo_200_orig,photo_200,photo_400_orig,photo_id,photo_max,photo_max_orig,quotes,relatives,relation,schools,screen_name,sex,site,status,timezone,tv,universities,verified,wall_comments"
+  									, order:"hints", version:"5.8"}, 
+  		function(data)
+  		{
+  			console.log(data);
+	
+			var table = document.createElement('table');
+	    	var tbody = table.appendChild(document.createElement('tbody'));
+	    	
+	    	var items = data.response.items!==undefined?data.response.items:data.response;
+
+			for (var i = 0; i < items.length; i++)
+			{
+				var tr = tbody.appendChild(document.createElement('tr'));
+				var id = items[i].uid!== undefined?items[i].uid:items[i].id;
+				var last_seen = ' n/a ';
+				if (items[i].last_seen!==undefined) last_seen = D2S(new Date(items[i].last_seen.time * 1000));
+	    		tr.appendChild(document.createElement('td')).innerHTML = ('<p><a href="https://vk.com/' + items[i].domain + '">' + id + '</a></p>'
+	    				+ '<p class="date' + (items[i].online==1?' green':'') + '" >' + last_seen + '</p>');
+	    		tr.appendChild(document.createElement('td')).appendChild (document.createElement('img')).setAttribute("src",items[i].photo_50);
+	    		tr.appendChild(document.createElement('td')).innerHTML = (items[i].first_name + '<br />' + items[i].last_name);
+	    		tr.appendChild(document.createElement('td')).innerHTML = (items[i].bdate !== undefined ? items[i].bdate : "");
+	    		var btn = document.createElement('button');
+	    		btn.innerHTML = 'Выбрать';
+	    		btn.id=id;
+	    		btn.addEventListener ("click", function(event) {  GetGroups ( event.currentTarget.id);  GetUser(event.currentTarget.id); Select(null, 'groups_data','groups');  });
+	    		tr.appendChild(document.createElement('td')).appendChild (btn);
+			}
+			
+			document.getElementById('friends_data').appendChild(table);
+			document.getElementById('friends_data').style.display = "block";
+		}
+	);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+
+function GetUser(id) 
+{
+  	VK.api('users.get', {user_ids:id, fields:"id,first_name,last_name,deactivated,hidden,about,activities,bdate,blacklisted,blacklisted_by_me,books,can_post,can_see_all_posts,can_see_audio,can_send_friend_request,can_write_private_message,career,city,common_count,connections,contacts,counters,country,crop_photo,domain,education,exports,first_name_nom,first_name_gen,first_name_dat,first_name_acc,first_name_ins,first_name_abl,followers_count,friend_status,games,has_mobile,has_photo,home_town,interests,is_favorite,is_friend,is_hidden_from_feed,last_name_nom,last_name_gen,last_name_dat,last_name_acc,last_name_ins,last_name_abl,last_seen,lists,maiden_name,military,movies,music,nickname,occupation,online,online_mobile,online_app,personal,photo_50,photo_100,photo_200_orig,photo_200,photo_400_orig,photo_id,photo_max,photo_max_orig,quotes,relatives,relation,schools,screen_name,sex,site,status,timezone,tv,universities,verified,wall_comments"}, // 
+  		function(data)
+  		{
+
+        	console.log('users.get - Ok');
+        	console.log(data);
+
+			var table = document.createElement('table');
+	    	var tbody = table.appendChild(document.createElement('tbody'));
+
+			for (var i = 0; i < data.response.length; i++)
+			{
+				User = data.response[i];
+				var tr = tbody.appendChild(document.createElement('tr'));
+				var id = ((typeof data.response[i].uid)==='undefined'?data.response[i].id:data.response[i].uid);
+				tr.appendChild(document.createElement('td')).innerHTML = ('<p>' + id + '</p><p class="date' + (data.response[i].online==1?' green':'') + '" >' + D2S(new Date(data.response[i].last_seen.time * 1000)) + '</p>');;
+	    		tr.appendChild(document.createElement('td')).appendChild(document.createElement('img')).setAttribute("src",data.response[i].photo_50);
+	    		tr.appendChild(document.createElement('td')).innerHTML = data.response[i].first_name + '<br />' + data.response[i].last_name;
+	    		tr.appendChild(document.createElement('td')).innerHTML = '<button onclick="GetFriends('+id+')" >Друзей</button><section>' + data.response[i].counters.friends + '<section>';
+	    		tr.appendChild(document.createElement('td')).innerHTML = '<button onclick="GetGroups('+id+')">Групп</button><section>'  + ((typeof data.response[i].groups)!=='undefined'?data.response[i].counters.groups:data.response[i].counters.pages) + '<section>';
+	    		tr.appendChild(document.createElement('td')).innerHTML = '<header>Аудио</header><section>'  + data.response[i].counters.audios + '<section>';
+	    		tr.appendChild(document.createElement('td')).innerHTML = '<header>Видео</header><section>'  + data.response[i].counters.videos + '<section>';
+	    		tr.appendChild(document.createElement('td')).innerHTML = '<header>Фото</header><section>'   + data.response[i].counters.photos + '<section>';
+			}
+			document.getElementById('user_data').innerHTML = '';
+			document.getElementById('user_data').appendChild(table);
+		}
+	);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+/*
+ShowGroup ()
+{
+}
+*/
+//------------------------------------------------------------------------------------------------------------------------------------------
+function GetGroups(id) 
+{
+	console.log('GetGroups(' + id + ')');
+	document.getElementById('groups_data').innerHTML = '';	
+	Select(null, 'groups_data','groups');
+	VK.api('groups.get', { user_id:id, extended:'1' }, // 
+  		function(data)
+  		{
+
+        	console.log('groups.get - response');
+
+			var table = document.createElement('table');
+	    	var tbody = table.appendChild(document.createElement('tbody'));
+
+		  	if(data.response!==undefined)
+		  	{
+				for (var i = 0; i < data.response.items.length; i++)
+				{
+					var tr = tbody.appendChild(document.createElement('tr'));
+					tr.appendChild(document.createElement('td')).innerHTML = data.response.items[i].id;
+	    			tr.appendChild(document.createElement('td')).appendChild(document.createElement('img')).setAttribute("src",data.response.items[i].photo_50); //.photo_100
+	    			tr.appendChild(document.createElement('td')).innerHTML = data.response.items[i].name;
+	    			var btn = document.createElement('button');
+	    			btn.innerHTML = 'Лайки';
+	    			btn.id=data.response.items[i].id;
+	    			btn.addEventListener ("click", function(event) {  document.getElementById('likes_data').innerHTML = ''; GetLikes ( event.currentTarget.id,0,document.getElementById('max').value ); Select(null, 'likes_data','likes');  });
+	    			tr.appendChild(document.createElement('td')).appendChild (btn);
+				}
+				document.getElementById('groups_data').appendChild(table);				
+			}
+			else
+			{
+				document.getElementById('groups_data').innerHTML = data.error.error_msg;
+				console.log(data);
+			}
+		}
+	);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+function ShowLikes (Likes)
+{
+	var table = document.createElement('table');
+	var tbody = table.appendChild(document.createElement('tbody'));	
+	for (var i = 0; i < Likes.length; i++)
+	{
+		var tr = tbody.appendChild(document.createElement('tr'));
+		tr.appendChild(document.createElement('td')).innerHTML = ('<p><a href="https://vk.com/wall'+Likes[i].post.from_id+'_'+Likes[i].post.id+'">' + Likes[i].post.id + '</a></p><p class="date">' + D2S(new Date(Likes[i].post.date * 1000)) + '</p>');
+		var photo = "";
+		//console.log(Likes[i]);
+		if(Likes[i].post.attachments !== undefined)
+	   	for (var a = 0; a < Likes[i].post.attachments.length; a++)
+	   		if(Likes[i].post.attachments[a].type="photo")
+	   			if (Likes[i].post.attachments[a].photo !==undefined) { photo = Likes[i].post.attachments[a].photo.photo_604; break; }  // 75,130,604
+	   			else if (Likes[i].post.attachments[a].doc !==undefined) { photo = Likes[i].post.attachments[a].doc.url; break; } 
+	   tr.appendChild(document.createElement('td')).appendChild (document.createElement('img')).setAttribute("src",photo);
+	   tr.appendChild(document.createElement('td')).innerHTML = ('<div class="text"><p>' + Likes[i].post.text /*.slice(0,250)*/ + '</p></div>');
+	}
+	document.getElementById('likes_data').appendChild(table);	
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+function sleep(ms,start)
+{
+  start = (((typeof start)==='undefined')?(new Date().getTime()):start) ;
+  for (var i = 0; i < 1e7; i++) if ((new Date().getTime() - start) > ms) break;
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+function GetLikes(gid,offset,count) 
+{
+var Likes = [];
+//var s = new Date().getTime();
+	count = (((typeof count)==='undefined')?500:count);
+	console.log('GetLikes:'+ gid + ' - ' + offset+ ' - ' + count);
+	var Code =  'var p = API.wall.get ({ owner_id: -' + gid + ', count:24, offset:' + offset + ' }); '
+				+ ' var posts = p; ' 
+				+ ' var res={}; '
+				+ ' var i=1; '
+				+ ' if(p.items.length>=0) { posts = p.items; i=0; } '
+				+ ' while(i< posts.length) '
+				+ ' { '
+				+ '	 var likes = API.likes.getList ({ type:"post", owner_id: posts[i].from_id, item_id: posts[i].id, friends_only:1, skip_own:0 }); '
+				+ '	 if(likes.count>0) ' 
+			   + '      res.push({"post":posts[i], "likes":likes});'
+				+ '	 i = i+1; '
+				+ ' } '
+				+ ' return res; ';
+
+	//console.log('Code: ' + Code);
+	VK.api('execute', {"code": Code}, 
+  		function(data)
+  		{
+
+			document.getElementById('count').innerHTML = offset + ':' + count ;	
+		  	if(data.response!==undefined) 
+		  	{
+		  		console.log(data);
+		  		for (var i = 0; i < data.response.length; i++) for(var l = 0; l < data.response[i].likes.items.length; l++ ) if(data.response[i].likes.items[l] == User.id) Likes.push ( data.response[i] );
+	  			if (Likes.length > 0) ShowLikes (Likes);
+		  		sleep(250);
+		  		if(offset<count) GetLikes(gid,offset+24,count);
+		  	}
+		  	else console.log(data);
+		}
+	);
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------------
+
+function InitOk()
+{
+	VK.callMethod("resizeWindow", 800, 640); // Максимальное значение ширины окна — 1000 px, высоты — 4050.
+
+   GetUser ();
+   GetFriends ();	
+
+   //setTimeout( GetGroups (189070371), 3000 );
+   //GetGroups (189070371);
+   //GetLikes(30022666,0);
+   //GetLikes(50106785,0);
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+
+window.onload = (
+	function()
+	{
+   	VK.init ( InitOk(), function() { console.log('Error'); }, '5.8');
+	} );
+//------------------------------------------------------------------------------------------------------------------------------------------
+
+</script>
+
+<style type="text/css">
+ /* Style the tab */
+div.tab
+{
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+div.tab button
+{
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 6px 16px;
+    transition: 0.3s;
+}
+
+div.tab label
+{
+    background-color: inherit;
+    float: right;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 6px 16px;
+    transition: 0.3s;
+}
+
+div.tab input
+{
+    float: left;
+    border: none;
+    outline: none;
+    cursor: text;
+    padding: 6px 16px;
+    transition: 0.3s;
+}
+/* Change background color of buttons on hover */
+div.tab button:hover
+{
+    background-color: #ddd;
+}
+/* Create an active/current tablink class */
+div.tab button.active
+{
+    background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent
+{
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+</style>
+
+<script type="text/javascript">
+function Select(evt, TabName, id) 
+{
+    var i, tabcontent, tablinks;
+
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) tabcontent[i].style.display = "none";
+
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) tablinks[i].className = tablinks[i].className.replace(" active", "");
+
+    document.getElementById(TabName).style.display = "block";
+    //evt.currentTarget.className += " active";
+    document.getElementById(id).className += " active";
+}
+</script>
+
+<body>
+
+<div id="user_data"></div>
+
+ <div class="tab">
+  <button id="friends"	class="tablinks active" onclick="Select(event, 'friends_data','friends')">Друзья</button>
+  <button id="groups"	class="tablinks" 			onclick="Select(event, 'groups_data','groups') 	">Группы</button>
+  <button id="likes"		class="tablinks" 			onclick="Select(event, 'likes_data','likes')  	">Лайки</button>
+  <input  id="max" 		maxlength="6" size="7"  value="1500">
+  <label  id="count">0</label>
+</div>
+
+<div id="friends_data" 	class="tabcontent"></div>
+<div id="groups_data" 	class="tabcontent"></div>
+<div id="likes_data" 	class="tabcontent"></div>
+
+</body>
+
 </html>
-
-
-
