@@ -207,7 +207,7 @@ function GetUser(id)
 	);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
-GetGroup (id)
+function GetGroup (id)
 {
 	console.log('GetGroup(' + id + ')');
 	document.getElementById('user_data').innerHTML = '';
@@ -238,9 +238,7 @@ GetGroup (id)
 			document.getElementById('user_data').appendChild(table);
 		}
 	);
-
 }
-
 //------------------------------------------------------------------------------------------------------------------------------------------
 function GetGroups(id) 
 {
