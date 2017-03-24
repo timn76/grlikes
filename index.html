@@ -123,6 +123,8 @@
 //------------------------------------------------------------------------------------------------------------------------------------------
 var User;
 var Group;
+var Cancel = false;
+var CountLikes = 0;
 //------------------------------------------------------------------------------------------------------------------------------------------
 
 function D2S(d)
@@ -130,15 +132,18 @@ function D2S(d)
 	var dtf = new Intl.DateTimeFormat("ru-RU", {   year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "numeric" /*, second: "numeric"*/} );
 	return (dtf.format(d));
 }
+function uvl(v,d)
+{
+	//return ((typeof v)=='undefined'?d:v); 
+	return (v===undefined?d:v); 
+}
 //------------------------------------------------------------------------------------------------------------------------------------------
-
 function GetFriends (id)
 {
 	console.log('GetFriends(' + id + ')');
 	document.getElementById('friends_data').innerHTML = '';	
 	Select(null, 'friends_data','friends');
 	
-// id,first_name,last_name,deactivated,hidden,about,activities,bdate,blacklisted,blacklisted_by_me,books,can_post,can_see_all_posts,can_see_audio,can_send_friend_request,can_write_private_message,career,city,common_count,connections,contacts,counters,country,crop_photo,domain,education,exports,first_name_nom,first_name_gen,first_name_dat,first_name_acc,first_name_ins,first_name_abl,followers_count,friend_status,games,has_mobile,has_photo,home_town,interests,is_favorite,is_friend,is_hidden_from_feed,last_name_nom,last_name_gen,last_name_dat,last_name_acc,last_name_ins,last_name_abl,last_seen,lists,maiden_name,military,movies,music,nickname,occupation,online,online_mobile,online_app,personal,photo_50,photo_100,photo_200_orig,photo_200,photo_400_orig,photo_id,photo_max,photo_max_orig,quotes,relatives,relation,schools,screen_name,sex,site,status,timezone,tv,universities,verified,wall_comments
   	VK.api('friends.get', {user_id:id, fields:"id,uid,first_name,last_name,deactivated,hidden,about,activities,bdate,blacklisted,blacklisted_by_me,books,can_post,can_see_all_posts,can_see_audio,can_send_friend_request,can_write_private_message,career,city,common_count,connections,contacts,counters,country,crop_photo,domain,education,exports,first_name_nom,first_name_gen,first_name_dat,first_name_acc,first_name_ins,first_name_abl,followers_count,friend_status,games,has_mobile,has_photo,home_town,interests,is_favorite,is_friend,is_hidden_from_feed,last_name_nom,last_name_gen,last_name_dat,last_name_acc,last_name_ins,last_name_abl,last_seen,lists,maiden_name,military,movies,music,nickname,occupation,online,online_mobile,online_app,personal,photo_50,photo_100,photo_200_orig,photo_200,photo_400_orig,photo_id,photo_max,photo_max_orig,quotes,relatives,relation,schools,screen_name,sex,site,status,timezone,tv,universities,verified,wall_comments"
   									, order:"hints", version:"5.8"}, 
   		function(data)
@@ -153,14 +158,14 @@ function GetFriends (id)
 			for (var i = 0; i < items.length; i++)
 			{
 				var tr = tbody.appendChild(document.createElement('tr'));
-				var id = items[i].uid!== undefined?items[i].uid:items[i].id;
+				var id = uvl(items[i].uid,items[i].id);
 				var last_seen = ' n/a ';
 				if (items[i].last_seen!==undefined) last_seen = D2S(new Date(items[i].last_seen.time * 1000));
 	    		tr.appendChild(document.createElement('td')).innerHTML = ('<p><a href="https://vk.com/' + items[i].domain + '">' + id + '</a></p>'
 	    				+ '<p class="date' + (items[i].online==1?' green':'') + '" >' + last_seen + '</p>');
 	    		tr.appendChild(document.createElement('td')).appendChild (document.createElement('img')).setAttribute("src",items[i].photo_50);
 	    		tr.appendChild(document.createElement('td')).innerHTML = (items[i].first_name + '<br />' + items[i].last_name);
-	    		tr.appendChild(document.createElement('td')).innerHTML = (items[i].bdate !== undefined ? items[i].bdate : "");
+	    		tr.appendChild(document.createElement('td')).innerHTML = (uvl(items[i].bdate,""));
 	    		var btn = document.createElement('button');
 	    		btn.innerHTML = 'Выбрать';
 	    		btn.id=id;
@@ -174,7 +179,6 @@ function GetFriends (id)
 	);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
-
 function GetUser(id) 
 {
   	VK.api('users.get', {user_ids:id, fields:"id,first_name,last_name,deactivated,hidden,about,activities,bdate,blacklisted,blacklisted_by_me,books,can_post,can_see_all_posts,can_see_audio,can_send_friend_request,can_write_private_message,career,city,common_count,connections,contacts,counters,country,crop_photo,domain,education,exports,first_name_nom,first_name_gen,first_name_dat,first_name_acc,first_name_ins,first_name_abl,followers_count,friend_status,games,has_mobile,has_photo,home_town,interests,is_favorite,is_friend,is_hidden_from_feed,last_name_nom,last_name_gen,last_name_dat,last_name_acc,last_name_ins,last_name_abl,last_seen,lists,maiden_name,military,movies,music,nickname,occupation,online,online_mobile,online_app,personal,photo_50,photo_100,photo_200_orig,photo_200,photo_400_orig,photo_id,photo_max,photo_max_orig,quotes,relatives,relation,schools,screen_name,sex,site,status,timezone,tv,universities,verified,wall_comments"}, // 
@@ -190,19 +194,36 @@ function GetUser(id)
 			for (var i = 0; i < data.response.length; i++)
 			{
 				User = data.response[i];
+				User.id = ((typeof data.response[i].uid)=='undefined'?data.response[i].id:data.response[i].uid);
 				var tr = tbody.appendChild(document.createElement('tr'));
-				var id = ((typeof data.response[i].uid)=='undefined'?data.response[i].id:data.response[i].uid);
-				tr.appendChild(document.createElement('td')).innerHTML = ('<p>' + id + '</p><p class="date' + (data.response[i].online==1?' green':'') + '" >' + D2S(new Date(data.response[i].last_seen.time * 1000)) + '</p>');;
+				tr.appendChild(document.createElement('td')).innerHTML = ('<p>' + User.id + '</p><p class="date' + (data.response[i].online==1?' green':'') + '" >' + D2S(new Date(data.response[i].last_seen.time * 1000)) + '</p>');;
 	    		tr.appendChild(document.createElement('td')).appendChild(document.createElement('img')).setAttribute("src",data.response[i].photo_50);
 	    		tr.appendChild(document.createElement('td')).innerHTML = data.response[i].first_name + '<br />' + data.response[i].last_name;
 	    		tr.appendChild(document.createElement('td')).innerHTML = '<button onclick="GetFriends('+id+')" >Друзей</button><section>' + data.response[i].counters.friends + '<section>';
 	    		tr.appendChild(document.createElement('td')).innerHTML = '<button onclick="GetGroups('+id+')">Групп</button><section>'  + ((typeof data.response[i].groups)!='undefined'?data.response[i].counters.groups:data.response[i].counters.pages) + '<section>';
-	    		tr.appendChild(document.createElement('td')).innerHTML = '<header>Аудио</header><section>'  + data.response[i].counters.audios + '<section>';
-	    		tr.appendChild(document.createElement('td')).innerHTML = '<header>Видео</header><section>'  + data.response[i].counters.videos + '<section>';
-	    		tr.appendChild(document.createElement('td')).innerHTML = '<header>Фото</header><section>'   + data.response[i].counters.photos + '<section>';
+	    		tr.appendChild(document.createElement('td')).innerHTML = '<header>Аудио</header><section>'  + uvl(data.response[i].counters.audios,'-') + '<section>';
+	    		tr.appendChild(document.createElement('td')).innerHTML = '<header>Видео</header><section>'  + uvl(data.response[i].counters.videos,'-') + '<section>';
+	    		tr.appendChild(document.createElement('td')).innerHTML = '<header>Фото</header><section>'   + uvl(data.response[i].counters.photos,'-') + '<section>';
 			}
 			document.getElementById('user_data').innerHTML = '';
 			document.getElementById('user_data').appendChild(table);
+		}
+	);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+function GetPosts (id)
+{
+	console.log('GetPosts(' + id + ')');
+  	VK.api('wall.get', {owner_id:-id, count:1}, 
+  		function(data)
+  		{
+
+        	console.log('GetPosts - Ok');
+        	console.log(data);
+
+			while (document.getElementById('posts')==null) sleep (200);
+			document.getElementById('posts').innerHTML = uvl(data.response.count,'-');
+
 		}
 	);
 }
@@ -217,23 +238,24 @@ function GetGroup (id)
 
         	console.log('GetGroup - Ok');
         	console.log(data);
-
+        	
 			var table = document.createElement('table');
 	    	var tbody = table.appendChild(document.createElement('tbody'));
 
 			for (var i = 0; i < data.response.length; i++)
 			{
-				User = data.response[i];
+				Group = data.response[i];
+				Group.id = uvl(data.response[i].id,data.response[i].gid);
+				GetPosts (Group.id);
 				var tr = tbody.appendChild(document.createElement('tr'));
-				var id = ((typeof data.response[i].uid)=='undefined'?data.response[i].id:data.response[i].gid);
-				tr.appendChild(document.createElement('td')).innerHTML = ('<p>' + id + '</p><p class="date" >' + D2S(new Date(data.response[i].start_date * 1000)) + '</p>');;
+				tr.appendChild(document.createElement('td')).innerHTML = ('<p>' + Group.id + '</p><p class="date" >' + D2S(new Date(data.response[i].start_date * 1000)) + '</p>');;
 	    		tr.appendChild(document.createElement('td')).appendChild(document.createElement('img')).setAttribute("src",data.response[i].photo_50);
-	    		tr.appendChild(document.createElement('td')).innerHTML = data.response[i].first_name + '<br />' + data.response[i].name;
+	    		tr.appendChild(document.createElement('td')).innerHTML = '<p>' + data.response[i].name + '</p>';
 	    		tr.appendChild(document.createElement('td')).innerHTML = '<header>Членов</header><section>' + data.response[i].members_count + '<section>';
-	    		tr.appendChild(document.createElement('td')).innerHTML = '<header id="header.posts">Постов</header><section>' + '' + '<section>';
-	    		tr.appendChild(document.createElement('td')).innerHTML = '<header>Аудио</header><section>'  + data.response[i].counters.audios + '<section>';
-	    		tr.appendChild(document.createElement('td')).innerHTML = '<header>Видео</header><section>'  + data.response[i].counters.videos + '<section>';
-	    		tr.appendChild(document.createElement('td')).innerHTML = '<header>Фото</header><section>'   + data.response[i].counters.photos + '<section>';
+	    		tr.appendChild(document.createElement('td')).innerHTML = '<header>Постов</header><section id="posts">' + '-' + '<section>';
+	    		tr.appendChild(document.createElement('td')).innerHTML = '<header>Аудио</header><section>'  + uvl(data.response[i].counters.audios,'-') + '<section>';
+	    		tr.appendChild(document.createElement('td')).innerHTML = '<header>Видео</header><section>'  + uvl(data.response[i].counters.videos,'-') + '<section>';
+	    		tr.appendChild(document.createElement('td')).innerHTML = '<header>Фото</header><section>'   + uvl(data.response[i].counters.photos,'-') + '<section>';
 			}
 			document.getElementById('user_data').appendChild(table);
 		}
@@ -269,9 +291,11 @@ function GetGroups(id)
 	    				function(event)
 	    				{
 	    					GetGroup (event.currentTarget.id);
-	    					//document.getElementById('likes_data').innerHTML = '';
-	    					//GetLikes ( event.currentTarget.id,0,document.getElementById('max').value);
-	    					//Select(null, 'likes_data','likes');
+	    					document.getElementById('likes_data').innerHTML = '';
+	    					setCancel(false);
+	    					CountLikes = 0;
+	    					GetLikes ( event.currentTarget.id,0,document.getElementById('max').value);
+	    					Select(null, 'likes_data','likes');
 	    				}
 	    			);
 	    			tr.appendChild(document.createElement('td')).appendChild (btn);
@@ -289,6 +313,10 @@ function GetGroups(id)
 //------------------------------------------------------------------------------------------------------------------------------------------
 function ShowLikes (Likes)
 {
+	//console.log('ShowLikes()');
+	//console.log(Likes);
+
+	CountLikes += Likes.length;
 	var table = document.createElement('table');
 	var tbody = table.appendChild(document.createElement('tbody'));	
 	for (var i = 0; i < Likes.length; i++)
@@ -318,7 +346,7 @@ function GetLikes(gid,offset,count)
 {
 var Likes = [];
 //var s = new Date().getTime();
-	count = (((typeof count)==='undefined')?500:count);
+	count = (((typeof count)=='undefined')?500:count);
 	console.log('GetLikes:'+ gid + ' - ' + offset+ ' - ' + count);
 	var Code =  'var p = API.wall.get ({ owner_id: -' + gid + ', count:24, offset:' + offset + ' }); '
 				+ ' var posts = p; ' 
@@ -333,24 +361,23 @@ var Likes = [];
 				+ '	 i = i+1; '
 				+ ' } '
 				+ ' return res; ';
-
-	//console.log('Code: ' + Code);
 	VK.api('execute', {"code": Code}, 
   		function(data)
   		{
-
-			document.getElementById('count').innerHTML = offset + ':' + count ;	
 		  	if(data.response!==undefined) 
 		  	{
-		  		console.log(data);
+		  		//console.log(data);
+		  		//console.log(User);
 		  		for (var i = 0; i < data.response.length; i++) for(var l = 0; l < data.response[i].likes.items.length; l++ ) if(data.response[i].likes.items[l] == User.id) Likes.push ( data.response[i] );
 	  			if (Likes.length > 0) ShowLikes (Likes);
+	  			document.getElementById('count').innerHTML = offset + ':' + CountLikes ;	
 		  		sleep(250);
-		  		if(offset<count) GetLikes(gid,offset+24,count);
+		  		if(!Cancel && CountLikes<count) GetLikes(gid,offset+24,count);
 		  	}
 		  	else console.log(data);
 		}
 	);
+	Cancel = false;
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -369,7 +396,6 @@ function InitOk()
 
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
-
 window.onload = (
 	function()
 	{
@@ -456,6 +482,8 @@ function Select(evt, TabName, id)
     //evt.currentTarget.className += " active";
     document.getElementById(id).className += " active";
 }
+
+function setCancel(val){ Cancel=val; }
 </script>
 
 <body>
@@ -466,8 +494,9 @@ function Select(evt, TabName, id)
   <button id="friends"	class="tablinks active" onclick="Select(event, 'friends_data','friends')">Друзья</button>
   <button id="groups"	class="tablinks" 			onclick="Select(event, 'groups_data','groups') 	">Группы</button>
   <button id="likes"		class="tablinks" 			onclick="Select(event, 'likes_data','likes')  	">Лайки</button>
-  <input  id="max" 		maxlength="6" size="7"  value="1500">
+  <input  id="max" 		maxlength="6" size="7"  value="15">
   <label  id="count">0</label>
+  <button id="cancel"									onclick="setCancel(true)">Стоп</button>
 </div>
 
 <div id="friends_data" 	class="tabcontent"></div>
