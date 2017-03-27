@@ -371,8 +371,8 @@ var Likes = [];
 		  		for (var i = 0; i < data.response.length; i++) for(var l = 0; l < data.response[i].likes.items.length; l++ ) if(data.response[i].likes.items[l] == User.id) Likes.push ( data.response[i] );
 	  			if (Likes.length > 0) ShowLikes (Likes);
 	  			document.getElementById('count').innerHTML = offset + ':' + CountLikes ;	
-		  		sleep(250);
-		  		if(!Cancel && CountLikes<count) GetLikes(gid,offset+24,count);
+		  		sleep(280);
+		  		if(!Cancel && (count==0 || CountLikes<count)) GetLikes(gid,offset+24,count);
 		  	}
 		  	else console.log(data);
 		}
