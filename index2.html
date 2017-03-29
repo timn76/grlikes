@@ -30,15 +30,18 @@
  
 <style>
 
-body 		{ width:760px; color:#000; margin:0 auto; padding:0; direction:ltr; font-family:Tahoma,Verdana,Arial,Sans-Serif,Lucida Sans; font-size:11px; font-weight:normal}
+body 		{ width:760px; color:#000; margin:0 auto; padding:0; direction:ltr; font-family:Tahoma,Verdana,Arial,Sans-Serif,Lucida Sans; font-size:12px; font-weight:normal}
+img 		{ border:0 }
 a 			{ color:#2b587a; text-decoration:none; cursor:pointer }
 a:hover 	{ text-decoration:underline }
 
 	div
 	{
-		overflow: 	auto;
-		max-height: 500px;
-		border: 		1px solid #ccc;
+		margin:			0 auto;
+		overflow: 		auto;
+		max-height: 	500px;
+		border-bottom:	1px solid #597da3
+		/*border: 		1px solid #ccc;*/
 	}
 	div.text
 	{
@@ -65,6 +68,7 @@ a:hover 	{ text-decoration:underline }
 	{
 		font-size: 	14px;
 		padding: 0px 2px;
+		margin: 0 auto;
 	}
 	p.date
 	{
@@ -75,14 +79,9 @@ a:hover 	{ text-decoration:underline }
 	{
 		color:	green;
 	}
-	a
-	{
-		font-size:	14px;
-	}
 	button
 	{
     	background-color: #ccc;
-    	float: left;
     	border: none;
     	outline: none;
     	cursor: pointer;
@@ -96,14 +95,16 @@ a:hover 	{ text-decoration:underline }
 
 	tr
 	{
-   	border: none;
+   	/* border: none; */
    	padding: 0px 0px;
+   	margin: 0;
+   	border-bottom:1px solid #597da3
 	}
 	td
 	{
    	background-color: #eee;
    	padding: 0px 0px;
-   	border: 		1px solid #ccc;
+   	/* border: 		1px solid #ccc; */
    	text-align:	center;
 	}
 	header
@@ -131,6 +132,8 @@ var User;
 var Group;
 var Cancel = false;
 var CountLikes = 0;
+var Groups = [];
+var AllGroups = [];
 //------------------------------------------------------------------------------------------------------------------------------------------
 
 function D2S(d)
@@ -284,10 +287,11 @@ function GetGroups(id)
 
 		  	if(data.response!==undefined)
 		  	{
+		  		Groups = data.response.items;
 				for (var i = 0; i < data.response.items.length; i++)
 				{
 					var tr = tbody.appendChild(document.createElement('tr'));
-					tr.appendChild(document.createElement('td')).innerHTML = data.response.items[i].id;
+					tr.appendChild(document.createElement('td')).innerHTML = '<a href="https://vk.com/' + data.response.items[i].screen_name + '">' + data.response.items[i].id + '</a>';
 	    			tr.appendChild(document.createElement('td')).appendChild(document.createElement('img')).setAttribute("src",data.response.items[i].photo_50); //.photo_100
 	    			tr.appendChild(document.createElement('td')).innerHTML = data.response.items[i].name;
 	    			var btn = document.createElement('button');
@@ -296,17 +300,21 @@ function GetGroups(id)
 	    			btn.addEventListener ("click", 
 	    				function(event)
 	    				{
+	    					Cancel = true;
 	    					GetGroup (event.currentTarget.id);
 	    					document.getElementById('likes_data').innerHTML = '';
 	    					setCancel(false);
 	    					CountLikes = 0;
+	    					Cancel = false;
 	    					GetLikes ( event.currentTarget.id,0,document.getElementById('max').value);
 	    					Select(null, 'likes_data','likes');
 	    				}
 	    			);
 	    			tr.appendChild(document.createElement('td')).appendChild (btn);
 				}
-				document.getElementById('groups_data').appendChild(table);				
+				document.getElementById('groups_data').appendChild(table);
+				document.getElementById('likes_data').innerHTML = '';
+				GetLikesDay(0,0);				
 			}
 			else
 			{
@@ -317,7 +325,7 @@ function GetGroups(id)
 	);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
-function ShowLikes (Likes)
+function ShowLikes (Likes,p)
 {
 	//console.log('ShowLikes()');
 	//console.log(Likes);
@@ -328,6 +336,7 @@ function ShowLikes (Likes)
 	for (var i = 0; i < Likes.length; i++)
 	{
 		var tr = tbody.appendChild(document.createElement('tr'));
+		tr.appendChild(document.createElement('td')).appendChild(document.createElement('img')).setAttribute("src",p);		
 		tr.appendChild(document.createElement('td')).innerHTML = ('<p><a href="https://vk.com/wall'+Likes[i].post.from_id+'_'+Likes[i].post.id+'">' + Likes[i].post.id + '</a></p><p class="date">' + D2S(new Date(Likes[i].post.date * 1000)) + '</p>');
 		var photo = "";
 		//console.log(Likes[i]);
@@ -348,14 +357,11 @@ function sleep(ms,start)
   for (var i = 0; i < 1e7; i++) if ((new Date().getTime() - start) > ms) break;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
-function GetLikes(gid,offset,count) 
+function GetLikesCode (gid,offset)
 {
-var Likes = [];
-//var s = new Date().getTime();
-	count = (((typeof count)=='undefined')?500:count);
-	console.log('GetLikes:'+ gid + ' - ' + offset+ ' - ' + count);
 	var Code =  'var p = API.wall.get ({ owner_id: -' + gid + ', count:24, offset:' + offset + ' }); '
 				+ ' var posts = p; ' 
+				+ ' var c = p.count; '
 				+ ' var res={}; '
 				+ ' var i=1; '
 				+ ' if(p.items.length>=0) { posts = p.items; i=0; } '
@@ -366,28 +372,90 @@ var Likes = [];
 			   + '      res.push({"post":posts[i], "likes":likes});'
 				+ '	 i = i+1; '
 				+ ' } '
-				+ ' return res; ';
-	VK.api('execute', {"code": Code}, 
+				+ ' return { "date":posts[i-1].date, "count":c, "res":res };';
+	return Code;
+} 
+//------------------------------------------------------------------------------------------------------------------------------------------
+function GetLikes(gid,offset,count) 
+{
+var Likes = [];
+	count = uvl(count,5);
+	console.log('GetLikes:'+ gid + ' - ' + offset+ ' - ' + count);
+
+	VK.api('execute', {"code": GetLikesCode(gid,offset)}, 
   		function(data)
   		{
 		  	if(data.response!==undefined) 
 		  	{
 		  		//console.log(data);
-		  		//console.log(User);
-		  		for (var i = 0; i < data.response.length; i++) for(var l = 0; l < data.response[i].likes.items.length; l++ ) if(data.response[i].likes.items[l] == User.id) Likes.push ( data.response[i] );
-	  			if (Likes.length > 0) ShowLikes (Likes);
+		  		var res = data.response.res;
+		  		for ( var i = 0; i < res.length; i++) for( var l = 0; l < res[i].likes.items.length; l++ ) if(res[i].likes.items[l] == User.id) Likes.push ( res[i] );
+	  			if (Likes.length > 0) ShowLikes (Likes,Group.photo_50);
 	  			document.getElementById('count').innerHTML = offset + ':' + CountLikes ;	
-		  		sleep(250);
-		  		if(!Cancel && CountLikes<count) GetLikes(gid,offset+24,count);
+		  		sleep(280);
+		  		if( !Cancel && (count==0 || CountLikes<count+500) && offset < data.response.count  ) GetLikes (gid,offset+24,count);
 		  	}
 		  	else console.log(data);
 		}
 	);
-	Cancel = false;
 }
-
 //------------------------------------------------------------------------------------------------------------------------------------------
+function GetLikesDay(g,offset,d)
+{
+var Likes = [];
+var date = uvl(d,((new Date()) - 5*86400*1000)/1000);
+	console.log('GetLikesDay('+g+', '+offset+', '+(date)+')');
 
+	if(Groups.length==0) return;
+
+	if(g>=Groups.length) {g=0; offset += 24;}
+	VK.api('execute', {"code": GetLikesCode(Groups[g].id,offset)}, 
+  		function(data)
+  		{
+  			//console.log('GetLikesDay('+g+','+offset+') - response');
+		  	if(data.response!==undefined) 
+		  	{
+		  		console.log(data);
+		  		var res = data.response.res;
+		  		for ( var i = 0; i < res.length; i++ ) for( var l = 0; l < res[i].likes.items.length; l++ ) if( res[i].likes.items[l] == User.id ) Likes.push ( res[i] );
+	  			if (Likes.length > 0) ShowLikes (Likes,Groups[g].photo_50);
+	  			document.getElementById('count').innerHTML = g + ':' + offset + ':' + CountLikes ;	
+		  		sleep(300);
+		  		console.log('r.date:'+data.response.date + ', date:'+date);
+		  		if( data.response.date==null || data.response.date < date ) Groups.splice(g,1);
+		  		if( !Cancel && offset < data.response.count+500 ) GetLikesDay (g+1, offset, date);
+		  	}
+		  	else console.log(data);
+		}
+	);
+	
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+function SearchInGroups(t) 
+{
+
+	var ids = '';
+	var MaxCount = 1500 //145000000;
+
+		ids = '0';
+		for (var i=1;i<=500;i++) ids += ',' + (t*500+i);
+		console.log(ids);
+	  	VK.api('groups.getById', {group_ids:ids, fields:"members_count"}, 
+  			function(data)
+  			{
+		  		if(data.response!==undefined) 
+		  		{
+		  			console.log(data);
+		  			for ( var i = 0; i < data.response.length; i++ ) if ( data.response[i].is_closed == 0 && data.response[i].members_count > 10 ) AllGroups.push ( data.response[i] );
+		  			sleep(300);
+		  			if( !Cancel && t*500<MaxCount ) SearchInGroups(t+1);
+		  			else console.log ( AllGroups );
+		  		}
+		  		else console.log(data);
+			}
+		);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
 function InitOk()
 {
 	VK.callMethod("resizeWindow", 800, 640); // Максимальное значение ширины окна — 1000 px, высоты — 4050.
@@ -492,6 +560,22 @@ function Select(evt, TabName, id)
 function setCancel(val){ Cancel=val; }
 </script>
 
+<style>
+
+article
+{
+	padding: 2px 0px;
+	border-bottom: 1px solid #597da3; 
+}
+
+section
+{
+	float:	left;
+	padding: 2px 10px;
+}
+
+</style>
+
 <body>
 
 <div id="user_data"></div>
@@ -505,7 +589,10 @@ function setCancel(val){ Cancel=val; }
   <button id="cancel"									onclick="setCancel(true)">Стоп</button>
 </div>
 
-<div id="friends_data" 	class="tabcontent"></div>
+<div id="friends_data" 	class="tabcontent">
+	<article><section><a href="dddd">22222222</a><p>12</p><section></article>
+	<article><section><a href="dddd">33333333</a><p>13</p><section></article>
+</div>
 <div id="groups_data" 	class="tabcontent"></div>
 <div id="likes_data" 	class="tabcontent"></div>
 
