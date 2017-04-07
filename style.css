@@ -1,0 +1,196 @@
+body 		{ width: 760px;   color:#000; margin:0 auto; padding:0; direction:ltr; font-family:Tahoma,Verdana,Arial,Sans-Serif,Lucida Sans; font-size:12px; font-weight:normal}
+a 			{ color: #2a5885; text-decoration:none; cursor:pointer }
+a:hover 	{ text-decoration:underline }
+
+	div 	{}
+	div.date
+	{
+		overflow: 	hidden;
+		min-height: 100px;
+		max-height: 400px;
+		min-width: 	130px;
+		/* border: solid 1px black; */
+	}
+	img
+	{
+		border: 0;
+		max-width: 	180px;
+		max-height: 250px;
+	}
+	p
+	{
+		font-size: 	12px;
+		padding: 2px 0;
+		margin: 0 auto;
+	}
+	p.date
+	{
+		font-size:	10px;
+		width: 		90px;
+	}
+	p.green
+	{
+		color:	green;
+	}
+	p.name
+	{
+		font-size: 	14px;
+		--font-weight: bold;
+		padding: 4px 12px;
+		--color:	#475a70;
+	}
+
+	button
+	{
+		font-size: 	12px;
+    	background-color: #dce7f2;
+    	border: none;
+    	outline: none;
+    	cursor: pointer;
+    	padding: 4px 12px;
+    	transition: 0.3s;
+	}
+	button:hover
+	{
+		color:	#fff;
+   	background-color: rgb(80, 114, 153);
+	}
+	tr
+	{
+   	padding: 0;
+   	margin: 0;
+	}
+	tr:hover
+	{
+	}	
+	td
+	{
+   	padding: 0;
+   	border:  1px solid #eee;
+   	text-align:	center;
+	}
+	td.text
+	{
+		min-width: 450px;
+	}
+	td.counter
+	{
+		min-width: 70px; 
+		vertical-align: top;
+	}
+
+	article.post
+	{
+		border-bottom: 1px solid #597da3;
+	}
+	article:hover
+	{
+	}
+	section
+	{
+	}
+	header
+	{
+    	height: 16px;
+		margin: 0 0;
+   	padding: 4px 12px;
+   	font-size: 	12px;
+   	text-align:	center;
+   	background-color: #dce7f2;
+	}
+	footer
+	{
+		margin: 4px 0;
+   	padding: 2px 0;
+   	font-size: 	12px;
+   	text-align:	center;
+	}
+	section.text 
+	{
+  		max-height: 180px;
+  		overflow: 	auto;
+	}
+	p.text {}
+		
+div.tab
+{
+	 margin: 0 0;
+	 font-size: 	12px;
+    overflow: hidden;
+    outline: none;
+    box-shadow: none;
+    background-color: #dce7f2;
+    border-top: 1px solid #597da3;
+    border-bottom: 1px solid #597da3;
+}
+
+div.tab button
+{
+	 border: none;
+	 outline: none;
+    background-color: inherit;
+    float: left; 
+    cursor: pointer;
+    padding: 4px 12px;
+    transition: 0.3s;
+}
+div.tab button:hover
+{
+		color:	#fff;
+   	background-color: rgb(80, 114, 153);
+}
+div.tab button.active
+{
+    background-color: #597da3;
+}
+
+div.tab label
+{
+    background-color: inherit;
+    float: right;
+    border: none;
+    outline: none;
+    padding: 4px 12px;
+}
+div.tab input
+{
+	margin: 0 4px;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: text;
+    padding: 4px 4px;
+}
+div.tab select
+{
+	margin: 		0 4px;
+   float: 		left;
+   border: 	none;
+   outline:	none;
+   cursor:		text;
+	padding:	2px 4px;
+}
+.tabcontent
+{
+    display: 		none;
+    padding: 		4px 4px;
+    border: 		1px solid #ccc;
+    border-top:	none;
+	 margin:			0 auto;
+	 overflow:		auto;
+	 max-height:	520px;    
+}		
+	img.ml
+	{
+		margin: 7px 8px;
+		border: 0;
+		width: 	20px;
+		height: 10px;
+		float: right;
+		display: none; 
+	}
+	.none
+	{
+		display: none; 
+	}
+	
