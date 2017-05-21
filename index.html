@@ -469,14 +469,6 @@ function GetGroups(id)
 		  	{
 		  		Groups = data.response.items;
 				for (var i = 0; i < data.response.items.length; i++) gd.appendChild ( ShowGroups(Groups[i]) );
-				
-				/*var btn = Create('button', {html:'<p>+</p>'} );
-				btn.addEventListener ("click", function(event) 
-				{
-					var txt = prompt("Добавить группу:", "");
-					if(txt!= null && txt!=="") AddGroups (txt); 
-				});*/ 
-				gd.appendChild ( btn );
 			}
 			else
 			{
@@ -494,6 +486,9 @@ function ShowLike (like,group)
 	var tr = article.appendChild(document.createElement('table')).appendChild(document.createElement('tr'));
 	var td = tr.appendChild(Create('td', { child: Create('a', {href:'https://vk.com/'+group.screen_name, child:  Create('img',{src:group.photo_50, title:group.name, alt:group.name})})}));
 	td.appendChild(Create('footer', {child:Create('a', {href:'https://vk.com/wall'+like.post.from_id+'_'+like.post.id,html:'<p class="date">' + d2s(like.post.date) + '</p>'})}));
+	
+	if(like.post.copy_history !== undefined && like.post.copy_history.length>0) like.post = like.post.copy_history[0];
+
 	var photo = null;
 	if(like.post.attachments !== undefined)
    	for (var a = 0; a < like.post.attachments.length; a++)
