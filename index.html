@@ -303,9 +303,9 @@ function ShowFriend (friend)
 	var article = Create('article',{id:id, class:'sel_item' });
 	var tr = article.appendChild(document.createElement('table')).appendChild(document.createElement('tr'));
 
-	tr.appendChild(Create('td', {width: 95,  html:dm2html(friend.domain) + id2html(id,friend.domain) + ls2html(friend.last_seen,friend.online)}));
+	tr.appendChild(Create('td', {width: 100,  html:dm2html(friend.domain) + id2html(id,friend.domain) + ls2html(friend.last_seen,friend.online)}));
 	tr.appendChild(Create('td', {child: Create('a', {href:'https://vk.com/'+friend.domain, child:  Create('img',{src:friend.photo_50, title:friend.first_name+' '+friend.last_name })})}));
-	tr.appendChild(Create('td', {width: 120, html:'<p class="name">'+friend.first_name + '<br />' + friend.last_name+'</p>'}));
+	tr.appendChild(Create('td', {width: 180, html:'<p class="name">'+friend.first_name + '<br />' + friend.last_name+'</p>'}));
 	tr.appendChild(Create('td', {width: 70,  html:'<p>'+uvl(friend.bdate,"n/a")+'</p>'}));
 	//tr.appendChild(Create('td', {width:80, html:'<p>'+friend.city.title+'</p>'}));
 	article.addEventListener ("click", function(event) { Group=null; GetGroups ( event.currentTarget.id);  GetUser(event.currentTarget.id); /*Select(null, 'groups_data','groups');*/ });
@@ -336,9 +336,9 @@ function ShowUser(user)
 	var article = document.createElement('article');
 	var tr = article.appendChild(document.createElement('table')).appendChild(document.createElement('tr'));
 
-	tr.appendChild(Create('td', {width:95,  html:dm2html(user.domain) + id2html(user.id,user.domain) + ls2html(user.last_seen,user.online)}));
+	tr.appendChild(Create('td', {width:100,  html:dm2html(user.domain) + id2html(user.id,user.domain) + ls2html(user.last_seen,user.online)}));
 	tr.appendChild(Create('td', {child: Create('a', {href:'https://vk.com/'+user.domain, child:  Create('img',{src:user.photo_50, title:user.first_name+' '+user.last_name })})}));
-	tr.appendChild(Create('td', {width:120, html:'<p class="name">'+user.first_name + '<br />' + user.last_name+'</p>'}));
+	tr.appendChild(Create('td', {width:140, html:'<p class="name">'+user.first_name + '<br />' + user.last_name+'</p>'}));
 	tr.appendChild(Create('td', {width:70,  html:'<p>'+uvl(user.bdate,"n/a")+'</p>'}));
 	tr.appendChild(Create('td', {class:'counter', html:'<button onclick="GetFriends('+user.id+')" >Друзей</button><p>' + user.counters.friends + '</p>'}));
 	tr.appendChild(Create('td', {class:'counter', html:'<button onclick="GetGroups('+user.id+')">Групп</button><p>'  + ((typeof user.groups)!='undefined'?user.counters.groups:user.counters.pages) + '</p>'}));
@@ -415,35 +415,72 @@ function ShowGroups(group)
 
 	var tr = article.appendChild(document.createElement('table')).appendChild(document.createElement('tr'));
 
-	tr.appendChild(Create('td', {width: 95, html:dm2html(group.screen_name) + id2html(group.id,group.screen_name) + '<p class="date" >' + d2s(group.start_time) + '</p>'}));
+	tr.appendChild(Create('td', {width:160, html:dm2html(group.screen_name) + id2html(group.id,group.screen_name) + '<p class="date" >' + d2s(group.start_time) + '</p>'}));
 	tr.appendChild(Create('td', {child: Create('a', {href:'https://vk.com/'+group.screen_name, child:  Create('img',{src:group.photo_50, title:group.name})})}));
-	tr.appendChild(Create('td', {width:200, html:'<p class="name">'+group.name+'</p>'}));
-	tr.appendChild(Create('td', {width: 70, html:'<p>' + group.members_count + '</p>'}));
+	tr.appendChild(Create('td', {width:300, html:'<p class="name">'+group.name+'</p>'}));
+	tr.appendChild(Create('td', {width: 80, html:'<p>' + group.members_count + '</p>'}));
 	
 	article.addEventListener ("click", function(event) { GetGroup (event.currentTarget.id); });
 
 	return (article);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
+function AddGroups(ids) 
+{
+	var gd = document.getElementById('groups_data');
+	VK.api('groups.getById', { group_ids:ids, fields:"id,name,screen_name,is_closed,deactivated,is_admin,admin_level,is_member,invited_by,type,has_photo,photo_50,photo_100,photo_200,activity,age_limits,ban_info,can_create_topic,can_message,can_post,can_see_all_posts,can_upload_doc,can_upload_video,city,contacts,counters,cover,description,fixed_post,is_favorite,is_hidden_from_feed,is_messages_allowed,links,main_album_id,market,member_status,members_count,place,public_date_label,site,start_date,finish_date,status,verified,wiki_page" }, 
+  		function(data)
+  		{
+        	console.log('groups.getById - response');
+			console.log(data);
+		  	if(data.response!==undefined)
+		  	{
+				for (var i = 0; i < data.response.length; i++)
+				{
+					var s=-1;
+					for (var j = 0; j < Groups.length; j++) if(data.response[i].id == Groups[j].id ) { s = j; break; }
+					if(s == -1)
+					{
+					 	Groups.push ( data.response[i] );
+					 	gd.appendChild ( ShowGroups(data.response[i]) );
+					}
+				}
+			}
+			else
+			{
+				gd.innerHTML = data.error.error_msg;
+				console.log(data);
+			}
+		}
+	);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
 function GetGroups(id) 
 {
 	//console.log('GetGroups(' + id + ')');
-	document.getElementById('groups_data').innerHTML = '';	
+	var gd = document.getElementById('groups_data');
+	gd.innerHTML = '';	
 	Select(null, 'groups_data','groups');
 	VK.api('groups.get', { user_id:id, extended:'1', fields:"id,name,screen_name,is_closed,deactivated,is_admin,admin_level,is_member,invited_by,type,has_photo,photo_50,photo_100,photo_200,activity,age_limits,ban_info,can_create_topic,can_message,can_post,can_see_all_posts,can_upload_doc,can_upload_video,city,contacts,counters,cover,description,fixed_post,is_favorite,is_hidden_from_feed,is_messages_allowed,links,main_album_id,market,member_status,members_count,place,public_date_label,site,start_date,finish_date,status,verified,wiki_page" }, 
   		function(data)
   		{
         	//console.log('groups.get - response');
-			var table = document.createElement('table');
-	    	var tbody = table.appendChild(document.createElement('tbody'));
 		  	if(data.response!==undefined)
 		  	{
 		  		Groups = data.response.items;
-				for (var i = 0; i < data.response.items.length; i++) document.getElementById('groups_data').appendChild (ShowGroups(Groups[i])); 
+				for (var i = 0; i < data.response.items.length; i++) gd.appendChild ( ShowGroups(Groups[i]) );
+				
+				/*var btn = Create('button', {html:'<p>+</p>'} );
+				btn.addEventListener ("click", function(event) 
+				{
+					var txt = prompt("Добавить группу:", "");
+					if(txt!= null && txt!=="") AddGroups (txt); 
+				});*/ 
+				gd.appendChild ( btn );
 			}
 			else
 			{
-				document.getElementById('groups_data').innerHTML = data.error.error_msg;
+				gd.innerHTML = data.error.error_msg;
 				console.log(data);
 			}
 		}
@@ -534,8 +571,8 @@ var likes = [];
 		  		for ( var i = 0; i < res.length; i++) for( var l = 0; l < res[i].likes.items.length; l++ ) if(res[i].likes.items[l] == User.id) likes.push ( res[i] );
 	  			if (likes.length > 0) ShowLikes (likes, Group);
 	  			document.getElementById('count').innerHTML = offset + ':' + CountLikes ;	
-		  		//sleep(280);
-		  		if( !Cancel && offset < data.response.count+500  ) setTimeout (GetLikes (gid,offset+24,count),300);
+		  		sleep(280);
+		  		if( !Cancel && offset < data.response.count+500  ) GetLikes (gid,offset+24,count);
 		  	}
 		  	else console.log(data);
 		}
@@ -565,7 +602,7 @@ var likes = [];
 				sleep(280);
 		  		//console.log('r.date:'+data.response.date + ', date:'+date);
 		  		if( data.response.date==null || data.response.date < date ) SearchGroups.splice(g,1);
-		  		if( !Cancel && offset < data.response.count+500 ) GetLikesDay (g+1, offset, date);
+		  		if( !Cancel && offset < data.response.count+500 )  GetLikesDay (g+1, offset, date);
 		  	}
 		  	else console.log(data);
 		}
@@ -656,11 +693,29 @@ function Select(evt, TabName, id)
     document.getElementById(id).className += " active";
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
+function KeyPress(event) 
+{
+/*var text = e.type +
+    ' keyCode=' + e.keyCode +
+    ' which=' + e.which +
+    ' charCode=' + e.charCode +
+    ' char=' + String.fromCharCode(e.keyCode || e.charCode) +
+    (e.shiftKey ? ' +shift' : '') +
+    (e.ctrlKey ? ' +ctrl' : '') +
+    (e.altKey ? ' +alt' : '') +
+    (e.metaKey ? ' +meta' : '') + "\n";*/
+	if(event.charCode==43)
+	{
+		var txt = prompt("Добавить группу:", "");
+		if(txt!= null && txt!=="") AddGroups (txt);
+	} 
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
 
  
 </script>
 
-<body>
+<body onkeypress="KeyPress(event)">
 
 <div id="user_data"></div>
 
