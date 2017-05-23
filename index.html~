@@ -3,51 +3,20 @@
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="viewport" content="width=device-width,user-scalable=no" />
-		<title>html5 page</title>
+		<title>Лайки друга</title>
+		<base target="_blank">
 	</head>
 
-
 <script src="https://vk.com/js/api/xd_connection.js?2"  type="text/javascript"></script>
-
-<!--
-<script type="text/javascript">
-'use strict'
-  var Status = false;
-  console.log('VK.Init...');
-  VK.init( function() {	console.log('Ok'); Status = true; }
-  			, function() { console.log('Error'); }
-  			, '5.62' );
-  //VK.callMethod("showSettingsBox", 8214);
   
-  function Go() 
-  {
-  		console.log('Go..');
-  		document.body.append('<p><b/>!!!!!!!!!!!</p>');
-  }
-</script>
-
- style='text-align:center;padding-top:50px;' -->
- 
+<!-- <link rel="stylesheet" href="grlikes.css" type="text/css" /> -->
+<!-- <script type="text/javascript" src="grlikes.js"></script> -->
 <style>
-
-body 		{ width:760px; color:#000; margin:0 auto; padding:0; direction:ltr; font-family:Tahoma,Verdana,Arial,Sans-Serif,Lucida Sans; font-size:11px; font-weight:normal}
-a 			{ color:#2b587a; text-decoration:none; cursor:pointer }
+body 		{ width: 760px;   color:#000; margin:0 auto; padding:0; direction:ltr; font-family:Tahoma,Verdana,Arial,Sans-Serif,Lucida Sans; font-size:12px; font-weight:normal}
+a 			{ color: #2a5885; text-decoration:none; cursor:pointer }
 a:hover 	{ text-decoration:underline }
 
-	div
-	{
-		overflow: 	auto;
-		max-height: 500px;
-		border: 		1px solid #ccc;
-	}
-	div.text
-	{
-		overflow: 	auto;
-		min-height: 100px;
-		max-height: 120px;
-		width: 		470px;
-		border: 		1px solid #ccc;
-	}
+	div 	{}
 	div.date
 	{
 		overflow: 	hidden;
@@ -56,133 +25,330 @@ a:hover 	{ text-decoration:underline }
 		min-width: 	130px;
 		/* border: solid 1px black; */
 	}
-	img
+	img.post
 	{
+		border: 0;
 		max-width: 	180px;
 		max-height: 250px;
 	}
 	p
 	{
-		font-size: 	14px;
-		padding: 0px 2px;
+		font-size: 	12px;
+		padding: 2px 0;
+		margin: 0 auto;
 	}
 	p.date
 	{
-		font-size:	9px;
-		min-width: 	85px;
+		font-size:	10px;
+		width: 		90px;
 	}
 	p.green
 	{
 		color:	green;
 	}
-	a
+	p.name
 	{
-		font-size:	14px;
+		font-size: 	14px;
+		--font-weight: bold;
+		padding: 4px 12px;
+		--color:	#475a70;
 	}
 	button
 	{
-    	background-color: #ccc;
-    	float: left;
+		font-size: 	12px;
+    	background-color: #dce7f2;
     	border: none;
     	outline: none;
     	cursor: pointer;
-    	padding: 2px 8px;
+    	padding: 4px 12px;
     	transition: 0.3s;
 	}
 	button:hover
 	{
-   	background-color: #ddd;
+		color:	#fff;
+   	background-color: rgb(80, 114, 153);
 	}
-
 	tr
 	{
-   	border: none;
-   	padding: 0px 0px;
+   	padding: 0;
+   	margin: 0;
 	}
+	tr:hover
+	{
+	}	
 	td
 	{
-   	background-color: #eee;
-   	padding: 0px 0px;
-   	border: 		1px solid #ccc;
+   	padding: 0;
+   	border:  1px solid #eee;
    	text-align:	center;
+	}
+	td.text
+	{
+		min-width: 450px;
+	}
+	td.counter
+	{
+		min-width: 70px; 
+		vertical-align: top;
+	}
+	.sel_item
+	{
+	}
+	.sel_item:hover
+	{
+		background-color: #dce7f2;
+	}
+	article.post
+	{
+		border-bottom: 1px solid #597da3;
+	}
+
+	section
+	{
 	}
 	header
 	{
-   	background-color: #ccc;
-   	padding: 2px 6px;
+    	height: 16px;
+		margin: 0 0;
+   	padding: 4px 12px;
+   	font-size: 	12px;
+   	text-align:	center;
+   	background-color: #dce7f2;
+	}
+	footer
+	{
+		margin: 4px 0;
+   	padding: 2px 0;
+   	font-size: 	12px;
    	text-align:	center;
 	}
-	section
+	section.text 
 	{
-		padding: 2px 6px;
-   	text-align:	center;
+  		max-height: 250px;
+  		overflow: 	auto;
 	}
 
-			
+	p.text {}
+		
+div.tab
+{
+	 margin: 0 0;
+	 font-size: 	12px;
+    overflow: hidden;
+    outline: none;
+    box-shadow: none;
+    background-color: #dce7f2;
+    border-top: 1px solid #597da3;
+    border-bottom: 1px solid #597da3;
+}
+
+div.tab button
+{
+	 border: none;
+	 outline: none;
+    background-color: inherit;
+    float: left; 
+    cursor: pointer;
+    padding: 4px 12px;
+    transition: 0.3s;
+}
+div.tab button:hover
+{
+		color:	#fff;
+   	background-color: rgb(80, 114, 153);
+}
+div.tab button.active
+{
+    background-color: #597da3;
+}
+
+div.tab label
+{
+    background-color: inherit;
+    float: right;
+    border: none;
+    outline: none;
+    padding: 4px 12px;
+}
+div.tab input
+{
+	margin: 0 4px;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: text;
+    padding: 4px 4px;
+}
+div.tab select
+{
+	margin: 		0 4px;
+   float: 		left;
+   border: 	none;
+   outline:	none;
+   cursor:		text;
+	padding:	2px 4px;
+}
+.tabcontent
+{
+    display: 		none;
+    padding: 		4px 4px;
+    border: 		1px solid #ccc;
+    border-top:	none;
+	 margin:			0 auto;
+	 overflow:		auto;
+	 max-height:	520px;    
+}		
+	img.ml
+	{
+		margin: 7px 8px;
+		border: 0;
+		width: 	20px;
+		height: 10px;
+		float: right;
+		display: none; 
+	}
+	.none
+	{
+		display: none; 
+	}
 </style>
 
-
-
 <script type="text/javascript" charset="cp1251" >
-'use strict'
 
+//------------------------------------------------------------------------------------------------------------------------------------------
+'use strict';
 //------------------------------------------------------------------------------------------------------------------------------------------
 var User;
 var Group;
 var Cancel = false;
 var CountLikes = 0;
+var Groups = [];
+var SearchGroups = [];
+var AllGroups = [];
+var Likes = [];
+var par = { id:false, me:false, others:false, debug:true, me:false };
 //------------------------------------------------------------------------------------------------------------------------------------------
-
+if (!Date.prototype.toStr) {
+  (function()
+  {
+    function pad(number)
+    {
+      if (number < 10) return '0' + number;
+      return number;
+    }
+    Date.prototype.toStr = function()
+    {
+    	if(isNaN(this)) return 'n/a';
+      return pad(this.getUTCDate()) + '.' + pad(this.getUTCMonth() + 1) + '.' + this.getUTCFullYear() +
+        ' ' + pad(this.getUTCHours()) + ':' + pad(this.getUTCMinutes());
+    };
+  }());
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+function d2s (time) 
+{
+	return (new Date(time * 1000)).toStr();
+}
+/*
 function D2S(d)
 {
-	var dtf = new Intl.DateTimeFormat("ru-RU", {   year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "numeric" /*, second: "numeric"*/} );
-	return (dtf.format(d));
+	console.log(d.toStr());
+	//var dtf = new Intl.DateTimeFormat("ru-RU", {   year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "numeric"}); // , second: "numeric"} );
+	return d.toStr(); //(dtf.format(d));
 }
+*/
+//------------------------------------------------------------------------------------------------------------------------------------------
 function uvl(v,d)
 {
 	//return ((typeof v)=='undefined'?d:v); 
 	return (v===undefined?d:v); 
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
+function Create(type,attr) 
+{
+	var elm = document.createElement(type);
+	if ((typeof attr.id)		!='undefined') elm.id 			= attr.id;
+	if ((typeof attr.class)	!='undefined') elm.className 	= attr.class;
+	if ((typeof attr.html)	!='undefined') elm.innerHTML 	= attr.html;
+	if ((typeof attr.href)	!='undefined') elm.href 		= attr.href;
+	if ((typeof attr.width)	!='undefined') elm.width 		= attr.width;
+	if ((typeof attr.height)!='undefined') elm.height 		= attr.height;
+	if ((typeof attr.src)	!='undefined') elm.src 			= attr.src;
+	if ((typeof attr.title)	!='undefined') elm.title		= attr.title;
+	if ((typeof attr.alt)	!='undefined') elm.alt			= attr.alt;
+	if ((typeof attr.child)	!='undefined') elm.appendChild (attr.child);
+	if ((typeof attr.target)!='undefined') elm.target		= attr.target;
+	//if ((typeof attr.click)	!='undefined') elm.addEventListener (attr.click);
+	return elm;
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+function id2html(id,addr) 
+{
+	if(par.id) return ('<a href="https://vk.com/' + addr + '"><p>' + id + '</p></a>');
+	return '';
+}//------------------------------------------------------------------------------------------------------------------------------------------
+function dm2html(dm) 
+{
+	return ('<a href="https://vk.com/' + dm + '"><p>' + dm + '</p></a>');
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+function ls2html(last_seen,online) 
+{
+	if(last_seen!==undefined) return ('<p class="date' + (online==1?' green':'') + '" >' + d2s(last_seen.time) + '</p>');
+	return ' n/a ';
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+function ShowFriend (friend)
+{
+	var id = uvl(friend.uid,friend.id);
+
+	var article = Create('article',{id:id, class:'sel_item' });
+	var tr = article.appendChild(document.createElement('table')).appendChild(document.createElement('tr'));
+
+	tr.appendChild(Create('td', {width: 100,  html:dm2html(friend.domain) + id2html(id,friend.domain) + ls2html(friend.last_seen,friend.online)}));
+	tr.appendChild(Create('td', {child: Create('a', {href:'https://vk.com/'+friend.domain, child:  Create('img',{src:friend.photo_50, title:friend.first_name+' '+friend.last_name })})}));
+	tr.appendChild(Create('td', {width: 180, html:'<p class="name">'+friend.first_name + '<br />' + friend.last_name+'</p>'}));
+	tr.appendChild(Create('td', {width: 70,  html:'<p>'+uvl(friend.bdate,"n/a")+'</p>'}));
+	//tr.appendChild(Create('td', {width:80, html:'<p>'+friend.city.title+'</p>'}));
+	article.addEventListener ("click", function(event) { Group=null; GetGroups ( event.currentTarget.id);  GetUser(event.currentTarget.id); /*Select(null, 'groups_data','groups');*/ });
+
+	return (article);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
 function GetFriends (id)
 {
 	console.log('GetFriends(' + id + ')');
-	document.getElementById('friends_data').innerHTML = '';	
+	var fd = document.getElementById('friends_data');
+	fd.innerHTML = '';	
 	Select(null, 'friends_data','friends');
 	
-  	VK.api('friends.get', {user_id:id, fields:"id,uid,first_name,last_name,deactivated,hidden,about,activities,bdate,blacklisted,blacklisted_by_me,books,can_post,can_see_all_posts,can_see_audio,can_send_friend_request,can_write_private_message,career,city,common_count,connections,contacts,counters,country,crop_photo,domain,education,exports,first_name_nom,first_name_gen,first_name_dat,first_name_acc,first_name_ins,first_name_abl,followers_count,friend_status,games,has_mobile,has_photo,home_town,interests,is_favorite,is_friend,is_hidden_from_feed,last_name_nom,last_name_gen,last_name_dat,last_name_acc,last_name_ins,last_name_abl,last_seen,lists,maiden_name,military,movies,music,nickname,occupation,online,online_mobile,online_app,personal,photo_50,photo_100,photo_200_orig,photo_200,photo_400_orig,photo_id,photo_max,photo_max_orig,quotes,relatives,relation,schools,screen_name,sex,site,status,timezone,tv,universities,verified,wall_comments"
+  	VK.api('friends.get', {user_id:id, fields:"id,uid,user_id,first_name,last_name,deactivated,hidden,about,activities,bdate,blacklisted,blacklisted_by_me,books,can_post,can_see_all_posts,can_see_audio,can_send_friend_request,can_write_private_message,career,city,common_count,connections,contacts,counters,country,crop_photo,domain,education,exports,first_name_nom,first_name_gen,first_name_dat,first_name_acc,first_name_ins,first_name_abl,followers_count,friend_status,games,has_mobile,has_photo,home_town,interests,is_favorite,is_friend,is_hidden_from_feed,last_name_nom,last_name_gen,last_name_dat,last_name_acc,last_name_ins,last_name_abl,last_seen,lists,maiden_name,military,movies,music,nickname,occupation,online,online_mobile,online_app,personal,photo_50,photo_100,photo_200_orig,photo_200,photo_400_orig,photo_id,photo_max,photo_max_orig,quotes,relatives,relation,schools,screen_name,sex,site,status,timezone,tv,universities,verified,wall_comments"
   									, order:"hints", version:"5.8"}, 
   		function(data)
   		{
-  			console.log(data);
-	
-			var table = document.createElement('table');
-	    	var tbody = table.appendChild(document.createElement('tbody'));
-	    	
-	    	var items = data.response.items!==undefined?data.response.items:data.response;
-
-			for (var i = 0; i < items.length; i++)
-			{
-				var tr = tbody.appendChild(document.createElement('tr'));
-				var id = uvl(items[i].uid,items[i].id);
-				var last_seen = ' n/a ';
-				if (items[i].last_seen!==undefined) last_seen = D2S(new Date(items[i].last_seen.time * 1000));
-	    		tr.appendChild(document.createElement('td')).innerHTML = ('<p><a href="https://vk.com/' + items[i].domain + '">' + id + '</a></p>'
-	    				+ '<p class="date' + (items[i].online==1?' green':'') + '" >' + last_seen + '</p>');
-	    		tr.appendChild(document.createElement('td')).appendChild (document.createElement('img')).setAttribute("src",items[i].photo_50);
-	    		tr.appendChild(document.createElement('td')).innerHTML = (items[i].first_name + '<br />' + items[i].last_name);
-	    		tr.appendChild(document.createElement('td')).innerHTML = (uvl(items[i].bdate,""));
-	    		var btn = document.createElement('button');
-	    		btn.innerHTML = 'Выбрать';
-	    		btn.id=id;
-	    		btn.addEventListener ("click", function(event) {  GetGroups ( event.currentTarget.id);  GetUser(event.currentTarget.id); Select(null, 'groups_data','groups');  });
-	    		tr.appendChild(document.createElement('td')).appendChild (btn);
-			}
-			
-			document.getElementById('friends_data').appendChild(table);
-			document.getElementById('friends_data').style.display = "block";
+	    	var items = (data.response.items!==undefined?data.response.items:data.response);
+			for (var i = 0; i < items.length; i++)	fd.appendChild( ShowFriend (items[i]) );
+			fd.style.display = "block";
 		}
 	);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+function ShowUser(user) 
+{
+	var article = document.createElement('article');
+	var tr = article.appendChild(document.createElement('table')).appendChild(document.createElement('tr'));
+
+	tr.appendChild(Create('td', {width:100,  html:dm2html(user.domain) + id2html(user.id,user.domain) + ls2html(user.last_seen,user.online)}));
+	tr.appendChild(Create('td', {child: Create('a', {href:'https://vk.com/'+user.domain, child:  Create('img',{src:user.photo_50, title:user.first_name+' '+user.last_name })})}));
+	tr.appendChild(Create('td', {width:140, html:'<p class="name">'+user.first_name + '<br />' + user.last_name+'</p>'}));
+	tr.appendChild(Create('td', {width:70,  html:'<p>'+uvl(user.bdate,"n/a")+'</p>'}));
+	tr.appendChild(Create('td', {class:'counter', html:'<button onclick="GetFriends('+user.id+')" >Друзей</button><p>' + user.counters.friends + '</p>'}));
+	tr.appendChild(Create('td', {class:'counter', html:'<button onclick="GetGroups('+user.id+')">Групп</button><p>'  + ((typeof user.groups)!='undefined'?user.counters.groups:user.counters.pages) + '</p>'}));
+	tr.appendChild(Create('td', {class:'counter', html:'<header>Аудио</header><p>'  + uvl(user.counters.audios,'-') + '</p>'}));
+	tr.appendChild(Create('td', {class:'counter', html:'<header>Видео</header><p>'  + uvl(user.counters.videos,'-') + '</p>'}));
+	tr.appendChild(Create('td', {class:'counter', html:'<header>Фото</header><p>'   + uvl(user.counters.photos,'-') + '</p>'}));
+
+	return (article);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 function GetUser(id) 
@@ -190,156 +356,164 @@ function GetUser(id)
   	VK.api('users.get', {user_ids:id, fields:"id,first_name,last_name,deactivated,hidden,about,activities,bdate,blacklisted,blacklisted_by_me,books,can_post,can_see_all_posts,can_see_audio,can_send_friend_request,can_write_private_message,career,city,common_count,connections,contacts,counters,country,crop_photo,domain,education,exports,first_name_nom,first_name_gen,first_name_dat,first_name_acc,first_name_ins,first_name_abl,followers_count,friend_status,games,has_mobile,has_photo,home_town,interests,is_favorite,is_friend,is_hidden_from_feed,last_name_nom,last_name_gen,last_name_dat,last_name_acc,last_name_ins,last_name_abl,last_seen,lists,maiden_name,military,movies,music,nickname,occupation,online,online_mobile,online_app,personal,photo_50,photo_100,photo_200_orig,photo_200,photo_400_orig,photo_id,photo_max,photo_max_orig,quotes,relatives,relation,schools,screen_name,sex,site,status,timezone,tv,universities,verified,wall_comments"}, // 
   		function(data)
   		{
-
-        	console.log('users.get - Ok');
-        	console.log(data);
-
-			var table = document.createElement('table');
-	    	var tbody = table.appendChild(document.createElement('tbody'));
-
 			for (var i = 0; i < data.response.length; i++)
 			{
 				User = data.response[i];
 				User.id = ((typeof data.response[i].uid)=='undefined'?data.response[i].id:data.response[i].uid);
-				var tr = tbody.appendChild(document.createElement('tr'));
-				tr.appendChild(document.createElement('td')).innerHTML = ('<p>' + User.id + '</p><p class="date' + (data.response[i].online==1?' green':'') + '" >' + D2S(new Date(data.response[i].last_seen.time * 1000)) + '</p>');;
-	    		tr.appendChild(document.createElement('td')).appendChild(document.createElement('img')).setAttribute("src",data.response[i].photo_50);
-	    		tr.appendChild(document.createElement('td')).innerHTML = data.response[i].first_name + '<br />' + data.response[i].last_name;
-	    		tr.appendChild(document.createElement('td')).innerHTML = '<button onclick="GetFriends('+id+')" >Друзей</button><section>' + data.response[i].counters.friends + '<section>';
-	    		tr.appendChild(document.createElement('td')).innerHTML = '<button onclick="GetGroups('+id+')">Групп</button><section>'  + ((typeof data.response[i].groups)!='undefined'?data.response[i].counters.groups:data.response[i].counters.pages) + '<section>';
-	    		tr.appendChild(document.createElement('td')).innerHTML = '<header>Аудио</header><section>'  + uvl(data.response[i].counters.audios,'-') + '<section>';
-	    		tr.appendChild(document.createElement('td')).innerHTML = '<header>Видео</header><section>'  + uvl(data.response[i].counters.videos,'-') + '<section>';
-	    		tr.appendChild(document.createElement('td')).innerHTML = '<header>Фото</header><section>'   + uvl(data.response[i].counters.photos,'-') + '<section>';
+				document.getElementById('user_data').innerHTML = ShowUser(User).outerHTML;
+				if((typeof id)=='undefined' && User.id==156808317) par.me = true;
 			}
-			document.getElementById('user_data').innerHTML = '';
-			document.getElementById('user_data').appendChild(table);
 		}
 	);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 function GetPosts (id)
 {
-	console.log('GetPosts(' + id + ')');
   	VK.api('wall.get', {owner_id:-id, count:1}, 
   		function(data)
   		{
-
-        	console.log('GetPosts - Ok');
-        	console.log(data);
-
 			while (document.getElementById('posts')==null) sleep (200);
 			document.getElementById('posts').innerHTML = uvl(data.response.count,'-');
-
 		}
 	);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
+function ShowGroup(group) 
+{
+	var article = document.createElement('article');
+	var tr = article.appendChild(document.createElement('table')).appendChild(document.createElement('tr'));
+
+	tr.appendChild(Create('td', {width:95,  html:dm2html(group.screen_name) + id2html(group.id,group.screen_name) + '<p class="date" >' + d2s(group.start_time) + '</p>'}));
+	tr.appendChild(Create('td', {child: Create('a', {href:'https://vk.com/'+group.screen_name, child:  Create('img',{src:group.photo_50, title:group.name})})}));
+	tr.appendChild(Create('td', {width:200, html:'<p class="name">'+group.name+'</p>'}));
+	tr.appendChild(Create('td', {class:'counter', html:'<header class="counter">Членов</header><footer>' + group.members_count + '</footer>'}));
+	tr.appendChild(Create('td', {class:'counter', html:'<header class="counter">Постов</header><footer id="posts">' + '-' + '</footer>'}));
+	tr.appendChild(Create('td', {class:'counter', html:'<header class="counter">Аудио</header><footer>'  + uvl(group.counters.audios,'-') + '</footer>'}));
+	tr.appendChild(Create('td', {class:'counter', html:'<header class="counter">Видео</header><footer>'  + uvl(group.counters.videos,'-') + '</footer>'}));
+	tr.appendChild(Create('td', {class:'counter', html:'<header class="counter">Фото</header><footer>'   + uvl(group.counters.photos,'-') + '</footer>'}));
+
+	return (article);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
 function GetGroup (id)
 {
-	console.log('GetGroup(' + id + ')');
-	document.getElementById('user_data').innerHTML = '';
   	VK.api('groups.getById', {group_id:id, fields:"id,name,screen_name,is_closed,deactivated,is_admin,admin_level,is_member,invited_by,type,has_photo,photo_50,photo_100,photo_200,activity,age_limits,ban_info,can_create_topic,can_message,can_post,can_see_all_posts,can_upload_doc,can_upload_video,city,contacts,counters,cover,description,fixed_post,is_favorite,is_hidden_from_feed,is_messages_allowed,links,main_album_id,market,member_status,members_count,place,public_date_label,site,start_date,finish_date,status,verified,wiki_page"}, 
   		function(data)
   		{
-
-        	console.log('GetGroup - Ok');
-        	console.log(data);
-        	
-			var table = document.createElement('table');
-	    	var tbody = table.appendChild(document.createElement('tbody'));
-
 			for (var i = 0; i < data.response.length; i++)
 			{
 				Group = data.response[i];
 				Group.id = uvl(data.response[i].id,data.response[i].gid);
 				GetPosts (Group.id);
-				var tr = tbody.appendChild(document.createElement('tr'));
-				tr.appendChild(document.createElement('td')).innerHTML = ('<p>' + Group.id + '</p><p class="date" >' + D2S(new Date(data.response[i].start_date * 1000)) + '</p>');;
-	    		tr.appendChild(document.createElement('td')).appendChild(document.createElement('img')).setAttribute("src",data.response[i].photo_50);
-	    		tr.appendChild(document.createElement('td')).innerHTML = '<p>' + data.response[i].name + '</p>';
-	    		tr.appendChild(document.createElement('td')).innerHTML = '<header>Членов</header><section>' + data.response[i].members_count + '<section>';
-	    		tr.appendChild(document.createElement('td')).innerHTML = '<header>Постов</header><section id="posts">' + '-' + '<section>';
-	    		tr.appendChild(document.createElement('td')).innerHTML = '<header>Аудио</header><section>'  + uvl(data.response[i].counters.audios,'-') + '<section>';
-	    		tr.appendChild(document.createElement('td')).innerHTML = '<header>Видео</header><section>'  + uvl(data.response[i].counters.videos,'-') + '<section>';
-	    		tr.appendChild(document.createElement('td')).innerHTML = '<header>Фото</header><section>'   + uvl(data.response[i].counters.photos,'-') + '<section>';
+				document.getElementById('user_data').innerHTML = ShowGroup(Group).outerHTML;;
 			}
-			document.getElementById('user_data').appendChild(table);
 		}
 	);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
-function GetGroups(id) 
+function ShowGroups(group) 
 {
-	console.log('GetGroups(' + id + ')');
-	document.getElementById('groups_data').innerHTML = '';	
-	Select(null, 'groups_data','groups');
-	VK.api('groups.get', { user_id:id, extended:'1', fields:"id,name,screen_name,is_closed,deactivated,is_admin,admin_level,is_member,invited_by,type,has_photo,photo_50,photo_100,photo_200,activity,age_limits,ban_info,can_create_topic,can_message,can_post,can_see_all_posts,can_upload_doc,can_upload_video,city,contacts,counters,cover,description,fixed_post,is_favorite,is_hidden_from_feed,is_messages_allowed,links,main_album_id,market,member_status,members_count,place,public_date_label,site,start_date,finish_date,status,verified,wiki_page" }, 
+	var article = Create('article',{ id:group.id, class:'sel_item' });
+
+	var tr = article.appendChild(document.createElement('table')).appendChild(document.createElement('tr'));
+
+	tr.appendChild(Create('td', {width:160, html:dm2html(group.screen_name) + id2html(group.id,group.screen_name) + '<p class="date" >' + d2s(group.start_time) + '</p>'}));
+	tr.appendChild(Create('td', {child: Create('a', {href:'https://vk.com/'+group.screen_name, child:  Create('img',{src:group.photo_50, title:group.name})})}));
+	tr.appendChild(Create('td', {width:300, html:'<p class="name">'+group.name+'</p>'}));
+	tr.appendChild(Create('td', {width: 80, html:'<p>' + group.members_count + '</p>'}));
+	
+	article.addEventListener ("click", function(event) { GetGroup (event.currentTarget.id); });
+
+	return (article);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+function AddGroups(ids) 
+{
+	var gd = document.getElementById('groups_data');
+	VK.api('groups.getById', { group_ids:ids, fields:"id,name,screen_name,is_closed,deactivated,is_admin,admin_level,is_member,invited_by,type,has_photo,photo_50,photo_100,photo_200,activity,age_limits,ban_info,can_create_topic,can_message,can_post,can_see_all_posts,can_upload_doc,can_upload_video,city,contacts,counters,cover,description,fixed_post,is_favorite,is_hidden_from_feed,is_messages_allowed,links,main_album_id,market,member_status,members_count,place,public_date_label,site,start_date,finish_date,status,verified,wiki_page" }, 
   		function(data)
   		{
-
-        	console.log('groups.get - response');
-
-			var table = document.createElement('table');
-	    	var tbody = table.appendChild(document.createElement('tbody'));
-
+        	console.log('groups.getById - response');
+			console.log(data);
 		  	if(data.response!==undefined)
 		  	{
-				for (var i = 0; i < data.response.items.length; i++)
+				for (var i = 0; i < data.response.length; i++)
 				{
-					var tr = tbody.appendChild(document.createElement('tr'));
-					tr.appendChild(document.createElement('td')).innerHTML = data.response.items[i].id;
-	    			tr.appendChild(document.createElement('td')).appendChild(document.createElement('img')).setAttribute("src",data.response.items[i].photo_50); //.photo_100
-	    			tr.appendChild(document.createElement('td')).innerHTML = data.response.items[i].name;
-	    			var btn = document.createElement('button');
-	    			btn.innerHTML = 'Выбрать';
-	    			btn.id=data.response.items[i].id;
-	    			btn.addEventListener ("click", 
-	    				function(event)
-	    				{
-	    					GetGroup (event.currentTarget.id);
-	    					document.getElementById('likes_data').innerHTML = '';
-	    					setCancel(false);
-	    					CountLikes = 0;
-	    					GetLikes ( event.currentTarget.id,0,document.getElementById('max').value);
-	    					Select(null, 'likes_data','likes');
-	    				}
-	    			);
-	    			tr.appendChild(document.createElement('td')).appendChild (btn);
+					var s=-1;
+					for (var j = 0; j < Groups.length; j++) if(data.response[i].id == Groups[j].id ) { s = j; break; }
+					if(s == -1)
+					{
+					 	Groups.push ( data.response[i] );
+					 	gd.appendChild ( ShowGroups(data.response[i]) );
+					}
 				}
-				document.getElementById('groups_data').appendChild(table);				
 			}
 			else
 			{
-				document.getElementById('groups_data').innerHTML = data.error.error_msg;
+				gd.innerHTML = data.error.error_msg;
 				console.log(data);
 			}
 		}
 	);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
-function ShowLikes (Likes)
+function GetGroups(id) 
 {
-	//console.log('ShowLikes()');
-	//console.log(Likes);
+	//console.log('GetGroups(' + id + ')');
+	var gd = document.getElementById('groups_data');
+	gd.innerHTML = '';	
+	Select(null, 'groups_data','groups');
+	VK.api('groups.get', { user_id:id, extended:'1', fields:"id,name,screen_name,is_closed,deactivated,is_admin,admin_level,is_member,invited_by,type,has_photo,photo_50,photo_100,photo_200,activity,age_limits,ban_info,can_create_topic,can_message,can_post,can_see_all_posts,can_upload_doc,can_upload_video,city,contacts,counters,cover,description,fixed_post,is_favorite,is_hidden_from_feed,is_messages_allowed,links,main_album_id,market,member_status,members_count,place,public_date_label,site,start_date,finish_date,status,verified,wiki_page" }, 
+  		function(data)
+  		{
+        	//console.log('groups.get - response');
+		  	if(data.response!==undefined)
+		  	{
+		  		Groups = data.response.items;
+				for (var i = 0; i < data.response.items.length; i++) gd.appendChild ( ShowGroups(Groups[i]) );
+			}
+			else
+			{
+				gd.innerHTML = data.error.error_msg;
+				console.log(data);
+			}
+		}
+	);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+function ShowLike (like,group)
+{
+	var article = Create('article', {class:"post"});
 
-	CountLikes += Likes.length;
-	var table = document.createElement('table');
-	var tbody = table.appendChild(document.createElement('tbody'));	
-	for (var i = 0; i < Likes.length; i++)
-	{
-		var tr = tbody.appendChild(document.createElement('tr'));
-		tr.appendChild(document.createElement('td')).innerHTML = ('<p><a href="https://vk.com/wall'+Likes[i].post.from_id+'_'+Likes[i].post.id+'">' + Likes[i].post.id + '</a></p><p class="date">' + D2S(new Date(Likes[i].post.date * 1000)) + '</p>');
-		var photo = "";
-		//console.log(Likes[i]);
-		if(Likes[i].post.attachments !== undefined)
-	   	for (var a = 0; a < Likes[i].post.attachments.length; a++)
-	   		if(Likes[i].post.attachments[a].type="photo")
-	   			if (Likes[i].post.attachments[a].photo !==undefined) { photo = Likes[i].post.attachments[a].photo.photo_604; break; }  // 75,130,604
-	   			else if (Likes[i].post.attachments[a].doc !==undefined) { photo = Likes[i].post.attachments[a].doc.url; break; } 
-	   tr.appendChild(document.createElement('td')).appendChild (document.createElement('img')).setAttribute("src",photo);
-	   tr.appendChild(document.createElement('td')).innerHTML = ('<div class="text"><p>' + Likes[i].post.text /*.slice(0,250)*/ + '</p></div>');
-	}
-	document.getElementById('likes_data').appendChild(table);	
+	var tr = article.appendChild(document.createElement('table')).appendChild(document.createElement('tr'));
+	var td = tr.appendChild(Create('td', { child: Create('a', {href:'https://vk.com/'+group.screen_name, child:  Create('img',{src:group.photo_50, title:group.name, alt:group.name})})}));
+	td.appendChild(Create('footer', {child:Create('a', {href:'https://vk.com/wall'+like.post.from_id+'_'+like.post.id,html:'<p class="date">' + d2s(like.post.date) + '</p>'})}));
+	
+	if(like.post.copy_history !== undefined && like.post.copy_history.length>0) like.post = like.post.copy_history[0];
+
+	var photo = null;
+	if(like.post.attachments !== undefined)
+   	for (var a = 0; a < like.post.attachments.length; a++)
+   		if(like.post.attachments[a].type="photo")
+   			if (like.post.attachments[a].photo !==undefined) { photo = like.post.attachments[a].photo.photo_604; break; }  // 75,130,604
+   			else if (like.post.attachments[a].doc !==undefined) { photo = like.post.attachments[a].doc.url; break; } 
+   if(photo != null) td = tr.appendChild( Create('td', { width:180, child: Create('img', {class:'post',src:photo}) }) );
+   else console.log(like);
+   //console.log('td.offsetHeight:'+td.offsetHeight);
+   tr.appendChild(Create('td', { class:'text', child:Create('section', {height:td.offsetHeight, class:'text',html:'<p class="text">' + like.post.text + '</p>'})}));
+
+	return (article);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+function ShowLikes (likes,group)
+{
+	var ld = document.getElementById('likes_data');
+	CountLikes += likes.length;
+	//for (var i = 0; i < likes.length; i++) ld.appendChild(ShowLike(likes[i],group));	
+	for (var i = 0; i < likes.length; i++) Likes.push({"like": likes[i], "group":group });
+	Likes.sort( function(a, b) {return (b.like.post.date-a.like.post.date);} );
+	ld.innerHTML='';	
+	for (var i = 0; i < Likes.length; i++) ld.appendChild(ShowLike(Likes[i].like,Likes[i].group));
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 function sleep(ms,start)
@@ -348,14 +522,24 @@ function sleep(ms,start)
   for (var i = 0; i < 1e7; i++) if ((new Date().getTime() - start) > ms) break;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
-function GetLikes(gid,offset,count) 
+/*
+function sleep(ms)
 {
-var Likes = [];
-//var s = new Date().getTime();
-	count = (((typeof count)=='undefined')?500:count);
-	console.log('GetLikes:'+ gid + ' - ' + offset+ ' - ' + count);
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+async function demo_sleep()
+{
+  console.log('Taking a break...');
+  await sleep(2000);
+  console.log('Two second later');
+}
+*/
+//------------------------------------------------------------------------------------------------------------------------------------------
+function GetLikesCode (gid,offset)
+{
 	var Code =  'var p = API.wall.get ({ owner_id: -' + gid + ', count:24, offset:' + offset + ' }); '
 				+ ' var posts = p; ' 
+				+ ' var c = p.count; '
 				+ ' var res={}; '
 				+ ' var i=1; '
 				+ ' if(p.items.length>=0) { posts = p.items; i=0; } '
@@ -366,40 +550,91 @@ var Likes = [];
 			   + '      res.push({"post":posts[i], "likes":likes});'
 				+ '	 i = i+1; '
 				+ ' } '
-				+ ' return res; ';
-	VK.api('execute', {"code": Code}, 
+				+ ' return { "date":posts[i-1].date, "count":c, "res":res };';
+	return Code;
+} 
+//------------------------------------------------------------------------------------------------------------------------------------------
+function GetLikes(gid,offset,date) 
+{
+var likes = [];
+	count = uvl(count,5);
+	console.log('GetLikes:'+ gid + ' - ' + offset+ ' - ' + count);
+	VK.api('execute', {"code": GetLikesCode(gid,offset)}, 
+  		function(data)
+  		{
+		  	if(data.response!==undefined) 
+		  	{
+		  		var res = data.response.res;
+		  		for ( var i = 0; i < res.length; i++) for( var l = 0; l < res[i].likes.items.length; l++ ) if(res[i].likes.items[l] == User.id) likes.push ( res[i] );
+	  			if (likes.length > 0) ShowLikes (likes, Group);
+	  			document.getElementById('count').innerHTML = offset + ':' + CountLikes ;	
+		  		sleep(280);
+		  		if( !Cancel && offset < data.response.count+500  ) GetLikes (gid,offset+24,count);
+		  	}
+		  	else console.log(data);
+		}
+	);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+function GetLikesDay(g,offset,date)
+{
+var likes = [];
+	//console.log('GetLikesDay('+g+', '+offset+', '+(date) + ':' + d2s(date)+')');
+	if(SearchGroups.length==0)
+	{
+		Start(false);
+		return;
+	}
+	if(g>=SearchGroups.length) {g=0; offset += 24;}
+	VK.api('execute', {"code": GetLikesCode(SearchGroups[g].id,offset)}, 
   		function(data)
   		{
 		  	if(data.response!==undefined) 
 		  	{
 		  		//console.log(data);
-		  		//console.log(User);
-		  		for (var i = 0; i < data.response.length; i++) for(var l = 0; l < data.response[i].likes.items.length; l++ ) if(data.response[i].likes.items[l] == User.id) Likes.push ( data.response[i] );
-	  			if (Likes.length > 0) ShowLikes (Likes);
-	  			document.getElementById('count').innerHTML = offset + ':' + CountLikes ;	
-		  		sleep(280);
-		  		if(!Cancel && (count==0 || CountLikes<count)) GetLikes(gid,offset+24,count);
+		  		var res = data.response.res;
+		  		for (var i=0; i<res.length; i++) if (res[i].post.date>=date) for(var l=0; l<res[i].likes.items.length; l++) if(res[i].likes.items[l]==User.id) likes.push (res[i]);
+	  			if (likes.length > 0) ShowLikes (likes, SearchGroups[g]);
+	  			document.getElementById('count').innerHTML = g + ':' + offset + ':' + CountLikes;	
+				sleep(280);
+		  		//console.log('r.date:'+data.response.date + ', date:'+date);
+		  		if( data.response.date==null || data.response.date < date ) SearchGroups.splice(g,1);
+		  		if( !Cancel && offset < data.response.count+500 )  GetLikesDay (g+1, offset, date);
 		  	}
 		  	else console.log(data);
 		}
 	);
-	Cancel = false;
 }
-
 //------------------------------------------------------------------------------------------------------------------------------------------
-
+function SearchInGroups(t) 
+{
+	var ids = '';
+	var MaxCount = 1500; //145000000;
+		ids = '0';
+		for (var i=1;i<=500;i++) ids += ',' + (t*500+i);
+		console.log(ids);
+	  	VK.api('groups.getById', {group_ids:ids, fields:"members_count"}, 
+  			function(data)
+  			{
+		  		if(data.response!==undefined) 
+		  		{
+		  			console.log(data);
+		  			for ( var i = 0; i < data.response.length; i++ ) if ( data.response[i].is_closed == 0 && data.response[i].members_count > 10 ) AllGroups.push ( data.response[i] );
+		  			sleep(300);
+		  			if( !Cancel && t*500<MaxCount ) SearchInGroups(t+1);
+		  			else console.log ( AllGroups );
+		  		}
+		  		else console.log(data);
+			}
+		);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
 function InitOk()
 {
 	VK.callMethod("resizeWindow", 800, 640); // Максимальное значение ширины окна — 1000 px, высоты — 4050.
 
    GetUser ();
    GetFriends ();	
-
-   //setTimeout( GetGroups (189070371), 3000 );
-   //GetGroups (189070371);
-   //GetLikes(30022666,0);
-   //GetLikes(50106785,0);
-
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 window.onload = (
@@ -408,72 +643,38 @@ window.onload = (
    	VK.init ( InitOk(), function() { console.log('Error'); }, '5.8');
 	} );
 //------------------------------------------------------------------------------------------------------------------------------------------
-
-</script>
-
-<style type="text/css">
- /* Style the tab */
-div.tab
+function Start(state)
 {
-    overflow: hidden;
-    border: 1px solid #ccc;
-    background-color: #f1f1f1;
-}
+	var dt = new Date();
+	var btn = document.getElementById('start'); 
+	//console.log('Groups.length:' + Groups.length + ', state:' + state + ', btn.innerHTML:' + btn.innerHTML);
 
-/* Style the buttons inside the tab */
-div.tab button
-{
-    background-color: inherit;
-    float: left;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    padding: 6px 16px;
-    transition: 0.3s;
+	if(Groups.length>0 && state && btn.innerHTML == 'Искать')
+	{
+		SearchGroups = [];
+		if(Group!=null) SearchGroups.push(Group);
+		else SearchGroups = Groups.slice();
+		Likes = [];
+		Cancel = false;
+		document.getElementById('likes_data').innerHTML = '';
+		CountLikes = 0;
+		if(document.getElementById('sel').value>0) dt.setDate(dt.getDate()-document.getElementById('sel').value);
+		else dt = new Date(2000, 0, 1);
+		GetLikesDay(0,0,Math.trunc((+dt)/(86400*1000))*86400);
+		Select(null, 'likes_data','likes');
+		btn.innerHTML = 'Стоп';
+		document.getElementById("ml").style.display = "block";
+	}
+	else
+	{
+		Cancel = true;
+		sleep(500);
+		btn.innerHTML = 'Искать';
+		document.getElementById("ml").style.display = "none";
+		if(Likes.length==0) document.getElementById('likes_data').innerHTML = 'Ничего не найдено';
+	}
 }
-
-div.tab label
-{
-    background-color: inherit;
-    float: right;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    padding: 6px 16px;
-    transition: 0.3s;
-}
-
-div.tab input
-{
-    float: left;
-    border: none;
-    outline: none;
-    cursor: text;
-    padding: 6px 16px;
-    transition: 0.3s;
-}
-/* Change background color of buttons on hover */
-div.tab button:hover
-{
-    background-color: #ddd;
-}
-/* Create an active/current tablink class */
-div.tab button.active
-{
-    background-color: #ccc;
-}
-
-/* Style the tab content */
-.tabcontent
-{
-    display: none;
-    padding: 6px 12px;
-    border: 1px solid #ccc;
-    border-top: none;
-}
-</style>
-
-<script type="text/javascript">
+//------------------------------------------------------------------------------------------------------------------------------------------
 function Select(evt, TabName, id) 
 {
     var i, tabcontent, tablinks;
@@ -488,11 +689,30 @@ function Select(evt, TabName, id)
     //evt.currentTarget.className += " active";
     document.getElementById(id).className += " active";
 }
+//------------------------------------------------------------------------------------------------------------------------------------------
+function KeyPress(event) 
+{
+/*var text = e.type +
+    ' keyCode=' + e.keyCode +
+    ' which=' + e.which +
+    ' charCode=' + e.charCode +
+    ' char=' + String.fromCharCode(e.keyCode || e.charCode) +
+    (e.shiftKey ? ' +shift' : '') +
+    (e.ctrlKey ? ' +ctrl' : '') +
+    (e.altKey ? ' +alt' : '') +
+    (e.metaKey ? ' +meta' : '') + "\n";*/
+	if(event.charCode==43)
+	{
+		var txt = prompt("Добавить группу:", "");
+		if(txt!= null && txt!=="") AddGroups (txt);
+	} 
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
 
-function setCancel(val){ Cancel=val; }
+ 
 </script>
 
-<body>
+<body onkeypress="KeyPress(event)">
 
 <div id="user_data"></div>
 
@@ -500,14 +720,24 @@ function setCancel(val){ Cancel=val; }
   <button id="friends"	class="tablinks active" onclick="Select(event, 'friends_data','friends')">Друзья</button>
   <button id="groups"	class="tablinks" 			onclick="Select(event, 'groups_data','groups') 	">Группы</button>
   <button id="likes"		class="tablinks" 			onclick="Select(event, 'likes_data','likes')  	">Лайки</button>
-  <input  id="max" 		maxlength="6" size="7"  value="15">
+  <select id="sel" size="1" title="Период поиска">
+    <option selected value="1">За один день</option>
+    <option value="3">За три дня</option>
+    <option value="7">За неделю</option>
+    <option value="31">За месяц</option>
+    <option value="366">За год</option>
+    <option value="0">За всё время</option>
+  </select>  
+  <button id="start"	onclick="Start(true)" title="Искать лайки в группах">Искать</button>
+
+  <!-- <input  id="max" 		maxlength="5" size="5"  value="5"> -->
   <label  id="count">0</label>
-  <button id="cancel"									onclick="setCancel(true)">Стоп</button>
+  <img id="ml" class="ml none" src="moving_lights.gif">
 </div>
 
 <div id="friends_data" 	class="tabcontent"></div>
-<div id="groups_data" 	class="tabcontent"></div>
-<div id="likes_data" 	class="tabcontent"></div>
+<div id="groups_data" 	class="tabcontent">Выберете друга, во вкладке "Друзья" для просмотра его групп.</div>
+<div id="likes_data" 	class="tabcontent">Выберете друга, затем период поиска и нажмите "Искать", для поиска его лайков.</div>
 
 </body>
 

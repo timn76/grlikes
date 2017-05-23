@@ -576,7 +576,7 @@ var likes = [];
 	);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
-function GetLikesDay(g,offset,date)
+function GetLikesDay (g, offset, date)
 {
 var likes = [];
 	//console.log('GetLikesDay('+g+', '+offset+', '+(date) + ':' + d2s(date)+')');
@@ -585,7 +585,7 @@ var likes = [];
 		Start(false);
 		return;
 	}
-	if(g>=SearchGroups.length) {g=0; offset += 24;}
+	if(g>=SearchGroups.length) { g=0; offset += 24; }
 	VK.api('execute', {"code": GetLikesCode(SearchGroups[g].id,offset)}, 
   		function(data)
   		{
@@ -598,10 +598,18 @@ var likes = [];
 	  			document.getElementById('count').innerHTML = g + ':' + offset + ':' + CountLikes;	
 				sleep(280);
 		  		//console.log('r.date:'+data.response.date + ', date:'+date);
-		  		if( data.response.date==null || data.response.date < date ) SearchGroups.splice(g,1);
-		  		if( !Cancel && offset < data.response.count+500 )  GetLikesDay (g+1, offset, date);
+		  		if( data.response.date==null || data.response.date < date )
+		  		{
+		  			SearchGroups.splice(g,1);
+		  			g--;
+		  		}
+		  		if( !Cancel )  GetLikesDay (g+1, offset, date);
 		  	}
-		  	else console.log(data);
+			else
+			{
+				//gd.innerHTML = data.error.error_msg;
+				console.log(data);
+			}
 		}
 	);
 }
