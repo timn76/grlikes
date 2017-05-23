@@ -3,7 +3,8 @@
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="viewport" content="width=device-width,user-scalable=no" />
-		<title>Лайки в группах</title>
+		<title>Лайки друга</title>
+		<base target="_blank">
 	</head>
 
 <script src="https://vk.com/js/api/xd_connection.js?2"  type="text/javascript"></script>
@@ -276,6 +277,7 @@ function Create(type,attr)
 	if ((typeof attr.title)	!='undefined') elm.title		= attr.title;
 	if ((typeof attr.alt)	!='undefined') elm.alt			= attr.alt;
 	if ((typeof attr.child)	!='undefined') elm.appendChild (attr.child);
+	if ((typeof attr.target)!='undefined') elm.target		= attr.target;
 	//if ((typeof attr.click)	!='undefined') elm.addEventListener (attr.click);
 	return elm;
 }
