@@ -598,7 +598,7 @@ var likes = [];
 	  			document.getElementById('count').innerHTML = g + ':' + offset + ':' + CountLikes;	
 				sleep(280);
 		  		//console.log('r.date:'+data.response.date + ', date:'+date);
-		  		if( data.response.date==null || data.response.date < date )
+		  		if( data.response.date==null || data.response.date < date || offset > data.response.count+100 )
 		  		{
 		  			SearchGroups.splice(g,1);
 		  			g--;
