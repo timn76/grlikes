@@ -239,8 +239,8 @@ if (!Date.prototype.toStr) {
     Date.prototype.toStr = function()
     {
     	if(isNaN(this)) return 'n/a';
-      return pad(this.getUTCDate()) + '.' + pad(this.getUTCMonth() + 1) + '.' + this.getUTCFullYear() +
-        ' ' + pad(this.getUTCHours()) + ':' + pad(this.getUTCMinutes());
+      return pad(this.getDate()) + '.' + pad(this.getMonth() + 1) + '.' + this.getFullYear() +
+        ' ' + pad(this.getHours()) + ':' + pad(this.getMinutes());
     };
   }());
 }

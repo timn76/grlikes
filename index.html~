@@ -481,12 +481,15 @@ function GetGroups(id)
 	);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
-function ShowLike (like,group)
+function CreatePost (like)
 {
-	var article = Create('article', {class:"post"});
+//console.log('CreatePost');
+//console.log(like);
+
+	var article = Create('article', {class:"post", id:like.id});
 
 	var tr = article.appendChild(document.createElement('table')).appendChild(document.createElement('tr'));
-	var td = tr.appendChild(Create('td', { child: Create('a', {href:'https://vk.com/'+group.screen_name, child:  Create('img',{src:group.photo_50, title:group.name, alt:group.name})})}));
+	var td = tr.appendChild(Create('td', { child: Create('a', {href:'https://vk.com/'+like.group.screen_name, child:  Create('img',{src:like.group.photo_50, title:like.group.name, alt:like.group.name})})}));
 	td.appendChild(Create('footer', {child:Create('a', {href:'https://vk.com/wall'+like.post.from_id+'_'+like.post.id,html:'<p class="date">' + d2s(like.post.date) + '</p>'})}));
 	
 	if(like.post.copy_history !== undefined && like.post.copy_history.length>0) like.post = like.post.copy_history[0];
@@ -495,8 +498,17 @@ function ShowLike (like,group)
 	if(like.post.attachments !== undefined)
    	for (var a = 0; a < like.post.attachments.length; a++)
    		if(like.post.attachments[a].type="photo")
-   			if (like.post.attachments[a].photo !==undefined) { photo = like.post.attachments[a].photo.photo_604; break; }  // 75,130,604
-   			else if (like.post.attachments[a].doc !==undefined) { photo = like.post.attachments[a].doc.url; break; } 
+   			if (like.post.attachments[a].photo !== undefined) { photo = like.post.attachments[a].photo.photo_604; break; }  // 75,130,604,807
+   			else
+   			{
+   				if (like.post.attachments[a].doc !== undefined) { photo = like.post.attachments[a].doc.url; break; }
+   				else 	if (like.post.attachments[a].video !== undefined)
+   						{
+   							photo = like.post.attachments[a].video.photo_320;
+   							like.post.text = uvl(like.post.text,like.post.attachments[a].video.description);
+   							break;
+   						}
+   			}
    if(photo != null) td = tr.appendChild( Create('td', { width:180, child: Create('img', {class:'post',src:photo}) }) );
    else console.log(like);
    //console.log('td.offsetHeight:'+td.offsetHeight);
@@ -505,18 +517,55 @@ function ShowLike (like,group)
 	return (article);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
-function ShowLikes (likes,group)
+function AddPost (like)
 {
+//console.log('AddPost');
+//console.log(like);
+
 	var ld = document.getElementById('likes_data');
-	CountLikes += likes.length;
-	//for (var i = 0; i < likes.length; i++) ld.appendChild(ShowLike(likes[i],group));	
-	for (var i = 0; i < likes.length; i++) Likes.push({"like": likes[i], "group":group });
-	Likes.sort( function(a, b) {return (b.like.post.date-a.like.post.date);} );
-	ld.innerHTML='';	
-	for (var i = 0; i < Likes.length; i++) ld.appendChild(ShowLike(Likes[i].like,Likes[i].group));
+	var i;
+	for (i = 0; i < Likes.length; i++) if (Likes[i].id == like.id) break;
+	var post = CreatePost ( like );
+//console.log('i:'+i);
+//console.log(Likes);
+	if (i>=Likes.length-1) ld.appendChild ( post );
+	else ld.insertBefore ( post, document.getElementById(Likes[i+1].id) );
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
-function sleep(ms,start)
+function ShowLikes (likes)
+{
+//console.log('ShowLikes');
+//console.log(likes);
+
+	CountLikes += likes.length;
+	//for (var i = 0; i < likes.length; i++) ld.appendChild(ShowLike(likes[i],group));
+	/*	
+	for (var i = 0; i < likes.length; i++)
+	{
+		likes[i].id = 'wall'+likes[i].post.from_id+'_'+likes[i].post.id;
+		Likes.push(likes[i]);
+	}
+	*/
+	Likes.sort( function(a, b) {return (b.post.date-a.post.date);} );
+	//ld.innerHTML='';	
+	//for (var i = 0; i < Likes.length; i++) ld.appendChild(ShowLike(Likes[i].like,Likes[i].group));
+	
+	for (var i = 0; i < likes.length; i++) AddPost ( likes[i] ); 
+	
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+function ShowLikesAll ()
+{
+//console.log('ShowLikes');
+//console.log(likes);
+
+	var ld = document.getElementById('likes_data');
+	Likes.sort( function(a, b) {return (b.post.date-a.post.date);} );
+	ld.innerHTML='';	
+	for (var i = 0; i < Likes.length; i++) ld.appendChild ( CreatePost ( Likes[i] ) );
+	
+}//------------------------------------------------------------------------------------------------------------------------------------------
+function sleep (ms,start)
 {
   start = (((typeof start)==='undefined')?(new Date().getTime()):start) ;
   for (var i = 0; i < 1e7; i++) if ((new Date().getTime() - start) > ms) break;
@@ -535,9 +584,9 @@ async function demo_sleep()
 }
 */
 //------------------------------------------------------------------------------------------------------------------------------------------
-function GetLikesCode (gid,offset)
+function GetLikesCode (gid,offset,uid)
 {
-	var Code =  'var p = API.wall.get ({ owner_id: -' + gid + ', count:24, offset:' + offset + ' }); '
+	var Code =  'var p = API.wall.get ({ owner_id:'+ uvl(uid,'-' + gid) + ', count:24, offset:' + offset + ' }); '
 				+ ' var posts = p; ' 
 				+ ' var c = p.count; '
 				+ ' var res={}; '
@@ -554,35 +603,42 @@ function GetLikesCode (gid,offset)
 	return Code;
 } 
 //------------------------------------------------------------------------------------------------------------------------------------------
-function GetLikes(gid,offset,date) 
+/*
+function GetLikes (gid,offset,date) 
 {
-var likes = [];
 	count = uvl(count,5);
 	console.log('GetLikes:'+ gid + ' - ' + offset+ ' - ' + count);
 	VK.api('execute', {"code": GetLikesCode(gid,offset)}, 
   		function(data)
   		{
+  			var likes = [];
 		  	if(data.response!==undefined) 
 		  	{
 		  		var res = data.response.res;
-		  		for ( var i = 0; i < res.length; i++) for( var l = 0; l < res[i].likes.items.length; l++ ) if(res[i].likes.items[l] == User.id) likes.push ( res[i] );
-	  			if (likes.length > 0) ShowLikes (likes, Group);
+		  		for ( var i = 0; i < res.length; i++) for( var l = 0; l < res[i].likes.items.length; l++ ) if(res[i].likes.items[l] == User.id) likes.push ( {"post":res[i].post,"likes":res[i].likes,"group":Group} );
+	  			if (likes.length > 0) ShowLikes (likes);
 	  			document.getElementById('count').innerHTML = offset + ':' + CountLikes ;	
-		  		sleep(280);
+		  		sleep(300);
 		  		if( !Cancel && offset < data.response.count+500  ) GetLikes (gid,offset+24,count);
 		  	}
-		  	else console.log(data);
+			else
+			{
+				//gd.innerHTML = data.error.error_msg;
+				console.log(data);
+			}
 		}
 	);
 }
+*/
 //------------------------------------------------------------------------------------------------------------------------------------------
 function GetLikesDay (g, offset, date)
 {
 var likes = [];
 	//console.log('GetLikesDay('+g+', '+offset+', '+(date) + ':' + d2s(date)+')');
-	if(SearchGroups.length==0)
+	if(SearchGroups.length==0 || Cancel)
 	{
 		Start(false);
+		ShowLikesAll();
 		return;
 	}
 	if(g>=SearchGroups.length) { g=0; offset += 24; }
@@ -593,11 +649,15 @@ var likes = [];
 		  	{
 		  		//console.log(data);
 		  		var res = data.response.res;
-		  		for (var i=0; i<res.length; i++) if (res[i].post.date>=date) for(var l=0; l<res[i].likes.items.length; l++) if(res[i].likes.items[l]==User.id) likes.push (res[i]);
-	  			if (likes.length > 0) ShowLikes (likes, SearchGroups[g]);
+		  		for (var i=0; i<res.length; i++) if (res[i].post.date>=date) for(var l=0; l<res[i].likes.items.length; l++) if(res[i].likes.items[l]==User.id)
+		  		{
+		  			var like = {"post":res[i].post,"likes":res[i].likes,"group":SearchGroups[g],"id":'wall'+res[i].post.from_id+'_'+res[i].post.id};
+		  			likes.push (like);
+		  			Likes.push (like);
+		  		}
+	  			if (likes.length > 0) ShowLikes (likes);
 	  			document.getElementById('count').innerHTML = g + ':' + offset + ':' + CountLikes;	
 				sleep(300);
-		  		//console.log('r.date:'+data.response.date + ', date:'+date);
 		  		if( data.response.date==null || data.response.date < date || offset > data.response.count+100 )
 		  		{
 		  			SearchGroups.splice(g,1);
