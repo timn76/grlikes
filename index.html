@@ -653,7 +653,6 @@ var likes = [];
 		  		{
 		  			var like = {"post":res[i].post,"likes":res[i].likes,"group":SearchGroups[g],"id":'wall'+res[i].post.from_id+'_'+res[i].post.id};
 		  			likes.push (like);
-		  			Likes.push (like);
 		  		}
 	  			if (likes.length > 0) ShowLikes (likes);
 	  			document.getElementById('count').innerHTML = g + ':' + offset + ':' + CountLikes;	
