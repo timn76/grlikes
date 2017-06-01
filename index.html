@@ -567,7 +567,8 @@ function ShowLikesAll ()
 }//------------------------------------------------------------------------------------------------------------------------------------------
 function sleep (ms,start)
 {
-  start = (((typeof start)==='undefined')?(new Date().getTime()):start) ;
+  //start = (((typeof start)==='undefined')?(new Date().getTime()):start) ;
+  start = uvl ( start, (new Date().getTime()) );
   for (var i = 0; i < 1e7; i++) if ((new Date().getTime() - start) > ms) break;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -653,6 +654,7 @@ var likes = [];
 		  		{
 		  			var like = {"post":res[i].post,"likes":res[i].likes,"group":SearchGroups[g],"id":'wall'+res[i].post.from_id+'_'+res[i].post.id};
 		  			likes.push (like);
+		  			Likes.push (like);
 		  		}
 	  			if (likes.length > 0) ShowLikes (likes);
 	  			document.getElementById('count').innerHTML = g + ':' + offset + ':' + CountLikes;	
