@@ -261,27 +261,36 @@ function D2S(d)
 function uvl(v,d)
 {
 	//return ((typeof v)=='undefined'?d:v); 
-	return (v===undefined?d:v); 
+	return (v==undefined?d:v); 
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 function Create(type,attr) 
 {
-	var elm = document.createElement(type);
-	if ((typeof attr.id)		!='undefined') elm.id 			= attr.id;
-	if ((typeof attr.class)	!='undefined') elm.className 	= attr.class;
-	if ((typeof attr.html)	!='undefined') elm.innerHTML 	= attr.html;
-	if ((typeof attr.href)	!='undefined') elm.href 		= attr.href;
-	if ((typeof attr.width)	!='undefined') elm.width 		= attr.width;
-	if ((typeof attr.height)!='undefined') elm.height 		= attr.height;
-	if ((typeof attr.src)	!='undefined') elm.src 			= attr.src;
-	if ((typeof attr.title)	!='undefined') elm.title		= attr.title;
-	if ((typeof attr.alt)	!='undefined') elm.alt			= attr.alt;
-	if ((typeof attr.child)	!='undefined') elm.appendChild (attr.child);
-	if ((typeof attr.target)!='undefined') elm.target		= attr.target;
-	//if ((typeof attr.click)	!='undefined') elm.addEventListener (attr.click);
+	let elm = document.createElement(type);
+	if (attr.id			!== undefined) elm.id 			= attr.id;
+	if (attr.class		!== undefined) elm.className 	= attr.class;
+	if (attr.html		!== undefined) elm.innerHTML 	= attr.html;
+	if (attr.href		!== undefined) elm.href 		= attr.href;
+	if (attr.width		!== undefined) elm.width 		= attr.width;
+	if (attr.height	!== undefined) elm.height 		= attr.height;
+	if (attr.src		!== undefined) elm.src 			= attr.src;
+	if (attr.title		!== undefined) elm.title		= attr.title;
+	if (attr.alt		!== undefined) elm.alt			= attr.alt;
+	if (attr.child		!== undefined) elm.appendChild (attr.child);
+	if (attr.target	!== undefined) elm.target		= attr.target;
+	if (attr.type	   !== undefined) elm.type		   = attr.type;
+	if (attr.name	   !== undefined) elm.name		   = attr.name;
+	if (attr.value	   !== undefined) elm.value		= attr.value;
+	if (attr.for	   !== undefined) elm.htmlFor		= attr.for;
+	if (attr.tag	   !== undefined) elm.tag			= attr.tag;
+	if (attr.checked	!== undefined) elm.checked		= attr.checked;
+
+	//var label = document.createElement('label')
+	//label.appendChild(document.createTextNode('text for label after checkbox'));
+	//if ((typeof attr.click	!= undefined) elm.addEventListener (attr.click);
+
 	return elm;
-}
-//------------------------------------------------------------------------------------------------------------------------------------------
+}//------------------------------------------------------------------------------------------------------------------------------------------
 function id2html(id,addr) 
 {
 	if(par.id) return ('<a href="https://vk.com/' + addr + '"><p>' + id + '</p></a>');
@@ -300,17 +309,16 @@ function ls2html(last_seen,online)
 //------------------------------------------------------------------------------------------------------------------------------------------
 function ShowFriend (friend)
 {
-	var id = uvl(friend.uid,friend.id);
+	let article = Create('article',{id:friend.id, class:'sel_item', tag:friend.id });
+	let tr = article.appendChild(document.createElement('table')).appendChild(document.createElement('tr'));
 
-	var article = Create('article',{id:id, class:'sel_item' });
-	var tr = article.appendChild(document.createElement('table')).appendChild(document.createElement('tr'));
-
-	tr.appendChild(Create('td', {width: 100,  html:dm2html(friend.domain) + id2html(id,friend.domain) + ls2html(friend.last_seen,friend.online)}));
+	tr.appendChild(Create('td', {width: 110, html:dm2html(friend.domain) + id2html(friend.id,friend.domain) + ls2html(friend.last_seen,friend.online)}));
 	tr.appendChild(Create('td', {child: Create('a', {href:'https://vk.com/'+friend.domain, child:  Create('img',{src:friend.photo_50, title:friend.first_name+' '+friend.last_name })})}));
 	tr.appendChild(Create('td', {width: 180, html:'<p class="name">'+friend.first_name + '<br />' + friend.last_name+'</p>'}));
-	tr.appendChild(Create('td', {width: 70,  html:'<p>'+uvl(friend.bdate,"n/a")+'</p>'}));
-	//tr.appendChild(Create('td', {width:80, html:'<p>'+friend.city.title+'</p>'}));
-	article.addEventListener ("click", function(event) { Group=null; GetGroups ( event.currentTarget.id);  GetUser(event.currentTarget.id); /*Select(null, 'groups_data','groups');*/ });
+	tr.appendChild(Create('td', {width:  70, html:'<p>'+uvl(friend.bdate,"n/a")+'</p>'}));
+	//tr.appendChild(Create('td', {width:  70, child:CreateCBC(friend)}));
+	
+	article.addEventListener ("click", function(event) {  /*EventLog(event);*/ Group=null; GetGroups ( event.currentTarget.tag);  GetUser(event.currentTarget.tag); }, false);
 
 	return (article);
 }
@@ -318,7 +326,7 @@ function ShowFriend (friend)
 function GetFriends (id)
 {
 	console.log('GetFriends(' + id + ')');
-	var fd = document.getElementById('friends_data');
+	let fd = document.getElementById('friends_data');
 	fd.innerHTML = '';	
 	Select(null, 'friends_data','friends');
 	
@@ -326,21 +334,29 @@ function GetFriends (id)
   									, order:"hints", version:"5.8"}, 
   		function(data)
   		{
-	    	var items = (data.response.items!==undefined?data.response.items:data.response);
-			for (var i = 0; i < items.length; i++)	fd.appendChild( ShowFriend (items[i]) );
-			fd.style.display = "block";
+			if(data.response != undefined)
+  			{
+  				Friends = (data.response.items!=undefined?data.response.items:data.response);
+				for (let i = 0; i < Friends.length; i++)
+				{
+					Friends[i].id = uvl(Friends[i].uid,Friends[i].id);
+					fd.appendChild( ShowFriend (Friends[i]) );
+				}
+				fd.style.display = "block";
+			}
+			else console.log(data);
 		}
 	);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 function ShowUser(user) 
 {
-	var article = document.createElement('article');
-	var tr = article.appendChild(document.createElement('table')).appendChild(document.createElement('tr'));
+	let article = document.createElement('article');
+	let tr = article.appendChild(document.createElement('table')).appendChild(document.createElement('tr'));
 
-	tr.appendChild(Create('td', {width:100,  html:dm2html(user.domain) + id2html(user.id,user.domain) + ls2html(user.last_seen,user.online)}));
+	tr.appendChild(Create('td', {width:110,  html:dm2html(user.domain) + id2html(user.id,user.domain) + ls2html(user.last_seen,user.online)}));
 	tr.appendChild(Create('td', {child: Create('a', {href:'https://vk.com/'+user.domain, child:  Create('img',{src:user.photo_50, title:user.first_name+' '+user.last_name })})}));
-	tr.appendChild(Create('td', {width:140, html:'<p class="name">'+user.first_name + '<br />' + user.last_name+'</p>'}));
+	tr.appendChild(Create('td', {width:140, html:'<p class="name">'+user.first_name + '<br/>' + user.last_name+'</p>'}));
 	tr.appendChild(Create('td', {width:70,  html:'<p>'+uvl(user.bdate,"n/a")+'</p>'}));
 	tr.appendChild(Create('td', {class:'counter', html:'<button onclick="GetFriends('+user.id+')" >Друзей</button><p>' + user.counters.friends + '</p>'}));
 	tr.appendChild(Create('td', {class:'counter', html:'<button onclick="GetGroups('+user.id+')">Групп</button><p>'  + ((typeof user.groups)!='undefined'?user.counters.groups:user.counters.pages) + '</p>'}));
@@ -351,23 +367,32 @@ function ShowUser(user)
 	return (article);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
-function GetUser(id) 
+function GetUser(id,f) 
 {
   	VK.api('users.get', {user_ids:id, fields:"id,first_name,last_name,deactivated,hidden,about,activities,bdate,blacklisted,blacklisted_by_me,books,can_post,can_see_all_posts,can_see_audio,can_send_friend_request,can_write_private_message,career,city,common_count,connections,contacts,counters,country,crop_photo,domain,education,exports,first_name_nom,first_name_gen,first_name_dat,first_name_acc,first_name_ins,first_name_abl,followers_count,friend_status,games,has_mobile,has_photo,home_town,interests,is_favorite,is_friend,is_hidden_from_feed,last_name_nom,last_name_gen,last_name_dat,last_name_acc,last_name_ins,last_name_abl,last_seen,lists,maiden_name,military,movies,music,nickname,occupation,online,online_mobile,online_app,personal,photo_50,photo_100,photo_200_orig,photo_200,photo_400_orig,photo_id,photo_max,photo_max_orig,quotes,relatives,relation,schools,screen_name,sex,site,status,timezone,tv,universities,verified,wall_comments"}, // 
   		function(data)
   		{
-			for (var i = 0; i < data.response.length; i++)
-			{
-				User = data.response[i];
-				User.id = ((typeof data.response[i].uid)=='undefined'?data.response[i].id:data.response[i].uid);
-				document.getElementById('user_data').innerHTML = ShowUser(User).outerHTML;
-				if((typeof id)=='undefined' && User.id==156808317) par.me = true;
+  			if(data.response != undefined)
+  			{
+				for (let i = 0; i < data.response.length; i++)
+				{
+					User = data.response[i];
+					User.id = uvl (data.response[i].id, data.response[i].uid); 
+					document.getElementById('user_data').innerHTML = ShowUser(User).outerHTML;
+					if(id==undefined)
+					{
+						Owner = User;
+						if(User.id==156808317) par.me = true;
+					}
+					if(f!=undefined) f (User.id);
+				}
 			}
+			else console.log(data);
 		}
 	);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
-function GetPosts (id)
+function GetPostsCount (id)
 {
   	VK.api('wall.get', {owner_id:-id, count:1}, 
   		function(data)
@@ -380,10 +405,10 @@ function GetPosts (id)
 //------------------------------------------------------------------------------------------------------------------------------------------
 function ShowGroup(group) 
 {
-	var article = document.createElement('article');
-	var tr = article.appendChild(document.createElement('table')).appendChild(document.createElement('tr'));
+	let article = document.createElement('article');
+	let tr = article.appendChild(document.createElement('table')).appendChild(document.createElement('tr'));
 
-	tr.appendChild(Create('td', {width:95,  html:dm2html(group.screen_name) + id2html(group.id,group.screen_name) + '<p class="date" >' + d2s(group.start_time) + '</p>'}));
+	tr.appendChild(Create('td', {width:110,  html:dm2html(group.screen_name) + id2html(group.id,group.screen_name) + '<p class="date" >' + d2s(group.start_time) + '</p>'}));
 	tr.appendChild(Create('td', {child: Create('a', {href:'https://vk.com/'+group.screen_name, child:  Create('img',{src:group.photo_50, title:group.name})})}));
 	tr.appendChild(Create('td', {width:200, html:'<p class="name">'+group.name+'</p>'}));
 	tr.appendChild(Create('td', {class:'counter', html:'<header class="counter">Членов</header><footer>' + group.members_count + '</footer>'}));
@@ -400,11 +425,11 @@ function GetGroup (id)
   	VK.api('groups.getById', {group_id:id, fields:"id,name,screen_name,is_closed,deactivated,is_admin,admin_level,is_member,invited_by,type,has_photo,photo_50,photo_100,photo_200,activity,age_limits,ban_info,can_create_topic,can_message,can_post,can_see_all_posts,can_upload_doc,can_upload_video,city,contacts,counters,cover,description,fixed_post,is_favorite,is_hidden_from_feed,is_messages_allowed,links,main_album_id,market,member_status,members_count,place,public_date_label,site,start_date,finish_date,status,verified,wiki_page"}, 
   		function(data)
   		{
-			for (var i = 0; i < data.response.length; i++)
+			for (let i = 0; i < data.response.length; i++)
 			{
 				Group = data.response[i];
 				Group.id = uvl(data.response[i].id,data.response[i].gid);
-				GetPosts (Group.id);
+				GetPostsCount (Group.id);
 				document.getElementById('user_data').innerHTML = ShowGroup(Group).outerHTML;;
 			}
 		}
@@ -413,11 +438,10 @@ function GetGroup (id)
 //------------------------------------------------------------------------------------------------------------------------------------------
 function ShowGroups(group) 
 {
-	var article = Create('article',{ id:group.id, class:'sel_item' });
+	let article = Create('article',{ id:group.id, class:'sel_item' });
+	let tr = article.appendChild(document.createElement('table')).appendChild(document.createElement('tr'));
 
-	var tr = article.appendChild(document.createElement('table')).appendChild(document.createElement('tr'));
-
-	tr.appendChild(Create('td', {width:160, html:dm2html(group.screen_name) + id2html(group.id,group.screen_name) + '<p class="date" >' + d2s(group.start_time) + '</p>'}));
+	tr.appendChild(Create('td', {width:170, html:dm2html(group.screen_name) + id2html(group.id,group.screen_name) + '<p class="date" >' + d2s(group.start_time) + '</p>'}));
 	tr.appendChild(Create('td', {child: Create('a', {href:'https://vk.com/'+group.screen_name, child:  Create('img',{src:group.photo_50, title:group.name})})}));
 	tr.appendChild(Create('td', {width:300, html:'<p class="name">'+group.name+'</p>'}));
 	tr.appendChild(Create('td', {width: 80, html:'<p>' + group.members_count + '</p>'}));
@@ -429,7 +453,7 @@ function ShowGroups(group)
 //------------------------------------------------------------------------------------------------------------------------------------------
 function AddGroups(ids) 
 {
-	var gd = document.getElementById('groups_data');
+	let gd = document.getElementById('groups_data');
 	VK.api('groups.getById', { group_ids:ids, fields:"id,name,screen_name,is_closed,deactivated,is_admin,admin_level,is_member,invited_by,type,has_photo,photo_50,photo_100,photo_200,activity,age_limits,ban_info,can_create_topic,can_message,can_post,can_see_all_posts,can_upload_doc,can_upload_video,city,contacts,counters,cover,description,fixed_post,is_favorite,is_hidden_from_feed,is_messages_allowed,links,main_album_id,market,member_status,members_count,place,public_date_label,site,start_date,finish_date,status,verified,wiki_page" }, 
   		function(data)
   		{
@@ -437,10 +461,10 @@ function AddGroups(ids)
 			console.log(data);
 		  	if(data.response!==undefined)
 		  	{
-				for (var i = 0; i < data.response.length; i++)
+				for (let i = 0; i < data.response.length; i++)
 				{
-					var s=-1;
-					for (var j = 0; j < Groups.length; j++) if(data.response[i].id == Groups[j].id ) { s = j; break; }
+					let s=-1;
+					for (let j = 0; j < Groups.length; j++) if(data.response[i].id == Groups[j].id ) { s = j; break; }
 					if(s == -1)
 					{
 					 	Groups.push ( data.response[i] );
@@ -460,7 +484,7 @@ function AddGroups(ids)
 function GetGroups(id) 
 {
 	//console.log('GetGroups(' + id + ')');
-	var gd = document.getElementById('groups_data');
+	let gd = document.getElementById('groups_data');
 	gd.innerHTML = '';	
 	Select(null, 'groups_data','groups');
 	VK.api('groups.get', { user_id:id, extended:'1', fields:"id,name,screen_name,is_closed,deactivated,is_admin,admin_level,is_member,invited_by,type,has_photo,photo_50,photo_100,photo_200,activity,age_limits,ban_info,can_create_topic,can_message,can_post,can_see_all_posts,can_upload_doc,can_upload_video,city,contacts,counters,cover,description,fixed_post,is_favorite,is_hidden_from_feed,is_messages_allowed,links,main_album_id,market,member_status,members_count,place,public_date_label,site,start_date,finish_date,status,verified,wiki_page" }, 
@@ -470,7 +494,7 @@ function GetGroups(id)
 		  	if(data.response!==undefined)
 		  	{
 		  		Groups = data.response.items;
-				for (var i = 0; i < data.response.items.length; i++) gd.appendChild ( ShowGroups(Groups[i]) );
+				for (let i = 0; i < data.response.items.length; i++) gd.appendChild ( ShowGroups(Groups[i]) );
 			}
 			else
 			{
@@ -486,23 +510,24 @@ function CreatePost (like)
 //console.log('CreatePost');
 //console.log(like);
 
-	var article = Create('article', {class:"post", id:like.id});
-
-	var tr = article.appendChild(document.createElement('table')).appendChild(document.createElement('tr'));
-	var td = tr.appendChild(Create('td', { child: Create('a', {href:'https://vk.com/'+like.group.screen_name, child:  Create('img',{src:like.group.photo_50, title:like.group.name, alt:like.group.name})})}));
+	let article = Create('article', {class:"post", id:like.id});
+	let tr = article.appendChild(document.createElement('table')).appendChild(document.createElement('tr'));
+	let td = tr.appendChild(Create('td', { child: Create('a', {href:'https://vk.com/'+like.group.screen_name, child:  Create('img',{src:like.group.photo_50, title:like.group.name, alt:like.group.name})})}));
+	let photo = null;
+	
 	td.appendChild(Create('footer', {child:Create('a', {href:'https://vk.com/wall'+like.post.from_id+'_'+like.post.id,html:'<p class="date">' + d2s(like.post.date) + '</p>'})}));
 	
-	if(like.post.copy_history !== undefined && like.post.copy_history.length>0) like.post = like.post.copy_history[0];
+	if(like.post.copy_history != undefined && like.post.copy_history.length>0) like.post = like.post.copy_history[0];
 
-	var photo = null;
+
 	if(like.post.attachments !== undefined)
-   	for (var a = 0; a < like.post.attachments.length; a++)
+   	for (let a = 0; a < like.post.attachments.length; a++)
    		if(like.post.attachments[a].type="photo")
-   			if (like.post.attachments[a].photo !== undefined) { photo = like.post.attachments[a].photo.photo_604; break; }  // 75,130,604,807
+   			if (like.post.attachments[a].photo != undefined) { photo = like.post.attachments[a].photo.photo_604; break; }  // 75,130,604,807
    			else
    			{
-   				if (like.post.attachments[a].doc !== undefined) { photo = like.post.attachments[a].doc.url; break; }
-   				else 	if (like.post.attachments[a].video !== undefined)
+   				if (like.post.attachments[a].doc != undefined) { photo = like.post.attachments[a].doc.url; break; }
+   				else 	if (like.post.attachments[a].video != undefined)
    						{
    							photo = like.post.attachments[a].video.photo_320;
    							like.post.text = uvl(like.post.text,like.post.attachments[a].video.description);
@@ -522,14 +547,16 @@ function AddPost (like)
 //console.log('AddPost');
 //console.log(like);
 
-	var ld = document.getElementById('likes_data');
-	var i;
+	let ld = document.getElementById('likes_data');
+	let post = CreatePost ( like );
+	let i;
 	for (i = 0; i < Likes.length; i++) if (Likes[i].id == like.id) break;
-	var post = CreatePost ( like );
 //console.log('i:'+i);
 //console.log(Likes);
-	if (i>=Likes.length-1) ld.appendChild ( post );
-	else ld.insertBefore ( post, document.getElementById(Likes[i+1].id) );
+	//if (i>=Likes.length-1) ld.appendChild ( post );
+	if (i==0) ld.insertBefore ( post, ld.firstChild );
+	else if (i==Likes.length-1) ld.appendChild ( post );
+	else ld.insertBefore ( post, document.getElementById(Likes[i+1].id) /*.nextSibling */ );
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 function ShowLikes (likes)
@@ -538,19 +565,8 @@ function ShowLikes (likes)
 //console.log(likes);
 
 	CountLikes += likes.length;
-	//for (var i = 0; i < likes.length; i++) ld.appendChild(ShowLike(likes[i],group));
-	/*	
-	for (var i = 0; i < likes.length; i++)
-	{
-		likes[i].id = 'wall'+likes[i].post.from_id+'_'+likes[i].post.id;
-		Likes.push(likes[i]);
-	}
-	*/
 	Likes.sort( function(a, b) {return (b.post.date-a.post.date);} );
-	//ld.innerHTML='';	
-	//for (var i = 0; i < Likes.length; i++) ld.appendChild(ShowLike(Likes[i].like,Likes[i].group));
-	
-	for (var i = 0; i < likes.length; i++) AddPost ( likes[i] ); 
+	for (let i = 0; i < likes.length; i++) AddPost ( likes[i] ); 
 	
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -559,35 +575,22 @@ function ShowLikesAll ()
 //console.log('ShowLikes');
 //console.log(likes);
 
-	var ld = document.getElementById('likes_data');
+	let ld = document.getElementById('likes_data');
 	Likes.sort( function(a, b) {return (b.post.date-a.post.date);} );
 	ld.innerHTML='';	
-	for (var i = 0; i < Likes.length; i++) ld.appendChild ( CreatePost ( Likes[i] ) );
+	for (let i = 0; i < Likes.length; i++) ld.appendChild ( CreatePost ( Likes[i] ) );
 	
 }//------------------------------------------------------------------------------------------------------------------------------------------
 function sleep (ms,start)
 {
   //start = (((typeof start)==='undefined')?(new Date().getTime()):start) ;
   start = uvl ( start, (new Date().getTime()) );
-  for (var i = 0; i < 1e7; i++) if ((new Date().getTime() - start) > ms) break;
+  for (let i = 0; i < 1e7; i++) if ((new Date().getTime() - start) > ms) break;
 }
-//------------------------------------------------------------------------------------------------------------------------------------------
-/*
-function sleep(ms)
-{
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-async function demo_sleep()
-{
-  console.log('Taking a break...');
-  await sleep(2000);
-  console.log('Two second later');
-}
-*/
 //------------------------------------------------------------------------------------------------------------------------------------------
 function GetLikesCode (gid,offset,uid)
 {
-	var Code =  'var p = API.wall.get ({ owner_id:'+ uvl(uid,'-' + gid) + ', count:24, offset:' + offset + ' }); '
+	let Code =  'var p = API.wall.get ({ owner_id:'+ uvl(uid,'-' + gid) + ', count:24, offset:' + offset + ' }); '
 				+ ' var posts = p; ' 
 				+ ' var c = p.count; '
 				+ ' var res={}; '
@@ -602,39 +605,10 @@ function GetLikesCode (gid,offset,uid)
 				+ ' } '
 				+ ' return { "date":posts[i-1].date, "count":c, "res":res };';
 	return Code;
-} 
-//------------------------------------------------------------------------------------------------------------------------------------------
-/*
-function GetLikes (gid,offset,date) 
-{
-	count = uvl(count,5);
-	console.log('GetLikes:'+ gid + ' - ' + offset+ ' - ' + count);
-	VK.api('execute', {"code": GetLikesCode(gid,offset)}, 
-  		function(data)
-  		{
-  			var likes = [];
-		  	if(data.response!==undefined) 
-		  	{
-		  		var res = data.response.res;
-		  		for ( var i = 0; i < res.length; i++) for( var l = 0; l < res[i].likes.items.length; l++ ) if(res[i].likes.items[l] == User.id) likes.push ( {"post":res[i].post,"likes":res[i].likes,"group":Group} );
-	  			if (likes.length > 0) ShowLikes (likes);
-	  			document.getElementById('count').innerHTML = offset + ':' + CountLikes ;	
-		  		sleep(300);
-		  		if( !Cancel && offset < data.response.count+500  ) GetLikes (gid,offset+24,count);
-		  	}
-			else
-			{
-				//gd.innerHTML = data.error.error_msg;
-				console.log(data);
-			}
-		}
-	);
 }
-*/
 //------------------------------------------------------------------------------------------------------------------------------------------
 function GetLikesDay (g, offset, date)
 {
-var likes = [];
 	//console.log('GetLikesDay('+g+', '+offset+', '+(date) + ':' + d2s(date)+')');
 	if(SearchGroups.length==0 || Cancel)
 	{
@@ -646,13 +620,14 @@ var likes = [];
 	VK.api('execute', {"code": GetLikesCode(SearchGroups[g].id,offset)}, 
   		function(data)
   		{
+  			let likes = [];
 		  	if(data.response!==undefined) 
 		  	{
 		  		//console.log(data);
-		  		var res = data.response.res;
-		  		for (var i=0; i<res.length; i++) if (res[i].post.date>=date) for(var l=0; l<res[i].likes.items.length; l++) if(res[i].likes.items[l]==User.id)
+		  		let res = data.response.res;
+		  		for (let i=0; i<res.length; i++) if (res[i].post.date>=date) for(let l=0; l<res[i].likes.items.length; l++) if(res[i].likes.items[l]==User.id)
 		  		{
-		  			var like = {"post":res[i].post,"likes":res[i].likes,"group":SearchGroups[g],"id":'wall'+res[i].post.from_id+'_'+res[i].post.id};
+		  			let like = {"post":res[i].post,"likes":res[i].likes,"group":SearchGroups[g],"id":'wall'+res[i].post.from_id+'_'+res[i].post.id};
 		  			likes.push (like);
 		  			Likes.push (like);
 		  		}
@@ -677,10 +652,10 @@ var likes = [];
 //------------------------------------------------------------------------------------------------------------------------------------------
 function SearchInGroups(t) 
 {
-	var ids = '';
-	var MaxCount = 1500; //145000000;
+	let ids = '';
+	let MaxCount = 1500; //145000000;
 		ids = '0';
-		for (var i=1;i<=500;i++) ids += ',' + (t*500+i);
+		for (let i=1;i<=500;i++) ids += ',' + (t*500+i);
 		console.log(ids);
 	  	VK.api('groups.getById', {group_ids:ids, fields:"members_count"}, 
   			function(data)
@@ -688,7 +663,7 @@ function SearchInGroups(t)
 		  		if(data.response!==undefined) 
 		  		{
 		  			console.log(data);
-		  			for ( var i = 0; i < data.response.length; i++ ) if ( data.response[i].is_closed == 0 && data.response[i].members_count > 10 ) AllGroups.push ( data.response[i] );
+		  			for ( let i = 0; i < data.response.length; i++ ) if ( data.response[i].is_closed == 0 && data.response[i].members_count > 10 ) AllGroups.push ( data.response[i] );
 		  			sleep(300);
 		  			if( !Cancel && t*500<MaxCount ) SearchInGroups(t+1);
 		  			else console.log ( AllGroups );
@@ -719,16 +694,16 @@ Math.trunc = Math.trunc || function(x)
 //------------------------------------------------------------------------------------------------------------------------------------------
 function Start(state)
 {
-	var dt = new Date();
-	var btn = document.getElementById('start'); 
+	let dt = new Date();
+	let btn = document.getElementById('start'); 
 	//console.log('Groups.length:' + Groups.length + ', state:' + state + ', btn.innerHTML:' + btn.innerHTML);
 
 	if(Groups.length>0 && state && btn.innerHTML == 'Искать')
 	{
-		SearchGroups = [];
+		SearchGroups.length = 0;
 		if(Group!=null) SearchGroups.push(Group);
 		else SearchGroups = Groups.slice();
-		Likes = [];
+		Likes.length = 0;
 		Cancel = false;
 		document.getElementById('likes_data').innerHTML = '';
 		CountLikes = 0;
@@ -751,7 +726,7 @@ function Start(state)
 //------------------------------------------------------------------------------------------------------------------------------------------
 function Select(evt, TabName, id) 
 {
-    var i, tabcontent, tablinks;
+    let i, tabcontent, tablinks;
 
     tabcontent = document.getElementsByClassName("tabcontent");
     for (i = 0; i < tabcontent.length; i++) tabcontent[i].style.display = "none";
@@ -777,7 +752,7 @@ function KeyPress(event)
     (e.metaKey ? ' +meta' : '') + "\n";*/
 	if(event.charCode==43)
 	{
-		var txt = prompt("Добавить группу:", "");
+		let txt = prompt("Добавить группу:", "");
 		if(txt!= null && txt!=="") AddGroups (txt);
 	} 
 }
