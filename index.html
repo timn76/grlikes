@@ -622,18 +622,18 @@ function GetLikesDay (g, offset, date)
 	VK.api('execute', {"code": GetLikesCode(SearchGroups[g].id,offset)}, 
   		function(data)
   		{
-  			let likes = [];
 		  	if(data.response!==undefined) 
 		  	{
 		  		//console.log(data);
-		  		let res = data.response.res;
-		  		for (let i=0; i<res.length; i++) if (res[i].post.date>=date) for(let l=0; l<res[i].likes.items.length; l++) if(res[i].likes.items[l]==User.id)
-		  		{
-		  			let like = {"post":res[i].post,"likes":res[i].likes,"group":SearchGroups[g],"id":'wall'+res[i].post.from_id+'_'+res[i].post.id};
-		  			likes.push (like);
-		  			Likes.push (like);
-		  		}
-	  			if (likes.length > 0) ShowLikes (likes);
+				let likes = [];
+	  			let res = data.response.res;
+	  			for (let i=0; i<res.length; i++) if (res[i].post.date>=date) for(let l=0; l<res[i].likes.items.length; l++) if(res[i].likes.items[l]==User.id)
+	  			{
+	  				let like = {"post":res[i].post,"likes":res[i].likes,"group":SearchGroups[g],"id":'wall'+res[i].post.from_id+'_'+res[i].post.id};
+	  				likes.push (like);
+	  				Likes.push (like);
+	  			}
+  				if (likes.length > 0) ShowLikes (likes);
 	  			document.getElementById('count').innerHTML = g + ':' + offset + ':' + CountLikes;	
 				sleep(300);
 		  		if( data.response.date==null || data.response.date < date || offset > data.response.count+100 )
@@ -641,6 +641,9 @@ function GetLikesDay (g, offset, date)
 		  			SearchGroups.splice(g,1);
 		  			g--;
 		  		}
+ 				likes.length = 0;
+  				likes = [];
+		  		data = null;
 		  		if( !Cancel )  GetLikesDay (g+1, offset, date);
 		  	}
 			else
