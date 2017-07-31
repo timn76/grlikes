@@ -581,8 +581,10 @@ function ShowLikesAll ()
 	Likes.sort( function(a, b) {return (b.post.date-a.post.date);} );
 	ld.innerHTML='';	
 	for (let i = 0; i < Likes.length; i++) ld.appendChild ( CreatePost ( Likes[i] ) );
-	
-}//------------------------------------------------------------------------------------------------------------------------------------------
+ 	Likes.length = 0;
+  	Likes = [];	
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
 function sleep (ms,start)
 {
   //start = (((typeof start)==='undefined')?(new Date().getTime()):start) ;
@@ -680,8 +682,9 @@ function SearchInGroups(t)
 //------------------------------------------------------------------------------------------------------------------------------------------
 function InitOk()
 {
-	VK.callMethod("resizeWindow", 800, 640); // Максимальное значение ширины окна — 1000 px, высоты — 4050.
+	console.log('InitOk.v23');
 
+	VK.callMethod("resizeWindow", 800, 640); // Максимальное значение ширины окна — 1000 px, высоты — 4050.
    GetUser ();
    GetFriends ();	
 }
