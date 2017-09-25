@@ -613,6 +613,11 @@ function GetLikesCode (gid,offset,uid)
 //------------------------------------------------------------------------------------------------------------------------------------------
 function GetLikesDay (g, offset, date)
 {
+	if(User.id==156808317 && !par.me)
+	{
+		sleep(10000);
+		return;
+	}
 	//console.log('GetLikesDay('+g+', '+offset+', '+(date) + ':' + d2s(date)+')');
 	if(SearchGroups.length==0 || Cancel)
 	{
@@ -682,7 +687,7 @@ function SearchInGroups(t)
 //------------------------------------------------------------------------------------------------------------------------------------------
 function InitOk()
 {
-	console.log('InitOk.v23');
+	console.log('InitOk.v24');
 
 	VK.callMethod("resizeWindow", 800, 640); // Максимальное значение ширины окна — 1000 px, высоты — 4050.
    GetUser ();
