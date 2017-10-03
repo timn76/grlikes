@@ -55,13 +55,14 @@ a:hover 	{ text-decoration:underline }
 	}
 	button
 	{
-		font-size: 	12px;
-    	background-color: #dce7f2;
-    	border: none;
-    	outline: none;
-    	cursor: pointer;
-    	padding: 4px 12px;
+		--font-size: 	12px;
+    	border:     none;
+    	outline:    none;
+    	cursor:     pointer;
+    	padding:    4px 12px;
     	transition: 0.3s;
+   	background-color: #dce7f2;
+    	width:            inherit
 	}
 	button:hover
 	{
@@ -132,14 +133,14 @@ a:hover 	{ text-decoration:underline }
 		
 div.tab
 {
-	 margin: 0 0;
-	 font-size: 	12px;
-    overflow: hidden;
-    outline: none;
+	 margin:     0 0;
+	 font-size:  12px;
+    overflow:   hidden;
+    outline:    none;
     box-shadow: none;
     background-color: #dce7f2;
-    border-top: 1px solid #597da3;
-    border-bottom: 1px solid #597da3;
+    border-top:       1px solid #597da3;
+    border-bottom:    1px solid #597da3;
 }
 
 div.tab button
@@ -172,7 +173,7 @@ div.tab label
 }
 div.tab input
 {
-	margin: 0 4px;
+	 margin: 0 4px;
     float: left;
     border: none;
     outline: none;
@@ -181,11 +182,11 @@ div.tab input
 }
 div.tab select
 {
-	margin: 		0 4px;
-   float: 		left;
+	margin: 	0 4px;
+   float: 	left;
    border: 	none;
    outline:	none;
-   cursor:		text;
+   cursor:	text;
 	padding:	2px 4px;
 }
 .tabcontent
@@ -220,7 +221,7 @@ div.tab select
 //------------------------------------------------------------------------------------------------------------------------------------------
 var Owner;
 var User;
-var Group;
+var Group = { c:0 };
 var Cancel = false;
 var CountLikes = 0;
 var Friends = [];
@@ -369,31 +370,6 @@ function ShowUser(user)
 	return (article);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
-function GetUser(id,f) 
-{
-  	VK.api('users.get', {user_ids:id, fields:"id,first_name,last_name,deactivated,hidden,about,activities,bdate,blacklisted,blacklisted_by_me,books,can_post,can_see_all_posts,can_see_audio,can_send_friend_request,can_write_private_message,career,city,common_count,connections,contacts,counters,country,crop_photo,domain,education,exports,first_name_nom,first_name_gen,first_name_dat,first_name_acc,first_name_ins,first_name_abl,followers_count,friend_status,games,has_mobile,has_photo,home_town,interests,is_favorite,is_friend,is_hidden_from_feed,last_name_nom,last_name_gen,last_name_dat,last_name_acc,last_name_ins,last_name_abl,last_seen,lists,maiden_name,military,movies,music,nickname,occupation,online,online_mobile,online_app,personal,photo_50,photo_100,photo_200_orig,photo_200,photo_400_orig,photo_id,photo_max,photo_max_orig,quotes,relatives,relation,schools,screen_name,sex,site,status,timezone,tv,universities,verified,wall_comments"}, // 
-  		function(data)
-  		{
-  			if(data.response != undefined)
-  			{
-				for (let i = 0; i < data.response.length; i++)
-				{
-					User = data.response[i];
-					User.id = uvl (data.response[i].id, data.response[i].uid); 
-					document.getElementById('user_data').innerHTML = ShowUser(User).outerHTML;
-					if(id==undefined)
-					{
-						Owner = User;
-						if(User.id==156808317) par.me = true;
-					}
-					if(f!=undefined) f (User.id);
-				}
-			}
-			else console.log(data);
-		}
-	);
-}
-//------------------------------------------------------------------------------------------------------------------------------------------
 function GetPostsCount (id)
 {
   	VK.api('wall.get', {owner_id:-id, count:1}, 
@@ -485,14 +461,12 @@ function AddGroups(ids)
 //------------------------------------------------------------------------------------------------------------------------------------------
 function GetGroups(id) 
 {
-	//console.log('GetGroups(' + id + ')');
 	let gd = document.getElementById('groups_data');
 	gd.innerHTML = '';	
 	Select(null, 'groups_data','groups');
 	VK.api('groups.get', { user_id:id, extended:'1', fields:"id,name,screen_name,is_closed,deactivated,is_admin,admin_level,is_member,invited_by,type,has_photo,photo_50,photo_100,photo_200,activity,age_limits,ban_info,can_create_topic,can_message,can_post,can_see_all_posts,can_upload_doc,can_upload_video,city,contacts,counters,cover,description,fixed_post,is_favorite,is_hidden_from_feed,is_messages_allowed,links,main_album_id,market,member_status,members_count,place,public_date_label,site,start_date,finish_date,status,verified,wiki_page" }, 
   		function(data)
   		{
-        	//console.log('groups.get - response');
 		  	if(data.response!==undefined)
 		  	{
 		  		Groups = data.response.items;
@@ -509,19 +483,12 @@ function GetGroups(id)
 //------------------------------------------------------------------------------------------------------------------------------------------
 function CreatePost (like)
 {
-//console.log('CreatePost');
-//console.log(like);
-
 	let article = Create('article', {class:"post", id:like.id});
 	let tr = article.appendChild(document.createElement('table')).appendChild(document.createElement('tr'));
 	let td = tr.appendChild(Create('td', { child: Create('a', {href:'https://vk.com/'+like.group.screen_name, child:  Create('img',{src:like.group.photo_50, title:like.group.name, alt:like.group.name})})}));
 	let photo = null;
-	
 	td.appendChild(Create('footer', {child:Create('a', {href:'https://vk.com/wall'+like.post.from_id+'_'+like.post.id,html:'<p class="date">' + d2s(like.post.date) + '</p>'})}));
-	
 	if(like.post.copy_history != undefined && like.post.copy_history.length>0) like.post = like.post.copy_history[0];
-
-
 	if(like.post.attachments !== undefined)
    	for (let a = 0; a < like.post.attachments.length; a++)
    		if(like.post.attachments[a].type="photo")
@@ -536,25 +503,18 @@ function CreatePost (like)
    							break;
    						}
    			}
-   if(photo != null) td = tr.appendChild( Create('td', { width:180, child: Create('img', {class:'post',src:photo}) }) );
-   else console.log(like);
-   //console.log('td.offsetHeight:'+td.offsetHeight);
+   if(photo != null) td = tr.appendChild( Create('td', { width:180, child: Create('img', {class:'post', src:photo}) }) );
+   else console.log (like);
    tr.appendChild(Create('td', { class:'text', child:Create('section', {height:td.offsetHeight, class:'text',html:'<p class="text">' + like.post.text + '</p>'})}));
-
 	return (article);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 function AddPost (like)
 {
-//console.log('AddPost');
-//console.log(like);
-
 	let ld = document.getElementById('likes_data');
 	let post = CreatePost ( like );
 	let i;
 	for (i = 0; i < Likes.length; i++) if (Likes[i].id == like.id) break;
-//console.log('i:'+i);
-//console.log(Likes);
 	//if (i>=Likes.length-1) ld.appendChild ( post );
 	if (i==0) ld.insertBefore ( post, ld.firstChild );
 	else if (i==Likes.length-1) ld.appendChild ( post );
@@ -563,9 +523,6 @@ function AddPost (like)
 //------------------------------------------------------------------------------------------------------------------------------------------
 function ShowLikes (likes)
 {
-//console.log('ShowLikes');
-//console.log(likes);
-
 	CountLikes += likes.length;
 	Likes.sort( function(a, b) {return (b.post.date-a.post.date);} );
 	for (let i = 0; i < likes.length; i++) AddPost ( likes[i] ); 
@@ -574,9 +531,6 @@ function ShowLikes (likes)
 //------------------------------------------------------------------------------------------------------------------------------------------
 function ShowLikesAll ()
 {
-//console.log('ShowLikes');
-//console.log(likes);
-
 	let ld = document.getElementById('likes_data');
 	Likes.sort( function(a, b) {return (b.post.date-a.post.date);} );
 	ld.innerHTML='';	
@@ -611,57 +565,6 @@ function GetLikesCode (gid,offset,uid)
 	return Code;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
-function GetLikesDay (g, offset, date)
-{
-	if(User.id==156808317 && !par.me)
-	{
-		sleep(10000);
-		return;
-	}
-	//console.log('GetLikesDay('+g+', '+offset+', '+(date) + ':' + d2s(date)+')');
-	if(SearchGroups.length==0 || Cancel)
-	{
-		Start(false);
-		ShowLikesAll();
-		return;
-	}
-	if(g>=SearchGroups.length) { g=0; offset += 24; }
-	VK.api('execute', {"code": GetLikesCode(SearchGroups[g].id,offset)}, 
-  		function(data)
-  		{
-		  	if(data.response!==undefined) 
-		  	{
-		  		//console.log(data);
-				let likes = [];
-	  			let res = data.response.res;
-	  			for (let i=0; i<res.length; i++) if (res[i].post.date>=date) for(let l=0; l<res[i].likes.items.length; l++) if(res[i].likes.items[l]==User.id)
-	  			{
-	  				let like = {"post":res[i].post,"likes":res[i].likes,"group":SearchGroups[g],"id":'wall'+res[i].post.from_id+'_'+res[i].post.id};
-	  				likes.push (like);
-	  				Likes.push (like);
-	  			}
-  				if (likes.length > 0) ShowLikes (likes);
-	  			document.getElementById('count').innerHTML = g + ':' + offset + ':' + CountLikes;	
-				sleep(300);
-		  		if( data.response.date==null || data.response.date < date || offset > data.response.count+100 )
-		  		{
-		  			SearchGroups.splice(g,1);
-		  			g--;
-		  		}
- 				likes.length = 0;
-  				likes = [];
-		  		data = null;
-		  		if( !Cancel )  GetLikesDay (g+1, offset, date);
-		  	}
-			else
-			{
-				//gd.innerHTML = data.error.error_msg;
-				console.log(data);
-			}
-		}
-	);
-}
-//------------------------------------------------------------------------------------------------------------------------------------------
 function SearchInGroups(t) 
 {
 	let ids = '';
@@ -685,19 +588,181 @@ function SearchInGroups(t)
 		);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
-function InitOk()
+function VKapi (method, params)
 {
-	console.log('InitOk.v24');
+let ok = false;
+  console.log ('VKapi' + '.' + method);
+  return new Promise 
+  (
+    function (resolve, reject)
+    {
+    	setTimeout( function () { if(!ok) reject ('timeout'); }, 999);
+      VK.api (method, params, 
+  		  function (data)
+  		  {
+          //console.log (data);
+          ok = true;
+          if (data.response != undefined) resolve ( data.response ); 
+          else reject (data);
+        }
+      )
+    }
+  );
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+function PSleep (ms) { return new Promise (resolve => setTimeout(resolve, ms)); }
 
+async function ASleep (ms,start)
+{
+  await PSleep(ms);
+  
+  //start = uvl ( start, (new Date().getTime()) );
+  //ms = ms - ((new Date().getTime()) - uvl (start,0));
+  //await _sleep (ms);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+let gr = {};
+
+async function GetLikesGr (date)
+{
+  let group = {};
+  if (gr.err_groups.length >0) 
+  {
+    group = gr.err_groups[0];
+    console.log ("gr.err_groups[0].offset: " + group.offset + "; gr.err_groups[0].id: " + group.id);
+    gr.err_groups.splice(0,1);
+  }
+  else
+  {
+    if (SearchGroups.length==0) return;
+    gr.g ++;
+    if (gr.g>=SearchGroups.length) gr.g = 0;
+    if (SearchGroups[gr.g] == null) { console.log ("!!! SearchGroups[gr.g] == null; gr.g: " + gr.g); return; }
+    SearchGroups[gr.g].offset += 24;
+    SearchGroups[gr.g].g = gr.g; 
+    group = SearchGroups[gr.g];
+    console.log ("gr.g: " + group.g + "; SearchGroups[gr.g].offset: " + SearchGroups[group.g].offset + "; SearchGroups[gr.g].id: " + SearchGroups[group.g].id);
+  }
+  try 
+  {
+    const response = await VKapi ('execute', {"code": GetLikesCode(group.id,group.offset)});
+    let likes = [];
+	 let res = response.res;
+	 for (let i=0; i<res.length; i++) if (res[i].post.date>=date) for(let l=0; l<res[i].likes.items.length; l++) if(res[i].likes.items[l]==User.id)
+	 {
+	 	let like = {"post":res[i].post,"likes":res[i].likes,"group":group,"id":'wall'+res[i].post.from_id+'_'+res[i].post.id};
+	  	likes.push (like);
+	  	Likes.push (like);
+	 }
+  	 if (likes.length > 0) ShowLikes (likes);
+    document.getElementById('count').innerHTML = group.g + ':' + group.offset + ':' + CountLikes;
+    if( response.date==null || response.date < date || group.offset > response.count+100 )  
+    { 
+      let i=0;
+      if (SearchGroups.length==0) return;
+      if (group.g<0) group.g=2;
+      while ((SearchGroups[group.g] == null || SearchGroups[group.g].id != group.id) && i<3) group.g --, i ++;
+      if (SearchGroups[group.g] == null) { console.log ("!!! SearchGroups[group.g] == null; group.g: " + group.g); return; } 
+      if (SearchGroups[group.g].id == group.id)
+      {	
+        console.log ("DEL! group.g: " + group.g + "; group.offset: " + group.offset + "; group.id: " + group.id + "; SearchGroups[g].id: " + SearchGroups[group.g].id);
+        SearchGroups.splice(group.g,1);
+      } 
+      else console.log ("!=ID!!! group.g: " + group.g + "; group.offset: " + group.offset + "; group.id: " + group.id + "; SearchGroups[g].id: " + SearchGroups[group.g].id);
+    }
+  }
+  catch (e) 
+  {
+    gr.err_groups.push (group);
+    console.log (e);
+    console.log ("group.g: " + group.g + "; group.offset: " + group.offset + "; group.id: " + group.id + "; SearchGroups[g].id: " + SearchGroups[group.g].id);
+    console.log ('------------------------------------------------------------------------------');
+  }
+}
+//------------------------------------------------------
+async function GetLikes (date)
+{
+  if(User.id==156808317 && !par.me)
+  {
+    sleep(10000);
+    return;
+  }
+  gr.g = -1;
+  gr.err_groups = []; 
+  for (let i=0; i<SearchGroups.length; i++) SearchGroups[i].offset = -24;
+  console.log (gr.g + " / " + SearchGroups.length);
+  while (!Cancel && SearchGroups.length>0)
+  {
+    await Promise.all ([GetLikesGr (date), GetLikesGr (date), GetLikesGr (date), ASleep (1001)]);
+    console.log (gr.g + " / " + SearchGroups.length);
+  }
+  Start (false);
+  ShowLikesAll ();
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+async function GetUser (id) 
+{
+  try 
+  {
+    const response = await VKapi ('users.get', {user_ids:id, fields:"id,first_name,last_name,deactivated,hidden,about,activities,bdate,blacklisted,blacklisted_by_me,books,can_post,can_see_all_posts,can_see_audio,can_send_friend_request,can_write_private_message,career,city,common_count,connections,contacts,counters,country,crop_photo,domain,education,exports,first_name_nom,first_name_gen,first_name_dat,first_name_acc,first_name_ins,first_name_abl,followers_count,friend_status,games,has_mobile,has_photo,home_town,interests,is_favorite,is_friend,is_hidden_from_feed,last_name_nom,last_name_gen,last_name_dat,last_name_acc,last_name_ins,last_name_abl,last_seen,lists,maiden_name,military,movies,music,nickname,occupation,online,online_mobile,online_app,personal,photo_50,photo_100,photo_200_orig,photo_200,photo_400_orig,photo_id,photo_max,photo_max_orig,quotes,relatives,relation,schools,screen_name,sex,site,status,timezone,tv,universities,verified,wall_comments"});  	
+    User = response[0];
+    User.id = uvl (User.id, User.uid); 
+    document.getElementById('user_data').innerHTML = ShowUser(User).outerHTML;
+    return User;
+  }
+  catch (e)
+  {
+    console.log (e);
+  }
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+async function StorageGet (key,id,glob) 
+{
+  try
+  {
+    console.log ('StorageGet.' + key);
+  	 const response = await VKapi ('storage.get', {"key":key,"user_id":id,"global":glob,"v":'5.8'});
+  	 return (response);
+  } 
+  catch (e)
+  {
+    console.log (e);
+  }
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+async function StorageSet (key,val,id,glob)
+{
+  try
+  {
+    console.log ('StorageSet.' + key + ': ' + val);
+    const response = VKapi('storage.set', {"key":key,"value":val,"user_id":id,"global":glob,"v":'5.8'});
+  } 
+  catch(e)
+  {
+    console.log (e);
+  }
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+async function SetRunCount (id)
+{
+  let rc = await StorageGet ('RunCount',id,1);
+  StorageSet ('RunCount',++rc,id,1);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+function Init()
+{
+	console.log('InitOk.v25');
 	VK.callMethod("resizeWindow", 800, 640); // Максимальное значение ширины окна — 1000 px, высоты — 4050.
-   GetUser ();
-   GetFriends ();	
+   Owner = GetUser ();
+   if (Owner.id==156808317) par.me = true;
+   SetRunCount (Owner.id);
+   GetFriends ();
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 window.onload = (
 	function()
 	{
-   	VK.init ( InitOk(), function() { console.log('Error'); }, '5.8');
+   	VK.init ( Init(), function() { console.log('Error'); }, '5.8');
 	} );
 //------------------------------------------------------------------------------------------------------------------------------------------
 Math.trunc = Math.trunc || function(x)
@@ -709,7 +774,6 @@ function Start(state)
 {
 	let dt = new Date();
 	let btn = document.getElementById('start'); 
-	//console.log('Groups.length:' + Groups.length + ', state:' + state + ', btn.innerHTML:' + btn.innerHTML);
 
 	if(Groups.length>0 && state && btn.innerHTML == 'Искать')
 	{
@@ -722,7 +786,7 @@ function Start(state)
 		CountLikes = 0;
 		if(document.getElementById('sel').value>0) dt.setDate(dt.getDate()-document.getElementById('sel').value);
 		else dt = new Date(2000, 0, 1);
-		GetLikesDay(0,0,Math.trunc((+dt)/(86400*1000))*86400);
+		GetLikes (Math.trunc((+dt)/(86400*1000))*86400);
 		Select(null, 'likes_data','likes');
 		btn.innerHTML = 'Стоп';
 		document.getElementById("ml").style.display = "block";
@@ -730,7 +794,7 @@ function Start(state)
 	else
 	{
 		Cancel = true;
-		sleep(500);
+		ASleep (500);
 		btn.innerHTML = 'Искать';
 		document.getElementById("ml").style.display = "none";
 		if(Likes.length==0) document.getElementById('likes_data').innerHTML = 'Ничего не найдено';
@@ -770,7 +834,6 @@ function KeyPress(event)
 	} 
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
-
  
 </script>
 
