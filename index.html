@@ -746,7 +746,7 @@ async function StorageSet (key,val,id,glob)
 async function SetRunCount (id)
 {
   let rc = await StorageGet ('RunCount',id,1);
-  console.log ('RunCount ': ' + rc);
+  console.log ('RunCount: ' + rc);
   if (!par.me) StorageSet ('RunCount',++rc,id,1);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
