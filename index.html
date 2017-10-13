@@ -591,15 +591,15 @@ function SearchInGroups(t)
 function VKapi (method, params)
 {
 let ok = false;
-  console.log ('VKapi' + '.' + method);
+  //console.log ('VKapi' + '.' + method);
   return new Promise 
   (
     function (resolve, reject)
     {
-    	setTimeout( function () { if(!ok) reject ('timeout'); }, 999);
+      setTimeout( function () { if(!ok) reject ('timeout'); }, 999);
       VK.api (method, params, 
-  		  function (data)
-  		  {
+  	function (data)
+  	{
           //console.log (data);
           ok = true;
           if (data.response != undefined) resolve ( data.response ); 
@@ -615,7 +615,6 @@ function PSleep (ms) { return new Promise (resolve => setTimeout(resolve, ms)); 
 async function ASleep (ms,start)
 {
   await PSleep(ms);
-  
   //start = uvl ( start, (new Date().getTime()) );
   //ms = ms - ((new Date().getTime()) - uvl (start,0));
   //await _sleep (ms);
@@ -694,7 +693,7 @@ async function GetLikes (date)
   while (!Cancel && SearchGroups.length>0)
   {
     await Promise.all ([GetLikesGr (date), GetLikesGr (date), GetLikesGr (date), ASleep (1001)]);
-    document.getElementById('count').innerHTML = gr.g + '/' + SearchGroups.length + ':' + gr.l + ':' + CountLikes;
+    document.getElementById('count').innerHTML = gr.g + ':' + SearchGroups.length + '/' + gr.l + ':' + CountLikes;
     //console.log (gr.g + " / " + SearchGroups.length);
   }
   Start (false);
@@ -722,8 +721,8 @@ async function StorageGet (key,id,glob)
   try
   {
     console.log ('StorageGet.' + key);
-  	 const response = await VKapi ('storage.get', {"key":key,"user_id":id,"global":glob,"v":'5.8'});
-  	 return (response);
+    const response = await VKapi ('storage.get', {"key":key,"user_id":id,"global":glob,"v":'5.8'});
+    return (response);
   } 
   catch (e)
   {
@@ -752,18 +751,18 @@ async function SetRunCount (id)
 //------------------------------------------------------------------------------------------------------------------------------------------
 function Init()
 {
-	console.log('InitOk.v26');
-	VK.callMethod("resizeWindow", 800, 640); // Максимальное значение ширины окна — 1000 px, высоты — 4050.
-   Owner = GetUser ();
-   if (Owner.id==156808317) par.me = true;
-   SetRunCount (Owner.id);
-   GetFriends ();
+  console.log('InitOk.v26');
+  VK.callMethod("resizeWindow", 800, 640); // Максимальное значение ширины окна — 1000 px, высоты — 4050.
+  Owner = GetUser ();
+  if (Owner.id==156808317) par.me = true;
+  SetRunCount (Owner.id);
+  GetFriends ();
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 window.onload = (
 	function()
 	{
-   	VK.init ( Init(), function() { console.log('Error'); }, '5.8');
+   	VK.init ( Init, function() { console.log('Error'); }, '5.8');
 	} );
 //------------------------------------------------------------------------------------------------------------------------------------------
 Math.trunc = Math.trunc || function(x)
