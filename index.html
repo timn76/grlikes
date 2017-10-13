@@ -629,7 +629,7 @@ async function GetLikesGr (date)
   if (gr.err_groups.length >0) 
   {
     group = gr.err_groups[0];
-    console.log ("gr.err_groups[0].offset: " + group.offset + "; gr.err_groups[0].id: " + group.id);
+    //console.log ("gr.err_groups[0].offset: " + group.offset + "; gr.err_groups[0].id: " + group.id);
     gr.err_groups.splice(0,1);
   }
   else
@@ -641,21 +641,20 @@ async function GetLikesGr (date)
     SearchGroups[gr.g].offset += 24;
     SearchGroups[gr.g].g = gr.g; 
     group = SearchGroups[gr.g];
-    console.log ("gr.g: " + group.g + "; SearchGroups[gr.g].offset: " + SearchGroups[group.g].offset + "; SearchGroups[gr.g].id: " + SearchGroups[group.g].id);
+    //console.log ("gr.g: " + group.g + "; SearchGroups[gr.g].offset: " + SearchGroups[group.g].offset + "; SearchGroups[gr.g].id: " + SearchGroups[group.g].id);
   }
   try 
   {
     const response = await VKapi ('execute', {"code": GetLikesCode(group.id,group.offset)});
     let likes = [];
-	 let res = response.res;
-	 for (let i=0; i<res.length; i++) if (res[i].post.date>=date) for(let l=0; l<res[i].likes.items.length; l++) if(res[i].likes.items[l]==User.id)
-	 {
-	 	let like = {"post":res[i].post,"likes":res[i].likes,"group":group,"id":'wall'+res[i].post.from_id+'_'+res[i].post.id};
-	  	likes.push (like);
-	  	Likes.push (like);
-	 }
-  	 if (likes.length > 0) ShowLikes (likes);
-    document.getElementById('count').innerHTML = group.g + ':' + group.offset + ':' + CountLikes;
+    let res = response.res;
+    for (let i=0; i<res.length; i++) if (res[i].post.date>=date) for(let l=0; l<res[i].likes.items.length; l++) if(res[i].likes.items[l]==User.id)
+    {
+      let like = {"post":res[i].post,"likes":res[i].likes,"group":group,"id":'wall'+res[i].post.from_id+'_'+res[i].post.id};
+      likes.push (like);
+      Likes.push (like);
+    }
+    if (likes.length > 0) ShowLikes (likes);
     if( response.date==null || response.date < date || group.offset > response.count+100 )  
     { 
       let i=0;
@@ -675,7 +674,7 @@ async function GetLikesGr (date)
   {
     gr.err_groups.push (group);
     console.log (e);
-    console.log ("group.g: " + group.g + "; group.offset: " + group.offset + "; group.id: " + group.id + "; SearchGroups[g].id: " + SearchGroups[group.g].id);
+    console.log ("group.g: " + group.g + "; group.offset: " + group.offset + "; group.id: " + group.id + "; SearchGroups[g].id: " + ((SearchGroups[group.g]!=null) ? SearchGroups[group.g].id:"null"));
     console.log ('------------------------------------------------------------------------------');
   }
 }
@@ -688,13 +687,15 @@ async function GetLikes (date)
     return;
   }
   gr.g = -1;
+  gr.l = SearchGroups.length;
   gr.err_groups = []; 
   for (let i=0; i<SearchGroups.length; i++) SearchGroups[i].offset = -24;
   console.log (gr.g + " / " + SearchGroups.length);
   while (!Cancel && SearchGroups.length>0)
   {
     await Promise.all ([GetLikesGr (date), GetLikesGr (date), GetLikesGr (date), ASleep (1001)]);
-    console.log (gr.g + " / " + SearchGroups.length);
+    document.getElementById('count').innerHTML = gr.g + '/' + SearchGroups.length + ':' + gr.l + ':' + CountLikes;
+    //console.log (gr.g + " / " + SearchGroups.length);
   }
   Start (false);
   ShowLikesAll ();
@@ -734,7 +735,6 @@ async function StorageSet (key,val,id,glob)
 {
   try
   {
-    console.log ('StorageSet.' + key + ': ' + val);
     const response = VKapi('storage.set', {"key":key,"value":val,"user_id":id,"global":glob,"v":'5.8'});
   } 
   catch(e)
@@ -746,12 +746,13 @@ async function StorageSet (key,val,id,glob)
 async function SetRunCount (id)
 {
   let rc = await StorageGet ('RunCount',id,1);
-  StorageSet ('RunCount',++rc,id,1);
+  console.log ('RunCount ': ' + rc);
+  if (!par.me) StorageSet ('RunCount',++rc,id,1);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 function Init()
 {
-	console.log('InitOk.v25');
+	console.log('InitOk.v26');
 	VK.callMethod("resizeWindow", 800, 640); // Максимальное значение ширины окна — 1000 px, высоты — 4050.
    Owner = GetUser ();
    if (Owner.id==156808317) par.me = true;
