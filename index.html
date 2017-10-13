@@ -596,7 +596,7 @@ let ok = false;
   (
     function (resolve, reject)
     {
-      setTimeout( function () { if(!ok) reject ('timeout'); }, 999);
+      setTimeout( function () { if(!ok) reject ('timeout'); }, 3000);
       VK.api (method, params, 
   	function (data)
   	{
@@ -692,7 +692,7 @@ async function GetLikes (date)
   console.log (gr.g + " / " + SearchGroups.length);
   while (!Cancel && SearchGroups.length>0)
   {
-    await Promise.all ([GetLikesGr (date), GetLikesGr (date), GetLikesGr (date), ASleep (1001)]);
+    await Promise.all ([GetLikesGr (date), GetLikesGr (date), GetLikesGr (date), ASleep (1010)]);
     document.getElementById('count').innerHTML = gr.g + ':' + SearchGroups.length + '/' + gr.l + ':' + CountLikes;
     //console.log (gr.g + " / " + SearchGroups.length);
   }
