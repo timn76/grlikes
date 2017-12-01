@@ -592,7 +592,7 @@ function SearchInGroups(t)
 function VKapi (method, params)
 {
 let ok = false;
-  console.log ('VKapi' + '.' + method);
+  //console.log ('VKapi' + '.' + method);
   return new Promise 
   (
     function (resolve, reject)
@@ -764,7 +764,7 @@ async function SetRunCount (id)
 //------------------------------------------------------------------------------------------------------------------------------------------
 function Init()
 {
-  console.log('InitOk.v27.2');
+  console.log('InitOk.v27.3');
   VK.callMethod("resizeWindow", 800, 640); // Максимальное значение ширины окна — 1000 px, высоты — 4050.
   Owner = GetUser ();
   GetFriends ();
