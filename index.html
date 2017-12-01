@@ -471,7 +471,8 @@ async function GetGroups (id, flush=0)
   try
   {
     let response = await VKapi ('groups.get', { user_id:id, extended:'1', fields:Group_fields });
-    console.log (response); 
+    console.log (response);
+    Group = null;
     Groups = response.items;
     for (let i = 0; i < Groups.length; i++) gd.appendChild ( ShowGroups (Groups[i]) );
     if (flush) StorageSet ('gr'+id,"");
@@ -764,7 +765,7 @@ async function SetRunCount (id)
 //------------------------------------------------------------------------------------------------------------------------------------------
 function Init()
 {
-  console.log('InitOk.v27.3');
+  console.log('InitOk.v27.4');
   VK.callMethod("resizeWindow", 800, 640); // Максимальное значение ширины окна — 1000 px, высоты — 4050.
   Owner = GetUser ();
   GetFriends ();
