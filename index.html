@@ -399,7 +399,6 @@ function ShowGroup (group)
 //------------------------------------------------------------------------------------------------------------------------------------------
 function GetGroup (id)
 {
-																	
   	VK.api('groups.getById', {group_id:id, fields:Group_fields}, 
   		function(data)
   		{
@@ -507,10 +506,10 @@ function CreatePost (like)
             break;
           }
         }
-   if (photo != null) td = tr.appendChild ( Create ('td', { width:180, child: Create ('img', {class:'post', src:photo}) }) );
-   else console.log (like);
-   tr.appendChild (Create('td', { class:'text', child:Create('section', {height:td.offsetHeight, class:'text',html:'<p class="text">' + like.post.text + '</p>'})}));
-	return (article);
+  if (photo != null) td = tr.appendChild ( Create ('td', { width:180, child: Create ('img', {class:'post', src:photo}) }) );
+  else console.log (like);
+  tr.appendChild (Create('td', { class:'text', child:Create('section', {height:td.offsetHeight, class:'text',html:'<p class="text">' + like.post.text + '</p>'})}));
+  return (article);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 function AddPost (like)
@@ -688,7 +687,6 @@ async function GetLikesGr (date)
 //------------------------------------------------------
 async function GetLikes (date)
 {
-  console.log (SearchGroups);
   if(User.id==156808317 && !par.me)
   {
     sleep(10000);
@@ -766,7 +764,7 @@ async function SetRunCount (id)
 //------------------------------------------------------------------------------------------------------------------------------------------
 function Init()
 {
-  console.log('InitOk.v27');
+  console.log('InitOk.v27.2');
   VK.callMethod("resizeWindow", 800, 640); // Максимальное значение ширины окна — 1000 px, высоты — 4050.
   Owner = GetUser ();
   GetFriends ();
