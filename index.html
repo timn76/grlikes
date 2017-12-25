@@ -267,16 +267,24 @@ div.tab select
 }
 .acc_tab label 
 {
-  width: 	1em;
-  float: 	left;
   position: relative;
   display: 	block;
-  padding: 	0 0 0 1em;
+  padding: 	0 0 0 0.5em;
   /*background:  #dce7f2;
   font-weight: bold;*/
   line-height: 2em;
   cursor: pointer;
-  margin-right: 1em;
+  margin-right: 0.5em;
+  color: #939393;
+}
+.acc_tab label.char 
+{
+  width: 	1em;
+  float: 	left;
+}
+.acc_tab label.line 
+{
+  font-size: 10px;
 }
 .acc_tab-content 
 {
@@ -305,6 +313,10 @@ div.tab select
   -moz-transition: all .35s;
   -o-transition: all .35s;
   transition: all .35s;
+}
+.acc_tab label.line::after {
+  right: 0;
+
 }
 .acc_tab input[type=checkbox] + label::after {
   content: "+";
@@ -431,14 +443,14 @@ function StopEvent (e)
 	if (e.stopPropagation) e.stopPropagation();
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
-function GetAccordion (id)
+function GetAccordion (id,data_tab)
 {
   let act = document.getElementById(id);
   if (!act)
   { 
-    let acc = document.getElementById('friends_data').appendChild (Create ('div',{id:'div-acc-'+id, class:'acc_tab'}));
-    acc.appendChild ( Create ('input', {id:'i-acc-'+id, type:"checkbox" }) );
-    acc.appendChild ( Create ('label', {for:'i-acc-'+id, html:id}) );
+    let acc = document.getElementById(data_tab).appendChild (Create ('div',{id:'div-acc-'+id, class:'acc_tab'}));
+    acc.appendChild ( Create ('input', {id:'i-acc-'+id, type:"checkbox", checked:(id.length==1?false:true) }) );
+    acc.appendChild ( Create ('label', {for:'i-acc-'+id, html:id, class:(id.length==1?"char":"line")}) );
     act = acc.appendChild(Create('div',{id:id,class:'acc_tab-content'}));
   }
   return act;
@@ -446,7 +458,7 @@ function GetAccordion (id)
 //------------------------------------------------------------------------------------------------------------------------------------------
 function AppendFriend (friend)
 {
-  GetAccordion (friend.first_name.charAt(0)) .appendChild (CreateFriendElement (friend));
+  GetAccordion (friend.first_name.charAt(0),'friends_data') .appendChild (CreateFriendElement (friend));
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 function CreateFriendElement (friend)
@@ -643,6 +655,14 @@ async function GetGroups (id, flush=0)
   }
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
+function AppendPost (like)
+{
+  let lbl = d2s(like.post.date).substr(0,10);
+  let act = GetAccordion (lbl, 'likes_data');
+  act.appendChild (CreatePost (like));
+  act.previousSibling.innerHTML = lbl + '  (' + act.childNodes.length + ')';
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
 function CreatePost (like)
 {
   let article = Create ('article', {class:"post", id:like.id});
@@ -673,21 +693,21 @@ function CreatePost (like)
 //------------------------------------------------------------------------------------------------------------------------------------------
 function AddPost (like)
 {
-	let ld = document.getElementById('likes_data');
-	let post = CreatePost ( like );
-	let i;
-	for (i = 0; i < Likes.length; i++) if (Likes[i].id == like.id) break;
-	//if (i>=Likes.length-1) ld.appendChild ( post );
-	if (i==0) ld.insertBefore ( post, ld.firstChild );
-	else if (i==Likes.length-1) ld.appendChild ( post );
-	else ld.insertBefore ( post, document.getElementById(Likes[i+1].id) /*.nextSibling */ );
+  let ld = GetAccordion (d2s(like.post.date).substr(0,10),'likes_data'); // document.getElementById('likes_data');
+  let post = AppendPost (CreatePost ( like ) );
+  let i;
+  for (i = 0; i < Likes.length; i++) if (Likes[i].id == like.id) break;
+  if (i==0) ld.insertBefore ( post, ld.firstChild );
+  else if (i==Likes.length-1) ld.appendChild ( post );
+  else ld.insertBefore ( post, document.getElementById(Likes[i+1].id) /*.nextSibling */ );
+
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 function ShowLikes (likes)
 {
 	CountLikes += likes.length;
-	Likes.sort( function(a, b) {return (b.post.date-a.post.date);} );
-	for (let i = 0; i < likes.length; i++) AddPost ( likes[i] ); 
+	//likes.sort( function(a, b) {return (b.post.date-a.post.date);} );
+	for (let i = 0; i < likes.length; i++) AppendPost ( likes[i] ); //AddPost ( likes[i] ); 
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 function ShowLikesAll ()
@@ -695,7 +715,7 @@ function ShowLikesAll ()
 	let ld = document.getElementById('likes_data');
 	Likes.sort( function(a, b) {return (b.post.date-a.post.date);} );
 	ld.innerHTML='';	
-	for (let i = 0; i < Likes.length; i++) ld.appendChild ( CreatePost ( Likes[i] ) );
+	for (let i = 0; i < Likes.length; i++) AppendPost ( Likes[i] ); //ld.appendChild ( CreatePost ( Likes[i] ) );
  	Likes.length = 0;
   	Likes = [];	
 }
@@ -910,7 +930,7 @@ async function SetRunCount (id)
 //------------------------------------------------------------------------------------------------------------------------------------------
 function Init ()
 {
-  console.log('InitOk.v28');
+  console.log('InitOk.v29');
   if (!par.mobile) VK.callMethod("resizeWindow", 800, 640); // Максимальное значение ширины окна — 1000 px, высоты — 4050.
   Owner = GetUser ();
   ShowFriends ();
@@ -1026,7 +1046,7 @@ function KeyPress (event)
 </div>
 
 <div id="friends_data" 	class="tabcontent"></div>
-<div id="groups_data" 	class="tabcontent"><p>Выберете друга, во вкладке "Друзья" для просмотра его групп.</p><br/></div>
+<div id="groups_data" 	class="tabcontent"><p>Выберете друга, во вкладке "Друзья" для просмотра его групп.</p></div>
 <div id="likes_data" 	class="tabcontent"><p>Выберете друга, затем период поиска и нажмите "Искать", для поиска его лайков.</p></div>
 
 </body>
