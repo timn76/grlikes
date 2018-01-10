@@ -349,7 +349,7 @@ var SearchList = [];
 var AllGroups = [];
 var Likes = [];
 var par = { id:false, me:false, others:false, debug:true, mobile:false };
-var Data = {sgGroups:'',fFriends:{}};
+var Data = {sgGroups:'', Friends: {Count:0, Step:500}};
 //------------------------------------------------------------------------------------------------------------------------------------------
 if (!Date.prototype.toStr) {
   (function()
@@ -481,32 +481,43 @@ let Group_fields = "id,name,screen_name,is_closed,deactivated,is_member,invited_
 let User_fields = "id,uid,user_id,first_name,last_name,domain,deactivated,hidden,bdate,city,common_count,connections,contacts,counters,country,crop_photo,followers_count,friend_status,games,has_mobile,has_photo,home_town,is_favorite,is_friend,is_hidden_from_feed,last_seen,lists,maiden_name,military,movies,music,nickname,occupation,online,online_mobile,online_app,personal,photo_50,quotes,relatives,relation,schools,screen_name,sex,site,status,timezone,tv,universities,verified,wall_comments"; 
 // 							,about,activities,blacklisted,blacklisted_by_me,books,can_post,can_see_all_posts,can_see_audio,can_send_friend_request,can_write_private_message,career,education,exports,first_name_nom,first_name_gen,first_name_dat,first_name_acc,first_name_ins,first_name_abl,interests,last_name_nom,last_name_gen,last_name_dat,last_name_acc,last_name_ins,last_name_abl,photo_100,photo_200_orig,photo_200,photo_400_orig,photo_id,photo_max,photo_max_orig,
 //------------------------------------------------------------------------------------------------------------------------------------------
-async function GetFriends (id)
+async function GetFriends (id,offset=0)
 {
   try
   {
-    const response = await VKapi ('friends.get', {user_id:id, fields:User_fields , order:"name"/*"hints"*/, version:"5.8"});
+    const response = await VKapi ('friends.get', {user_id:id, fields:User_fields , order:"name"/*"hints"*/, offset:offset, count:Data.Friends.Step, version:"5.8"}, 60000);
     let friends = uvl (response.items,response);
+    //if (offset==0) 
+    Data.Friends.Count = uvl (response.count,friends.length);
     //friends.sort( function (a, b) { if (a.first_name > b.first_name) return 1; if (a.first_name < b.first_name) return -1; return 0; } );
     for (let i = 0; i < friends.length; i++) friends[i].id = uvl(friends[i].uid,friends[i].id);
-    friends;
-    return friends
+    return friends;
   }
-  catch (e)
-  {
-    console.log (e);
-    return e;
-  }
+  catch (e) { console.log (e); return e; }
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 async function ShowFriends (id)
 {
+  document.getElementById("ml").style.display = "block";
   let fd = document.getElementById('friends_data');
-  fd.innerHTML = '';	
+  fd.innerHTML = '';
+  Friends = [];	
   Select(null, 'friends_data','friends');
-  Friends = await GetFriends (id);
-  for (let i = 0; i < Friends.length; i++)  AppendFriend (Friends[i]);
+  let offset = 0;
+  do 
+  {
+    const f = await GetFriends (id,offset);
+    for (let i = 0; i < f.length; i++)
+    { 
+      AppendFriend (f[i]);
+      Friends.push(f[i]);
+    }
+    offset += Data.Friends.Step;
+    document.getElementById('count').innerHTML = Friends.length + '/' + Data.Friends.Count;
+  } while (Friends.length<Data.Friends.Count && offset<Data.Friends.Count)
   fd.style.display = "block";
+  document.getElementById("ml").style.display = "none";
+  document.getElementById('count').innerHTML = '0';
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 function ShowUser (user) 
@@ -558,7 +569,7 @@ async function GetGroup (id)
 {
   try
   {
-    const response = await VKapi ('groups.getById', {group_id:id, fields:Group_fields});
+    const response = await VKapi ('groups.getById', {group_id:id, fields:Group_fields}, 30000);
     for (let i = 0; i < response.length; i++)
     {
       Group = response[i];
@@ -767,7 +778,7 @@ function SearchInGroups(t)
 		);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
-function VKapi (method, params)
+function VKapi (method, params, timeout=3000)
 {
 let ok = false;
   //console.log ('VKapi' + '.' + method);
@@ -775,7 +786,7 @@ let ok = false;
   (
     function (resolve, reject)
     {
-      setTimeout( function () { if(!ok) reject ('VKapi.' + method + ' - TimeOut!'); }, 3000);
+      setTimeout( function () { if(!ok) reject ('VKapi.' + method + ' - TimeOut!'); }, timeout);
       VK.api (method, params, 
   	     function (data)
   	     {
@@ -930,7 +941,7 @@ async function SetRunCount (id)
 //------------------------------------------------------------------------------------------------------------------------------------------
 function Init ()
 {
-  console.log('InitOk.v29');
+  console.log('InitOk.v30');
   if (!par.mobile) VK.callMethod("resizeWindow", 800, 640); // Максимальное значение ширины окна — 1000 px, высоты — 4050.
   Owner = GetUser ();
   ShowFriends ();
