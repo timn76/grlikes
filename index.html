@@ -351,7 +351,8 @@ var Likes = [];
 var par = { id:false, me:false, others:false, debug:true, mobile:false };
 var Data = {sgGroups:'', Friends: {Count:0, Step:500}};
 //------------------------------------------------------------------------------------------------------------------------------------------
-if (!Date.prototype.toStr) {
+if (!Date.prototype.toStr) 
+{
   (function()
   {
     function pad(number)
@@ -367,11 +368,15 @@ if (!Date.prototype.toStr) {
   }());
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
+Math.trunc = Math.trunc || function(x) { return (x - (x % 1)); }
+//------------------------------------------------------------------------------------------------------------------------------------------
 if(screen.width<500||navigator.userAgent.match(/Android/i)||navigator.userAgent.match(/webOS/i)||navigator.userAgent.match(/iPhone/i)|| navigator.userAgent.match(/iPod/i)) 
 {
   par.mobile = true;
   loadScript ("https://vk.com/js/api/mobile_sdk.js" );
 }
+//------------------------------------------------------------------------------------------------------------------------------------------
+window.onload = ( function() { VK.init ( Init, function () { console.log('Error init VK API!!!'); }, '5.8'); } );
 //------------------------------------------------------------------------------------------------------------------------------------------
 function loadScript(url)
 {    
@@ -650,7 +655,7 @@ async function GetGroups (id, flush=0)
   Select (null, 'groups_data','groups');
   try
   {
-    let response = await VKapi ('groups.get', { user_id:id, extended:'1', fields:Group_fields });
+    let response = await VKapi ('groups.get', { user_id:id, extended:'1', fields:Group_fields }, 60000);
     console.log (response);
     Group = null;
     Groups = response.items;
@@ -755,29 +760,6 @@ function GetLikesCode (id,offset,f,fo='1')
 	return Code;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
-function SearchInGroups(t) 
-{
-	let ids = '';
-	let MaxCount = 1500; //145000000;
-		ids = '0';
-		for (let i=1;i<=500;i++) ids += ',' + (t*500+i);
-		console.log(ids);
-	  	VK.api('groups.getById', {group_ids:ids, fields:"members_count"}, 
-  			function(data)
-  			{
-		  		if(data.response!==undefined) 
-		  		{
-		  			console.log(data);
-		  			for ( let i = 0; i < data.response.length; i++ ) if ( data.response[i].is_closed == 0 && data.response[i].members_count > 10 ) AllGroups.push ( data.response[i] );
-		  			sleep(300);
-		  			if( !Cancel && t*500<MaxCount ) SearchInGroups(t+1);
-		  			else console.log ( AllGroups );
-		  		}
-		  		else console.log(data);
-			}
-		);
-}
-//------------------------------------------------------------------------------------------------------------------------------------------
 function VKapi (method, params, timeout=3000)
 {
 let ok = false;
@@ -806,11 +788,7 @@ async function VKapiS (method, params)
 */
 //------------------------------------------------------------------------------------------------------------------------------------------
 function PSleep (ms) { return new Promise (resolve => setTimeout(resolve, ms)); }
-
-async function ASleep (ms,start)
-{
-  await PSleep(ms);
-}
+async function ASleep (ms,start) { await PSleep(ms); }
 //------------------------------------------------------------------------------------------------------------------------------------------
 let gr = {};
 
@@ -860,7 +838,7 @@ async function GetLikesGr (date)
       if (SearchList[group.g].id == group.id)
       {	
         //console.log ("DEL! group.g: " + group.g + "; group.offset: " + group.offset + "; group.id: " + group.id + "; SearchList[g].id: " + SearchList[group.g].id);
-        SearchList.splice(group.g,1);
+        SearchList.splice (group.g,1);
       } 
       else console.log ("!=ID!!! group.g: " + group.g + "; group.offset: " + group.offset + "; group.id: " + group.id + "; SearchList[g].id: " + SearchList[group.g].id);
     }
@@ -886,7 +864,7 @@ async function GetGroupLikes (date,f=false)
   gr.f = f;
   gr.err_groups = [];
   gr.sync = false; 
-  for (let i=0; i<SearchList.length; i++) SearchList[i].offset = -24;
+  for (let i=0; i<SearchList.length; i++) { SearchList[i].offset = -24; SearchList[i].IsFriendsWall = f; }
   console.log (gr.g + " / " + SearchList.length);
   while (!Cancel && SearchList.length>0)
   {
@@ -901,7 +879,7 @@ async function GetUser (id)
 {
   try 
   {
-    const response = await VKapi ('users.get', {user_ids:id, fields:User_fields});  	
+    const response = await VKapi ('users.get', {user_ids:id, fields:User_fields}, 30000);  	
     User = response[0];
     User.id = uvl (User.id, User.uid);
     if (id==undefined)
@@ -946,10 +924,6 @@ function Init ()
   Owner = GetUser ();
   ShowFriends ();
 }
-//------------------------------------------------------------------------------------------------------------------------------------------
-window.onload = ( function() { VK.init ( Init, function () { console.log('Error'); }, '5.8'); } );
-//------------------------------------------------------------------------------------------------------------------------------------------
-Math.trunc = Math.trunc || function(x) { return (x - (x % 1)); }
 //------------------------------------------------------------------------------------------------------------------------------------------
 async function Start (state)
 {
