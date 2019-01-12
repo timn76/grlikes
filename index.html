@@ -405,12 +405,12 @@ function Create(type,attr)
 	if (attr.html		!== undefined) elm.innerHTML 	= attr.html;
 	if (attr.href		!== undefined) elm.href 		= attr.href;
 	if (attr.width		!== undefined) elm.width 		= attr.width;
-	if (attr.height	!== undefined) elm.height 		= attr.height;
+	if (attr.height		!== undefined) elm.height 		= attr.height;
 	if (attr.src		!== undefined) elm.src 			= attr.src;
 	if (attr.title		!== undefined) elm.title		= attr.title;
 	if (attr.alt		!== undefined) elm.alt			= attr.alt;
 	if (attr.child		!== undefined) elm.appendChild (attr.child);
-	if (attr.target	!== undefined) elm.target		= attr.target;
+	if (attr.target		!== undefined) elm.target		= attr.target;
 	if (attr.type	   !== undefined) elm.type		   = attr.type;
 	if (attr.name	   !== undefined) elm.name		   = attr.name;
 	if (attr.value	   !== undefined) elm.value		= attr.value;
@@ -760,6 +760,38 @@ function GetLikesCode (id,offset,f,fo='1')
 	return Code;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
+function GetLikesCodeNF (id,offset,f,fo=1,CheckedID)
+{
+	let nl = '\n';
+	let Code =  ''
+				+ ' var p = API.wall.get ({ owner_id:'+ (f?'':'-') + id + ', count:24, offset:' + offset + ' });   '
+				+ nl + ' var posts = p; '
+				+ nl + ' var c = p.count; '
+				+ nl + ' var res={};  '
+				+ nl + ' var all={};  '
+				+ nl + ' var i=1;   '
+				+ nl + ' var j=-1; '
+				+ nl + ' var e = 1; '
+				+ nl + ' if (p.items.length>=0) { posts = p.items; i=0; } '
+				+ nl + ' while (i<posts.length' + (!fo?' && (posts[i].likes.count/1000+e<=25)':'') + ') '
+				+ nl + ' { '
+				+ nl + '   var ls=0; '
+				+ nl + '   j = -1; '
+				+ nl + (!fo?'   while (ls<posts[i].likes.count && j<0) ':'')
+				+ nl + '   { '
+				+ nl + '     var likes = API.likes.getList ({ type:"post", owner_id: posts[i].from_id, item_id: posts[i].id, friends_only:'+fo+', count:1000, skip_own:0, offset:ls }); '
+				+ nl + '     all.push ({"post":posts[i],"likes":' + (fo?'likes':'{}') + '}); '
+				+ nl + '     if (likes.items.length>=0) j = likes.items.indexOf (' + CheckedID + '); '
+				+ nl + '     if(j>=0) res.push ({"post":posts[i],"likes":' + (fo?'likes':'{}') + '}); '
+				+ nl + '     ls = ls + 1000; '
+				+ nl + '     e = e + 1; '
+				+ nl + '   } '
+				+ nl + '   i = i + 1;  '
+				+ nl + ' }   '
+				+ nl + ' return { "e":e,"i":i,"j":j,"date":posts[i-1].date, "count":c, "res":res, "all":all }; ';
+	return Code;
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
 function VKapi (method, params, timeout=3000)
 {
 let ok = false;
@@ -818,7 +850,9 @@ async function GetLikesGr (date)
   gr.sync = false;
   try 
   {
-    const response = await VKapi ('execute', {"code": GetLikesCode(group.id,group.offset,gr.f)});
+    //console.log (GetLikesCodeNF(group.id,group.offset,gr.f,1,User.id));
+    const response = await VKapi ('execute', {"code": GetLikesCodeNF(group.id,group.offset,gr.f,1,User.id)});
+	//console.log (response);
     let likes = [];
     let res = response.res;
     for (let i=0; i<res.length; i++) if (res[i].post.date>=date) for(let l=0; l<res[i].likes.items.length; l++) if(res[i].likes.items[l]==User.id)
@@ -828,7 +862,7 @@ async function GetLikesGr (date)
       Likes.push (like);
     }
     if (likes.length > 0) ShowLikes (likes);
-    if( response.date==null || response.date < date || group.offset > response.count+100 )  
+    if( response.date == null || response.date < date || group.offset > response.count + 100 )  
     { 
       let i=0;
       if (SearchList.length==0) return;
@@ -847,6 +881,7 @@ async function GetLikesGr (date)
   {
     gr.err_groups.push (group);
     console.log (e);
+	console.log (GetLikesCodeNF(group.id,group.offset,gr.f,1,User.id));
     console.log ("group.g: " + group.g + "; group.offset: " + group.offset + "; group.id: " + group.id + "; SearchList[g].id: " + ((SearchList[group.g]!=null) ? SearchList[group.g].id:"null"));
     console.log ('------------------------------------------------------------------------------');
   }
@@ -919,7 +954,7 @@ async function SetRunCount (id)
 //------------------------------------------------------------------------------------------------------------------------------------------
 function Init ()
 {
-  console.log('InitOk.v30');
+  console.log('InitOk.v1.1.10');
   if (!par.mobile) VK.callMethod("resizeWindow", 800, 640); // Максимальное значение ширины окна — 1000 px, высоты — 4050.
   Owner = GetUser ();
   ShowFriends ();
@@ -967,6 +1002,16 @@ async function Start (state)
 function Select (evt, TabName, id) 
 {
     let i, tabcontent, tablinks;
+	
+	if ((id=="friends" || id=="likes") && document.getElementById(id).className == "tablinks active")
+	{
+		let c = document.getElementById(TabName).children;
+		if (c.length) 
+		{
+			let s = !c[0].children[0].checked;
+			for (i = 0; i < c.length; i++) c[i].children[0].checked = s;
+		}
+	}
 
     tabcontent = document.getElementsByClassName("tabcontent");
     for (i = 0; i < tabcontent.length; i++) tabcontent[i].style.display = "none";
