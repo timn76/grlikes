@@ -135,7 +135,7 @@ a:hover 	{ text-decoration:underline }
 	}
 
 	p.text {}
-		
+/*		
 div.tab
 {
 	 margin:     0 0;
@@ -203,7 +203,216 @@ div.tab select
 	 margin:			0 auto;
 	 overflow:		auto;
 	 max-height:	520px;    
+}
+*/
+
+div.tab
+{
+	 margin:     0 0;
+	 font-size:  12px;
+    overflow:   hidden;
+    outline:    none;
+    box-shadow: none;
+    background-color: #dce7f2;
+    border-top:       1px solid #597da3;
+    border-bottom:    1px solid #597da3;
+}
+
+div.tab button
+{
+	 border: none;
+	 outline: none;
+    background-color: inherit;
+    float: left; 
+    cursor: pointer;
+    padding: 4px 12px;
+    transition: 0.3s;
+}
+div.tab button:hover
+{
+	color:	#fff;
+   	background-color: rgb(80, 114, 153);
+}
+div.tab button.active
+{
+    background-color: #597da3;
+}
+
+div.tab label
+{
+  font-size:  12px;
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  padding: 4px 6px;
+  margin-left: 15px;
+}
+
+div.tab label.counter
+{
+    float: right;
+    border: none;
+    outline: none;
+    padding: 4px 12px;
+}
+
+
+
+div.tab select
+{
+  margin: 	0 4px;
+  float: 	left;
+  border: 	none;
+  outline:	none;
+  cursor:	text;
+  padding:  3px 4px;
+  background-color: #f9f9f9;
+  min-width: 80px;
+}
+
+.tabcontent
+{
+    display: 		none;
+    padding: 		4px 4px;
+    border: 		1px solid #ccc;
+    border-top:	none;
+	 margin:			0 auto;
+	 overflow:		auto;
+	 max-height:	520px;    
 }		
+
+
+/* ----- dropdown menu -------------------------------------------------------*/
+.dropdown 
+{
+  float: left;
+  overflow: hidden;
+}
+
+    
+.dropdown .dropbtn 
+{
+  font-size: 10px;  
+  border: none;
+  outline: none;
+  color: black;
+  padding: 6px 1px;
+  background-color: inherit;
+  font-family: inherit;
+  float: left;
+  margin: 0;
+}
+
+.dropdown .dropbtn:hover
+{
+	color:	#fff;
+   	background-color: rgb(80, 114, 153);
+}
+
+.dropdown-content {
+  /* display: none; */
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 80px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  margin-top: 26px;
+  padding: 0 0;
+  /*
+  border-left:      1px solid #597da3;
+  border-bottom:    1px solid #597da3;
+  border-right:     1px solid #597da3;
+  */
+  border: none;
+}
+
+.dropdown-content *
+{
+  font-size:  12px;
+  float: none;
+  color: black;
+  padding: 6px 12px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+  display: block;
+  margin: 0 0;
+  border: none;
+}
+
+
+
+.dropdown-content label:hover
+{
+  background-color: #dce7f2;
+}
+
+.dropdown-content input
+{
+  float: left;
+  margin-right: 7px;
+  margin-top: 2px;
+}
+
+div.tab .dropdown-content label
+{
+  font-size:  12px;
+  float: none;
+  margin-left: 0;
+}
+
+div.tab .dropdown-content button
+{
+  float: none;
+  width: 100%;
+}
+
+div.tab .dropdown-content button:active
+{
+color:	black;
+}
+
+.dropdown input[type=checkbox].dropbtn
+{
+  display: none;
+}
+
+ul.dropdown-content
+{
+  max-height:  0;
+  overflow:    hidden;
+  transition:  0.2s;
+  list-style-type:none;
+}
+
+.dropdown input[type=checkbox].dropbtn:checked ~ label.dropbtn
+{
+	color:	black;
+    background-color: #597da3;
+}
+
+.dropdown input[type=checkbox].btn:checked ~ ul.menu, .dropdown:hover > .dropbtn  ~ ul.menu
+{
+  max-height: 300px;
+  /* display: block; */
+  border-left:      1px solid #597da3;
+  border-bottom:    1px solid #597da3;
+  border-right:     1px solid #597da3;
+}
+
+
+#name-filter
+{
+  margin 0;
+  ouline: none;
+  float: none;
+  margin-right: 0;
+}
+
+#name-filter:focus {outline: 2px solid #dce7f2;}
+
+		
 	img.ml
 	{
 		margin: 7px 8px;
@@ -218,7 +427,7 @@ div.tab select
 		display: none; 
 	}
 
-	/* delete button */
+/* -=== delete button ======================- */
 	.delete 
 	{
 		display: inline-block;
@@ -233,20 +442,20 @@ div.tab select
 		background-color: rgb(80, 114, 153);
 		cursor: pointer;    
 	}
-	.show_groups
+	.del_item
 	{
 		position: relative;
 	}
-	.show_groups:hover .delete
+	.del_item:hover .delete
 	{
 		display: block;
 	}
-	.show_groups .delete
+	.del_item .delete
 	{
 		top: 1px;
 		right: 1px;
 	}	
-	.show_groups .delete
+	.del_item .delete
 	{
 		position:absolute;
 		display:none;
@@ -338,7 +547,7 @@ div.tab select
 //------------------------------------------------------------------------------------------------------------------------------------------
 'use strict';
 //------------------------------------------------------------------------------------------------------------------------------------------
-var Owner;
+var Owner = {id:""};
 var User;
 var Group;
 var Cancel = false;
@@ -348,8 +557,9 @@ var Groups = [];
 var SearchList = [];
 var AllGroups = [];
 var Likes = [];
-var par = { id:false, me:false, others:false, debug:true, mobile:false };
-var Data = {sgGroups:'', Friends: {Count:0, Step:500}};
+var par = { id:false, me:false, others:false, debug:false, mobile:false, cnt:96}
+var Options = { friends: {load:false, "filter":"", addedonly:false, "men": true, "women":true, "unknown":true}, likes: {load:false, "groupby":"ByDate"} };
+var Data = {sgGroups:'', sgFriends:'', Friends: {Count:0, Step:500}};
 //------------------------------------------------------------------------------------------------------------------------------------------
 if (!Date.prototype.toStr) 
 {
@@ -360,10 +570,10 @@ if (!Date.prototype.toStr)
       if (number < 10) return '0' + number;
       return number;
     }
-    Date.prototype.toStr = function()
+    Date.prototype.toStr = function(sec=false)
     {
-    	if(isNaN(this)) return 'n/a';
-      return pad(this.getDate()) + '.' + pad(this.getMonth() + 1) + '.' + this.getFullYear() + ' ' + pad(this.getHours()) + ':' + pad(this.getMinutes());
+      if(isNaN(this)) return 'n/a';
+      return pad(this.getDate()) + '.' + pad(this.getMonth() + 1) + '.' + this.getFullYear() + ' ' + pad(this.getHours()) + ':' + pad(this.getMinutes()) + (sec?(':' + pad(this.getSeconds()) + '.' + this.getMilliseconds()):'');
     };
   }());
 }
@@ -376,7 +586,7 @@ if(screen.width<500||navigator.userAgent.match(/Android/i)||navigator.userAgent.
   loadScript ("https://vk.com/js/api/mobile_sdk.js" );
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
-window.onload = ( function() { VK.init ( Init, function () { console.log('Error init VK API!!!'); }, '5.8'); } );
+window.onload = ( function() { VK.init ( Init, function () { console.log ('Error init VK API!!!'); }, '5.92'); } );
 //------------------------------------------------------------------------------------------------------------------------------------------
 function loadScript(url)
 {    
@@ -397,28 +607,26 @@ function uvl(v,d)
   return (v==undefined?d:v); 
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
+function Debug (msg)
+{
+  if (par.debug) console.log (msg);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
 function Create(type,attr) 
 {
-	let elm = document.createElement(type);
-	if (attr.id			!== undefined) elm.id 			= attr.id;
-	if (attr.class		!== undefined) elm.className 	= attr.class;
-	if (attr.html		!== undefined) elm.innerHTML 	= attr.html;
-	if (attr.href		!== undefined) elm.href 		= attr.href;
-	if (attr.width		!== undefined) elm.width 		= attr.width;
-	if (attr.height		!== undefined) elm.height 		= attr.height;
-	if (attr.src		!== undefined) elm.src 			= attr.src;
-	if (attr.title		!== undefined) elm.title		= attr.title;
-	if (attr.alt		!== undefined) elm.alt			= attr.alt;
-	if (attr.child		!== undefined) elm.appendChild (attr.child);
-	if (attr.target		!== undefined) elm.target		= attr.target;
-	if (attr.type	   !== undefined) elm.type		   = attr.type;
-	if (attr.name	   !== undefined) elm.name		   = attr.name;
-	if (attr.value	   !== undefined) elm.value		= attr.value;
-	if (attr.for	   !== undefined) elm.htmlFor		= attr.for;
-	if (attr.tag	   !== undefined) elm.tag			= attr.tag;
-	if (attr.checked	!== undefined) elm.checked		= attr.checked;
-	if (attr.text	   !== undefined) elm.text		   = attr.text;
-
+  let elm = document.createElement(type);
+  for (let key in attr)
+  {
+    switch (key)
+    {
+      case "class": elm.className = attr.class;   break;
+      case "html":  elm.innerHTML = attr.html;    break;
+      case "for":   elm.htmlFor   = attr.for;     break;
+      case "child": elm.appendChild (attr.child); break;
+      default:      elm[key] = attr[key];
+    }
+  }
+  
 	//var label = document.createElement('label')
 	//label.appendChild(document.createTextNode('text for label after checkbox'));
 	//if ((typeof attr.click	!= undefined) elm.addEventListener (attr.click);
@@ -453,7 +661,7 @@ function GetAccordion (id,data_tab)
   let act = document.getElementById(id);
   if (!act)
   { 
-    let acc = document.getElementById(data_tab).appendChild (Create ('div',{id:'div-acc-'+id, class:'acc_tab'}));
+    let acc = document.getElementById(data_tab).appendChild (Create ('div',{id:'div-acc-'+id, class:'acc_tab', tag:id}));
     acc.appendChild ( Create ('input', {id:'i-acc-'+id, type:"checkbox", checked:(id.length==1?false:true) }) );
     acc.appendChild ( Create ('label', {for:'i-acc-'+id, html:id, class:(id.length==1?"char":"line")}) );
     act = acc.appendChild(Create('div',{id:id,class:'acc_tab-content'}));
@@ -468,15 +676,17 @@ function AppendFriend (friend)
 //------------------------------------------------------------------------------------------------------------------------------------------
 function CreateFriendElement (friend)
 {
-	let article = Create('article',{id:friend.id, class:'sel_item', tag:friend.id });
+	let article = Create('article',{id:friend.id, class:'sel_item del_item', "data-added":friend.added, "data-sex":friend.sex, "data-name":friend.first_name+' '+friend.last_name});
 	let tr = article.appendChild(document.createElement('table')).appendChild(document.createElement('tr'));
 
 	tr.appendChild(Create('td', {width: 140, html:dm2html(friend.domain) + id2html(friend.id,friend.domain) + ls2html(friend.last_seen,friend.online)}));
 	tr.appendChild(Create('td', {child: Create('a', {href:'https://vk.com/'+friend.domain, child:  Create('img',{src:friend.photo_50, title:friend.first_name+' '+friend.last_name })})}));
 	tr.appendChild(Create('td', {width: 240, html:'<p class="name">'+friend.first_name + '<br />' + friend.last_name+'</p>'}));
 	tr.appendChild(Create('td', {width:  70, html:'<p>'+uvl(friend.bdate,"n/a")+'</p>'}));
-	
-	article.addEventListener ("click", function(event) { GetGroups ( event.currentTarget.tag); GetUser(event.currentTarget.tag); }, false);
+	article.innerHTML += ( '<p onclick="DeleteFriend(this,event);" class="delete">&#10008;</p>' );	
+	article.addEventListener ("click", function(event) { GetGroups ( event.currentTarget.id); GetUser(event.currentTarget.id); }, false);
+
+  article.style.display = (CheckFilter(article)? "" : "none");
 
 	return (article);
 }
@@ -486,25 +696,80 @@ let Group_fields = "id,name,screen_name,is_closed,deactivated,is_member,invited_
 let User_fields = "id,uid,user_id,first_name,last_name,domain,deactivated,hidden,bdate,city,common_count,connections,contacts,counters,country,crop_photo,followers_count,friend_status,games,has_mobile,has_photo,home_town,is_favorite,is_friend,is_hidden_from_feed,last_seen,lists,maiden_name,military,movies,music,nickname,occupation,online,online_mobile,online_app,personal,photo_50,quotes,relatives,relation,schools,screen_name,sex,site,status,timezone,tv,universities,verified,wall_comments"; 
 // 							,about,activities,blacklisted,blacklisted_by_me,books,can_post,can_see_all_posts,can_see_audio,can_send_friend_request,can_write_private_message,career,education,exports,first_name_nom,first_name_gen,first_name_dat,first_name_acc,first_name_ins,first_name_abl,interests,last_name_nom,last_name_gen,last_name_dat,last_name_acc,last_name_ins,last_name_abl,photo_100,photo_200_orig,photo_200,photo_400_orig,photo_id,photo_max,photo_max_orig,
 //------------------------------------------------------------------------------------------------------------------------------------------
+async function AddFriends (ids) 
+{
+  Debug ("AddFriends(ids["+ ids + "])");
+  if (!ids) return;
+  let fd = document.getElementById ('friends_data');
+  try
+  {
+    const response = await VKapi ('users.get', {user_ids:ids, fields:User_fields}, 10000);  	
+
+    for (let i = 0; i < response.length; i++)
+    {
+      let s=-1;
+      for (let j=0; j<Friends.length; j++) if (response[i].id == Friends[j].id) { s = j; break; }
+      if (s == -1)
+      {
+        response[i].id      = uvl (response[i].uid, response[i].id);
+        response[i].added   = true;
+        Friends.push        ( response[i] );
+        AppendFriend        ( response[i] );
+        if (Data.sgFriends.indexOf(response[i].id)<0) Data.sgFriends += ( (Data.sgFriends?",":"") + response[i].id );
+        //Data.Friends.Count ++;
+      }
+    }
+    StorageSet ('friends', Data.sgFriends);
+  }
+  catch (e)
+  {
+    console.log (e);
+    if (e.error != undefined) fd.innerHTML = e.error.error_msg;
+  }
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+function DelSubstr (str,substr)
+{
+  Debug ("DelSubstr(str["+ str + "], substr=[" + substr + "])");
+  let m = str.split(",");
+  let r = "";
+  let i;
+  for (i = 0; i < m.length-1; i++) if (m[i] != substr) r += m[i] + ",";
+  if (m[i] != substr) r += m[i];
+  return (r);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+function DeleteFriend (element,event)
+{
+  Debug (element);
+  let i=-1;
+  for (let j=0; j<Friends.length; j++) if (element.parentNode.id == Friends[j].id) { i = j; break; }
+  if (i>=0) Friends.splice (i,1);
+  Data.sgFriends = DelSubstr (Data.sgFriends, element.parentNode.id);
+  StorageSet ('friends', Data.sgFriends);
+  element.parentNode.remove();
+  StopEvent (event);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
 async function GetFriends (id,offset=0)
 {
   try
   {
-    const response = await VKapi ('friends.get', {user_id:id, fields:User_fields , order:"name"/*"hints"*/, offset:offset, count:Data.Friends.Step, version:"5.8"}, 60000);
+    const response = await VKapi ('friends.get', {user_id:id, fields:User_fields , order:"name"/*"hints"*/, offset:offset, count:Data.Friends.Step /*, version:"5.8" */}, 60000);
     let friends = uvl (response.items,response);
     //if (offset==0) 
     Data.Friends.Count = uvl (response.count,friends.length);
     //friends.sort( function (a, b) { if (a.first_name > b.first_name) return 1; if (a.first_name < b.first_name) return -1; return 0; } );
-    for (let i = 0; i < friends.length; i++) friends[i].id = uvl(friends[i].uid,friends[i].id);
+    for (let i = 0; i < friends.length; i++) { friends[i].id = uvl(friends[i].uid,friends[i].id); /* friends[i].IsFriend = 1; */ }
     return friends;
   }
   catch (e) { console.log (e); return e; }
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
-async function ShowFriends (id)
+async function ShowFriends (id,flush=false)
 {
   document.getElementById("ml").style.display = "block";
-  let fd = document.getElementById('friends_data');
+  let fd = document.getElementById ('friends_data');
   fd.innerHTML = '';
   Friends = [];	
   Select(null, 'friends_data','friends');
@@ -515,11 +780,16 @@ async function ShowFriends (id)
     for (let i = 0; i < f.length; i++)
     { 
       AppendFriend (f[i]);
-      Friends.push(f[i]);
+      Friends.push (f[i]);
     }
     offset += Data.Friends.Step;
     document.getElementById('count').innerHTML = Friends.length + '/' + Data.Friends.Count;
   } while (Friends.length<Data.Friends.Count && offset<Data.Friends.Count)
+  if (flush) StorageSet ('friends',"");
+  else await AddFriends (Data.sgFriends = await StorageGet ('friends'));
+  
+  SetFilterAccordion ();
+
   fd.style.display = "block";
   document.getElementById("ml").style.display = "none";
   document.getElementById('count').innerHTML = '0';
@@ -534,7 +804,7 @@ function ShowUser (user)
 	tr.appendChild(Create('td', {child: Create('a', {href:'https://vk.com/'+user.domain, child:  Create('img',{src:user.photo_50, title:user.first_name+' '+user.last_name })})}));
 	tr.appendChild(Create('td', {width:140, html:'<p class="name">'+user.first_name + '<br/>' + user.last_name+'</p>'}));
 	tr.appendChild(Create('td', {width:70,  html:'<p>'+uvl(user.bdate,"n/a")+'</p>'}));
-	tr.appendChild(Create('td', {class:'counter', html:'<button onclick="ShowFriends('+user.id+')" >Друзей</button><p>' + user.counters.friends + '</p>'}));
+	tr.appendChild(Create('td', {class:'counter', html:'<button onclick="ShowFriends('+user.id+')">Друзей</button><p>' + user.counters.friends + '</p>'}));
 	tr.appendChild(Create('td', {class:'counter', html:'<button onclick="GetGroups('+user.id+',1)">Групп</button><p>'  + ((typeof user.groups)!='undefined'?user.counters.groups:user.counters.pages) + '</p>'}));
 	tr.appendChild(Create('td', {class:'counter', html:'<header>Аудио</header><p>'  + uvl(user.counters.audios,'-') + '</p>'}));
 	tr.appendChild(Create('td', {class:'counter', html:'<header>Видео</header><p>'  + uvl(user.counters.videos,'-') + '</p>'}));
@@ -555,50 +825,55 @@ async function GetPostsCount (id)
 //------------------------------------------------------------------------------------------------------------------------------------------
 function ShowGroup (group) 
 {
-	let article = document.createElement('article');
-	let tr = article.appendChild(document.createElement('table')).appendChild(document.createElement('tr'));
-
-	tr.appendChild(Create('td', {width:110,  html:dm2html(group.screen_name) + id2html(group.id,group.screen_name) + '<p class="date" >' + d2s(group.start_time) + '</p>'}));
-	tr.appendChild(Create('td', {child: Create('a', {href:'https://vk.com/'+group.screen_name, child:  Create('img',{src:group.photo_50, title:group.name})})}));
-	tr.appendChild(Create('td', {width:200, html:'<p class="name">'+group.name+'</p>'}));
-	tr.appendChild(Create('td', {class:'counter', html:'<header class="counter">Членов</header><footer>' + group.members_count + '</footer>'}));
-	tr.appendChild(Create('td', {class:'counter', html:'<header class="counter">Постов</header><footer id="posts">' + uvl(group.post_count,'-') + '</footer>'}));
-	tr.appendChild(Create('td', {class:'counter', html:'<header class="counter">Аудио</header><footer>'  + uvl(group.counters.audios,'-') + '</footer>'}));
-	tr.appendChild(Create('td', {class:'counter', html:'<header class="counter">Видео</header><footer>'  + uvl(group.counters.videos,'-') + '</footer>'}));
-	tr.appendChild(Create('td', {class:'counter', html:'<header class="counter">Фото</header><footer>'   + uvl(group.counters.photos,'-') + '</footer>'}));
-
-	return (article);
+  Debug ("ShowGroup (group)");
+  Debug (group);
+  let article = document.createElement('article');
+  let tr = article.appendChild(document.createElement('table')).appendChild(document.createElement('tr'));
+  tr.appendChild(Create('td', {width:110,  html:dm2html(group.screen_name) + id2html(group.id,group.screen_name) + '<p class="date" >' + d2s(group.start_time) + '</p>'}));
+  tr.appendChild(Create('td', {child: Create('a', {href:'https://vk.com/'+group.screen_name, child:  Create('img',{src:group.photo_50, title:group.name})})}));
+  tr.appendChild(Create('td', {width:200, html:'<p class="name">'+group.name+'</p>'}));
+  tr.appendChild(Create('td', {class:'counter', html:'<header class="counter">Членов</header><footer>' + group.members_count + '</footer>'}));
+  tr.appendChild(Create('td', {class:'counter', html:'<header class="counter">Постов</header><footer id="posts">' + uvl(group.post_count,'-') + '</footer>'}));
+  tr.appendChild(Create('td', {class:'counter', html:'<header class="counter">Аудио</header><footer>'  + uvl(group.counters.audios,'-') + '</footer>'}));
+  tr.appendChild(Create('td', {class:'counter', html:'<header class="counter">Видео</header><footer>'  + uvl(group.counters.videos,'-') + '</footer>'}));
+  tr.appendChild(Create('td', {class:'counter', html:'<header class="counter">Фото</header><footer>'   + uvl(group.counters.photos,'-') + '</footer>'}));
+  return (article);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 async function GetGroup (id)
 {
+  Debug ("GetGroup (" + id + ")");
   try
   {
-    const response = await VKapi ('groups.getById', {group_id:id, fields:Group_fields}, 30000);
-    for (let i = 0; i < response.length; i++)
+    let response = await VKapi ('groups.getById', {group_id:id, fields:Group_fields}, 10000);
+    Debug (response);
+    if (response.length>0)
     {
-      Group = response[i];
-      Group.id = uvl(response[i].id,response[i].gid);
+      Group = response[0];
+      Group.id = uvl (Group.id, Group.gid);
       Group.post_count = await GetPostsCount (Group.id);
-      document.getElementById('user_data').innerHTML = ShowGroup(Group).outerHTML;;
+      Debug (Group);
+      Debug (document.getElementById('user_data').innerHTML = ShowGroup(Group).outerHTML);
     }
-  } 
+  }
   catch (e) { console.log (e); }
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
-function DeleteGroup (element,event)
+function DeleteGroup (element,event,id)
 {
   let i=-1;
-  for (let j=0; j<Groups.length; j++) if (element.id == Groups[j].id) { i = j; break; }
+  Debug (element);
+  for (let j=0; j<Groups.length; j++) if (element.parentNode.id == Groups[j].id) { i = j; break; }
   if (i>=0) Groups.splice (i,1);
-  if (Data.sgGroups) StorageSet ('gr'+User.id, GroupsIds (Groups));
+  Data.sgGroups = DelSubstr (Data.sgGroups, element.parentNode.id);
+  StorageSet ('gr'+User.id, GroupsIds (Groups));
   element.parentNode.remove();
   StopEvent (event);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 function ShowGroups (group) 
 {
-	let article = Create('article',{ id:group.id, class:'sel_item show_groups' });
+	let article = Create('article', { id:group.id, class:'sel_item del_item' });
 	let tr = article.appendChild(document.createElement('table')).appendChild(document.createElement('tr'));
 
 	tr.appendChild(Create('td', {width:180, html:dm2html(group.screen_name) + id2html(group.id,group.screen_name) + '<p class="date" >' + d2s(group.start_time) + '</p>'}));
@@ -615,15 +890,18 @@ function ShowGroups (group)
 //------------------------------------------------------------------------------------------------------------------------------------------
 function GroupsIds (g)
 {
-	let s = "";
-	for (let i=0; i<g.length-1; i++) s += (g[i].id + "," + ((i+1)%25==0?"\n":""));
-	s += g[g.length-1].id;
-	return (s);
+  let s = "";
+  if (g.length)
+  {
+    for (let i=0; i<g.length-1; i++) s += (g[i].id + "," + ((i+1)%25==0?"\n":""));
+    s += g[g.length-1].id;
+  }
+  return (s);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 async function AddGroups (ids) 
 {
-  console.log ("AddGroupd(ids["+ ids + "])");
+  Debug ("AddGroupd(ids["+ ids + "])");
   if (!ids) return;
   let gd = document.getElementById ('groups_data');
   try
@@ -635,11 +913,13 @@ async function AddGroups (ids)
       for (let j=0; j<Groups.length; j++) if (response[i].id == Groups[j].id) { s = j; break; }
       if (s == -1)
       {
-        Groups.push    ( response[i] );
-        gd.appendChild ( ShowGroups (response[i]) );
+        response[i].added  = true;
+        Groups.push        ( response[i] );
+        gd.appendChild     ( ShowGroups (response[i]) );
+		if (Data.sgGroups.indexOf(response[i].id)<0) Data.sgGroups += ( (Data.sgGroups?",":"") + response[i].id );
       }
     }
-    StorageSet ('gr'+User.id, GroupsIds (Groups));
+    StorageSet ('gr'+User.id, Data.sgGroups);
   }
   catch (e)
   {
@@ -656,10 +936,10 @@ async function GetGroups (id, flush=0)
   try
   {
     let response = await VKapi ('groups.get', { user_id:id, extended:'1', fields:Group_fields }, 60000);
-    console.log (response);
+    Debug (response);
     Group = null;
     Groups = response.items;
-    console.log ('GetGroups ('+id+'):'+GroupsIds (Groups));
+    Debug ('GetGroups ('+id+'):' + GroupsIds (Groups));
     for (let i = 0; i < Groups.length; i++) gd.appendChild ( ShowGroups (Groups[i]) );
     if (flush) StorageSet ('gr'+id,"");
     else AddGroups (Data.sgGroups = await StorageGet ('gr'+id));
@@ -673,7 +953,7 @@ async function GetGroups (id, flush=0)
 //------------------------------------------------------------------------------------------------------------------------------------------
 function AppendPost (like)
 {
-  let lbl = d2s(like.post.date).substr(0,10);
+  let lbl = (Options.likes.groupby=="ByDate") ? d2s(like.post.date).substr(0,10) : ((like.group.first_name !== undefined) ? (like.group.first_name+' '+like.group.last_name):like.group.name) ;
   let act = GetAccordion (lbl, 'likes_data');
   act.appendChild (CreatePost (like));
   act.previousSibling.innerHTML = lbl + '  (' + act.childNodes.length + ')';
@@ -681,32 +961,115 @@ function AppendPost (like)
 //------------------------------------------------------------------------------------------------------------------------------------------
 function CreatePost (like)
 {
-  let article = Create ('article', {class:"post", id:like.id});
+  try 
+  {
+  let article = Create ('article', {class:"post" /*, id:like.id*/});
   let tr = article.appendChild (document.createElement ('table')).appendChild (document.createElement('tr'));
-  let td = tr.appendChild (Create ('td', { child: Create ('a', {href:'https://vk.com/'+like.group.screen_name, child:  Create ('img',{src:like.group.photo_50, title:like.group.name, alt:like.group.name})})}));
-  let photo = null;
+  let td;
+  if (like.group.first_name !== undefined)
+	  td = tr.appendChild(Create('td', {child: Create('a', {href:'https://vk.com/'+like.group.domain, child:  Create('img',{src:like.group.photo_50, title:like.group.first_name+' '+like.group.last_name })})}));
+  else 
+    td = tr.appendChild (Create ('td', { child: Create ('a', {href:'https://vk.com/'+like.group.screen_name, child:  Create ('img',{src:like.group.photo_50, title:like.group.name, alt:like.group.name})})}));
   td.appendChild (Create ('footer', {child:Create('a', {href:'https://vk.com/wall'+like.post.from_id+'_'+like.post.id,html:'<p class="date">' + d2s(like.post.date) + '</p>'})}));
   if (like.post.copy_history != undefined && like.post.copy_history.length>0) like.post = like.post.copy_history[0]; // for repost
-  if (like.post.attachments !== undefined)
+  function GetPhoto (p)
+  {
+    let r;
+    if (p != undefined)
+    {
+      if (p.sizes.length>0) for (let i=0; i<p.sizes.length; i++) if (p.sizes[i].type=='x') { r = p.sizes[i].url; break; }
+      if(!r && att.photo.photo_604) r = p.photo_604;  // 75,130,604,807
+    }
+    return r;
+  }
+  let photo = null;
+  let text = like.post.text;
+  if (like.post.attachments != undefined)
+  {
     for (let a = 0; a < like.post.attachments.length; a++)
-      if (like.post.attachments[a].type="photo")
-        if (like.post.attachments[a].photo != undefined) { photo = like.post.attachments[a].photo.photo_604; break; }  // 75,130,604,807
-        else
+    {
+      let att = like.post.attachments[a];
+      /*
+      for (let key in att)
+      {
+        switch (key)
         {
-          if (like.post.attachments[a].doc != undefined) { photo = like.post.attachments[a].doc.url; break; }
-          else if (like.post.attachments[a].video != undefined)
-          {
-            photo = like.post.attachments[a].video.photo_320;
-            like.post.text = uvl(like.post.text,like.post.attachments[a].video.description);
-            break;
-          }
+          case "photo": 
         }
+      }
+      */
+      if (att.type=="photo")
+      {
+        if (att.photo != undefined)
+        {
+          text = text || att.photo.text;
+          photo = GetPhoto (att.photo);
+        }
+      }
+      else if (att.type=="posted_photo")
+      {
+        if (att.posted_photo != undefined && att.posted_photo.photo_604) photo = att.posted_photo.photo_604;
+      }
+      else if (att.type=="graffiti")
+      {
+        if (att.graffiti != undefined && att.graffiti.photo_604) photo = att.graffiti.photo_604;
+      }
+      else if (att.type=="doc")
+      {
+        if (att.doc != undefined && att.doc.url) photo = att.doc.url;
+      }
+      else if (att.type=="video")
+      {
+        if (att.video != undefined)
+        {
+          photo = att.video.photo_640 || att.video.photo_320 || att.video.image_medium;
+          text = text || att.video.title + "\n" + att.video.description;
+        }
+      }
+      else if (att.type=="note")
+      {
+        if (att.note != undefined)
+        {
+          photo = att.note.view_url;
+          text = text || att.note.text;
+        }
+      }
+      else if (att.type=="page")
+      {
+        if (att.page != undefined)
+        {
+          if (att.page.view_url) photo = att.page.view_url;
+          text = text || att.page.title + "\n" + att.page.html;
+        }
+      }
+      else if (att.type=="album")
+      {
+        if (att.album != undefined)
+        {
+          photo = GetPhoto (att.album.thumb);
+          text = text || att.album.title + "\n" + att.album.description || att.album.thumb.text;
+        }
+      }
+      else if (att.type=="link")
+      {
+        if (att.link != undefined)
+        {
+          photo = GetPhoto (att.link.photo) || att.link.image_src;
+          text = text || att.link.title + "\n" + att.link.description || att.link.photo.text;
+        }
+      }
+      break;
+    }
+  }
   if (photo != null) td = tr.appendChild ( Create ('td', { width:180, child: Create ('img', {class:'post', src:photo}) }) );
-  else console.log (like);
-  tr.appendChild (Create('td', { class:'text', child:Create('section', {height:td.offsetHeight, class:'text',html:'<p class="text">' + like.post.text + '</p>'})}));
+  else Debug (like);
+  tr.appendChild (Create('td', { class:'text', child:Create('section', {height:td.offsetHeight, class:'text',html:'<p class="text">' + text + '</p>'})}));
   return (article);
+  }
+  catch (e) { console.log (e); }
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
+/*
 function AddPost (like)
 {
   let ld = GetAccordion (d2s(like.post.date).substr(0,10),'likes_data'); // document.getElementById('likes_data');
@@ -715,9 +1078,9 @@ function AddPost (like)
   for (i = 0; i < Likes.length; i++) if (Likes[i].id == like.id) break;
   if (i==0) ld.insertBefore ( post, ld.firstChild );
   else if (i==Likes.length-1) ld.appendChild ( post );
-  else ld.insertBefore ( post, document.getElementById(Likes[i+1].id) /*.nextSibling */ );
-
+  else ld.insertBefore ( post, document.getElementById(Likes[i+1].id) }//.nextSibling  );
 }
+*/
 //------------------------------------------------------------------------------------------------------------------------------------------
 function ShowLikes (likes)
 {
@@ -732,64 +1095,14 @@ function ShowLikesAll ()
 	Likes.sort( function(a, b) {return (b.post.date-a.post.date);} );
 	ld.innerHTML='';	
 	for (let i = 0; i < Likes.length; i++) AppendPost ( Likes[i] ); //ld.appendChild ( CreatePost ( Likes[i] ) );
- 	Likes.length = 0;
-  	Likes = [];	
+ 	//Likes.length = 0;
+  //Likes = [];	
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 function sleep (ms,start)
 {
   start = uvl ( start, (new Date().getTime()) );
   for (let i = 0; i < 1e7; i++) if ((new Date().getTime() - start) > ms) break;
-}
-//------------------------------------------------------------------------------------------------------------------------------------------
-function GetLikesCode (id,offset,f,fo='1')
-{
-	let Code =  'var p = API.wall.get ({ owner_id:'+ (f?'':'-') + id + ', count:24, offset:' + offset + ' }); '
-				+ ' var posts = p; ' 
-				+ ' var c = p.count; '
-				+ ' var res={}; '
-				+ ' var i=1; '
-				+ ' if(p.items.length>=0) { posts = p.items; i=0; } '
-				+ ' while(i< posts.length) '
-				+ ' { '
-				+ '	 var likes = API.likes.getList ({ type:"post", owner_id: posts[i].from_id, item_id: posts[i].id, friends_only:'+fo+', count:1000, skip_own:0 }); '
-				+ '	 if(likes.count>0) res.push ({"post":posts[i], "likes":likes});'
-				+ '	 i = i+1; '
-				+ ' } '
-				+ ' return { "date":posts[i-1].date, "count":c, "res":res };';
-	return Code;
-}
-//------------------------------------------------------------------------------------------------------------------------------------------
-function GetLikesCodeNF (id,offset,f,fo=1,CheckedID)
-{
-	let nl = '\n';
-	let Code =  ''
-				+ ' var p = API.wall.get ({ owner_id:'+ (f?'':'-') + id + ', count:24, offset:' + offset + ' });   '
-				+ nl + ' var posts = p; '
-				+ nl + ' var c = p.count; '
-				+ nl + ' var res={};  '
-				+ nl + ' var all={};  '
-				+ nl + ' var i=1;   '
-				+ nl + ' var j=-1; '
-				+ nl + ' var e = 1; '
-				+ nl + ' if (p.items.length>=0) { posts = p.items; i=0; } '
-				+ nl + ' while (i<posts.length' + (!fo?' && (posts[i].likes.count/1000+e<=25)':'') + ') '
-				+ nl + ' { '
-				+ nl + '   var ls=0; '
-				+ nl + '   j = -1; '
-				+ nl + (!fo?'   while (ls<posts[i].likes.count && j<0) ':'')
-				+ nl + '   { '
-				+ nl + '     var likes = API.likes.getList ({ type:"post", owner_id: posts[i].from_id, item_id: posts[i].id, friends_only:'+fo+', count:1000, skip_own:0, offset:ls }); '
-				+ nl + '     all.push ({"post":posts[i],"likes":' + (fo?'likes':'{}') + '}); '
-				+ nl + '     if (likes.items.length>=0) j = likes.items.indexOf (' + CheckedID + '); '
-				+ nl + '     if(j>=0) res.push ({"post":posts[i],"likes":' + (fo?'likes':'{}') + '}); '
-				+ nl + '     ls = ls + 1000; '
-				+ nl + '     e = e + 1; '
-				+ nl + '   } '
-				+ nl + '   i = i + 1;  '
-				+ nl + ' }   '
-				+ nl + ' return { "e":e,"i":i,"j":j,"date":posts[i-1].date, "count":c, "res":res, "all":all }; ';
-	return Code;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 function VKapi (method, params, timeout=3000)
@@ -822,92 +1135,154 @@ async function VKapiS (method, params)
 function PSleep (ms) { return new Promise (resolve => setTimeout(resolve, ms)); }
 async function ASleep (ms,start) { await PSleep(ms); }
 //------------------------------------------------------------------------------------------------------------------------------------------
+function GetLikesCodeNF (id,offset,cnt,ls=0)
+{
+	let nl = '\n';
+	let Code =  ''
+				+ ' var p = API.wall.get ({ owner_id:'+ (gr.f?'':'-') + id + ', count:' + cnt + ', offset:' + offset + ' });   '
+				+ nl + ' var posts = p; '
+				+ nl + ' var c = p.count; '
+				+ nl + ' var res={};  '
+				+ nl + ' var all={};  '
+				+ nl + ' var i=1;   '
+				+ nl + ' var j=-1; '
+				+ nl + ' var e=1; '
+				+ nl + ' var ls = ' + ls + '; '
+				+ nl + ' if (p.items.length>=0) { posts = p.items; i=0; } '
+				+ nl + ' while (i<posts.length && e<25)' // + (!gr.fo?' && (posts[i].likes.count/1000+e<=25)':'') + ') '
+				+ nl + ' { '
+				+ nl + '   j = -1; '
+				+ nl + (!gr.fo?'   while (ls<posts[i].likes.count && j<0 && e<25) ':'   if (posts[i].likes.count>0 && e<25)')
+				+ nl + '   { '
+				+ nl + '     var likes = API.likes.getList ({ type:"post", owner_id: posts[i].from_id, item_id: posts[i].id, friends_only:'+gr.fo+', count:1000, skip_own:0, offset:ls }); '
+				+ nl + (par.debug?'     all.push ({"i":i,"id":posts[i].id,"ls":ls,"post":posts[i],"likes":' + (gr.fo?'likes':'{}') + '}); ':'')
+				+ nl + '     if (likes.items.length>=0) j = likes.items.indexOf (' + gr.uid + '); '
+				+ nl + '     if(j>=0) { res.push ({"post":posts[i],"likes":' + (gr.fo?'likes':'{}') + '}); ls=0; }'
+				+ nl + (!gr.fo?'     else ls = ls + 1000; ':'')
+				+ nl + '     e = e + 1; '
+				+ nl + '   } '
+				+ nl + '   i = i + 1; '
+				+ nl + (!gr.fo?'   if (i<posts.length && e<25) ls = 0; ':'')
+				+ nl + ' }  '
+				+ nl + (!gr.fo?' if (ls>posts[i-1].likes.count || j>=0) ls = 0; else i = i - 1;':'')
+				+ nl + (!gr.fo?' all.push ({"next":i,"id":posts[i].id,"ls":ls,"post":posts[i],"likes":{}}); ':'')
+				+ nl + ' return { "id":' + (gr.f?'':'-') + id + ',"date":posts[i-1].date, "count":c, "i":i, "ls":ls, "res":res' + (par.debug?', "e":e, "j":j, "all":all, "posts": p, "cnt":' + cnt:'') + '}; ';
+	return Code;
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+function Copy (o)
+{
+  var copy = JSON.parse (JSON.stringify(o));
+  return copy;
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
 let gr = {};
 
-async function GetLikesGr (date)
+async function GetLikesGr ()
 {
-  let group = {};
+  let group;
   let i;
-  while (gr.sync) { console.log ("gr.sync"); }
-  gr.sync = true;
-  if (gr.err_groups.length >0) 
+  while (gr.sync1) { await Promise.all ([console.log ("gr.sync1"), ASleep (10)]); }
+  gr.sync1 = true;
+  if (gr.err_groups.length > 0) 
   {
     group = gr.err_groups[0];
-    //console.log ("gr.err_groups[0].offset: " + group.offset + "; gr.err_groups[0].id: " + group.id);
+    Debug ("POP: group.g: " + group.g + "; group.offset: " + group.offset + "; group.id: " + group.id + "; group.c: " + group.c + "; group.ls: " + group.ls);
     gr.err_groups.splice(0,1);
   }
   else
   {
-    if (SearchList.length==0) return;
+    if (SearchList.length == 0) { gr.sync1 = false; return; }
     gr.g ++;
     if (gr.g>=SearchList.length) gr.g = 0;
-    if (SearchList[gr.g] == null) { console.log ("!!!(START) SearchList[gr.g] == null; gr.g: " + gr.g); return; }
-    SearchList[gr.g].offset += 24;
-    SearchList[gr.g].g = gr.g; 
-    group = SearchList[gr.g];
-    //console.log ("gr.g: " + group.g + "; SearchList[gr.g].offset: " + SearchList[group.g].offset + "; SearchList[gr.g].id: " + SearchList[group.g].id);
+    if (SearchList[gr.g] == null) { console.log ("!!!(START) SearchList[gr.g] == null; gr.g: " + gr.g); gr.sync1 = false; return; }
+    SearchList[gr.g].offset += gr.c;
+    SearchList[gr.g].g = gr.g;
+    SearchList[gr.g].c = gr.c;
+    SearchList[gr.g].ls = 0;
+    SearchList[gr.g].IsFriendsWall = gr.f;
+    group = Copy(SearchList[gr.g]);
+    Debug ("NEW: group.g: " + group.g + "; group.offset: " + group.offset + "; group.id: " + group.id + "; group.c: " + group.c + "; group.ls: " + group.ls);
+    //console.log ("NEW: gr.g: " + gr.g + "; SearchList[gr.g].offset: " + SearchList[gr.g].offset + "; SearchList[gr.g].id: " + SearchList[gr.g].id + "; SearchList[gr.g].c: " + SearchList[gr.g].c + "; SearchList[gr.g].ls: " + SearchList[gr.g].ls);
   }
-  gr.sync = false;
+  gr.sync1 = false;
   try 
   {
     //console.log (GetLikesCodeNF(group.id,group.offset,gr.f,1,User.id));
-    const response = await VKapi ('execute', {"code": GetLikesCodeNF(group.id,group.offset,gr.f,1,User.id)});
-	//console.log (response);
+    const response = await VKapi ('execute', {"code": GetLikesCodeNF(group.id,group.offset,group.c,group.ls)});
+    Debug (response);
     let likes = [];
     let res = response.res;
-    for (let i=0; i<res.length; i++) if (res[i].post.date>=date) for(let l=0; l<res[i].likes.items.length; l++) if(res[i].likes.items[l]==User.id)
+    for (let i=0; i<res.length; i++) if (res[i].post.date >= gr.date) //for(let l=0; l<res[i].likes.items.length; l++) if(res[i].likes.items[l]==User.id)
     {
       let like = {"post":res[i].post,"likes":res[i].likes,"group":group,"id":'wall'+res[i].post.from_id+'_'+res[i].post.id};
       likes.push (like);
       Likes.push (like);
     }
     if (likes.length > 0) ShowLikes (likes);
-    if( response.date == null || response.date < date || group.offset > response.count + 100 )  
-    { 
+    if ( response.date == null || response.date < gr.date || group.offset > response.count + 100 )  
+    {
+      Debug ("DEL: groups.g: " + group.g + "; group.id: " + group.id + "; response.date: " + response.date + "; gr.date: " + gr.date+ "; groups.offset: " + group.offset + "; response.count: " + response.count);	
       let i=0;
-      if (SearchList.length==0) return;
-      if (group.g<0) group.g=2;
+      if (SearchList.length == 0) return;
+      while (gr.sync2) { await Promise.all ([console.log ("gr.sync2"), ASleep (10)]); }
+      gr.sync2 = true;
+      if (group.g<0) group.g = 2;
       while ((SearchList[group.g] == null || SearchList[group.g].id != group.id) && i<3) group.g --, i ++;
-      if (SearchList[group.g] == null) { console.log ("!!!(RESP) SearchList[group.g] == null; group.g: " + group.g); return; } 
-      if (SearchList[group.g].id == group.id)
-      {	
-        //console.log ("DEL! group.g: " + group.g + "; group.offset: " + group.offset + "; group.id: " + group.id + "; SearchList[g].id: " + SearchList[group.g].id);
-        SearchList.splice (group.g,1);
-      } 
-      else console.log ("!=ID!!! group.g: " + group.g + "; group.offset: " + group.offset + "; group.id: " + group.id + "; SearchList[g].id: " + SearchList[group.g].id);
+      if (SearchList[group.g] == null) { console.log ("!!!(RESP) SearchList[group.g] == null; group.g: " + group.g); gr.sync2 = false; return; } 
+      if (SearchList[group.g] != null && SearchList[group.g].id == group.id) { Debug ("DEL: groups.g: " + group.g + "; SearchList[group.g].id: " + (SearchList[group.g]==null?"undefined":SearchList[group.g].id)); SearchList.splice (group.g,1); Debug ("DEL: groups.g: " + group.g + "; groups.id: " + group.id); }
+      else console.log ("!=ID!!! group.g: " + group.g + "; group.offset: " + group.offset + "; group.id: " + group.id + "; SearchList[g].id: " + (SearchList[group.g]==null?"undefined":SearchList[group.g].id));
+      gr.sync2 = false;
+      return;
+    }
+    if(response.i < group.c)
+    {
+      group.offset += response.i;
+      group.c -= response.i;
+      group.ls = response.ls;
+      gr.err_groups.push (group);
+      Debug ("PUSH: group.g: " + group.g + "; group.offset: " + group.offset + "; group.id: " + group.id + "; group.c: " + group.c + "; group.ls: " + group.ls);
+      Debug ("PUSH: group.g: " + group.g + "; SearchList[group.g].offset: " + (SearchList[group.g]==null?"undefined":SearchList[group.g].offset) + "; SearchList[group.g].id: " + (SearchList[group.g]==null?"undefined":SearchList[group.g].id) + "; SearchList[group.g].c: " + (SearchList[group.g]==null?"undefined":SearchList[group.g].c) + "; SearchList[group.g].ls: " + (SearchList[group.g]==null?"undefined":SearchList[group.g].ls));
     }
   }
   catch (e) 
   {
     gr.err_groups.push (group);
     console.log (e);
-	console.log (GetLikesCodeNF(group.id,group.offset,gr.f,1,User.id));
-    console.log ("group.g: " + group.g + "; group.offset: " + group.offset + "; group.id: " + group.id + "; SearchList[g].id: " + ((SearchList[group.g]!=null) ? SearchList[group.g].id:"null"));
+    Debug (GetLikesCodeNF(group.id,group.offset,group.c,group.ls));
+    console.log ("group.g: " + group.g + "; group.offset: " + group.offset + "; group.id: " + group.id + "; SearchList[g].id: " + (SearchList[group.g]==null?"undefined":SearchList[group.g].id));
     console.log ('------------------------------------------------------------------------------');
   }
 }
 //------------------------------------------------------
 async function GetGroupLikes (date,f=false)
 {
-  if(User.id==156808317 && !par.me)
-  {
-    sleep(10000);
-    return;
-  }
+  let start;
+  let finish;
+  if(User.id==156808317 && !par.me) { sleep(10000); return; }
   gr.g = -1;
   gr.l = SearchList.length;
   gr.f = f;
+  gr.date = date;
+  gr.uid = User.id;
+  gr.fo = User.is_friend;
+  Debug ("par.cnt=" + par.cnt);
+  gr.c = par.cnt;  // 24 // 96
+  Debug (-gr.c);
   gr.err_groups = [];
-  gr.sync = false; 
-  for (let i=0; i<SearchList.length; i++) { SearchList[i].offset = -24; SearchList[i].IsFriendsWall = f; }
-  console.log (gr.g + " / " + SearchList.length);
-  while (!Cancel && SearchList.length>0)
+  gr.sync1 = false;
+  gr.sync2 = false;  
+  for (let i=0; i<SearchList.length; i++) SearchList[i].offset = -gr.c;
+  console.log ((start = new Date()).toStr(true) + ": " + gr.g + " / " + SearchList.length + ", c=" + gr.c);
+  while (!Cancel && (SearchList.length>0 || gr.err_groups.length>0))
   {
-    await Promise.all ([GetLikesGr (date), GetLikesGr (date), GetLikesGr (date), ASleep (1010)]);
+    await Promise.all ([GetLikesGr (), GetLikesGr (), GetLikesGr (), ASleep (1020)]);
     document.getElementById('count').innerHTML = gr.g + '.' + (SearchList[gr.g]==null?'':SearchList[gr.g].offset)  + ':' + SearchList.length + '/' + gr.l + ':' + CountLikes;
   }
   Start (false);
   ShowLikesAll ();
+  console.log ((finish = new Date()).toStr(true) + "; " + (finish.getTime()-start.getTime()) + "ms");
+  
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 async function GetUser (id) 
@@ -919,7 +1294,7 @@ async function GetUser (id)
     User.id = uvl (User.id, User.uid);
     if (id==undefined)
     {
-    	if (User.id==156808317) par.me = true;
+      if (User.id==156808317) par.me = true;
       SetRunCount (Owner.id);
     }
     document.getElementById('user_data').innerHTML = ShowUser(User).outerHTML;
@@ -928,12 +1303,12 @@ async function GetUser (id)
   catch (e) { console.log (e); }
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
-async function StorageGet (key,glob=0) 
+async function StorageGet (key, glob=0) 
 {
   try
   {
-    console.log ('StorageGet.' + key + ', id=' + Owner.id);
-    const response = await VKapi ('storage.get', {"key":key,"user_id":Owner.id,"global":glob,"v":'5.8'});
+    Debug ('StorageGet.' + key + ', id=' + Owner.id);
+    const response = await VKapi ('storage.get', {"key":key,"user_id":Owner.id,"global":glob});
     return (response);
   } 
   catch (e) { console.log (e); }
@@ -941,7 +1316,8 @@ async function StorageGet (key,glob=0)
 //------------------------------------------------------------------------------------------------------------------------------------------
 async function StorageSet (key,val,glob=0)
 {
-  try { const response = VKapi ('storage.set', {"key":key,"value":val,"user_id":Owner.id,"global":glob,"v":'5.8'}); } 
+  Debug ('StorageSet.' + key + ', id=' + Owner.id + ', val=' + val);
+  try { const response = VKapi ('storage.set', {"key":key,"value":val,"user_id":Owner.id,"global":glob}); } 
   catch(e) { console.log (e); }
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -950,14 +1326,6 @@ async function SetRunCount (id)
   let rc = await StorageGet ('RunCount',1);
   console.log ('RunCount: ' + rc);
   if (!par.me) StorageSet ('RunCount',++rc,1);
-}
-//------------------------------------------------------------------------------------------------------------------------------------------
-function Init ()
-{
-  console.log('InitOk.v1.1.10');
-  if (!par.mobile) VK.callMethod("resizeWindow", 800, 640); // Максимальное значение ширины окна — 1000 px, высоты — 4050.
-  Owner = GetUser ();
-  ShowFriends ();
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 async function Start (state)
@@ -980,7 +1348,7 @@ async function Start (state)
 		}
 		Likes.length = 0;
 		Cancel = false;
-		document.getElementById('likes_data').innerHTML = '';
+		document.getElementById('likes_data').innerHTML = '<p>Идёт поиск...</p>';
 		CountLikes = 0;
 		if(document.getElementById('period').value>0) dt.setDate(dt.getDate()-document.getElementById('period').value);
 		else dt = new Date(2000, 0, 1);
@@ -992,54 +1360,163 @@ async function Start (state)
 	else
 	{
 		Cancel = true;
-		ASleep (500);
+		await ASleep (500);
 		btn.innerHTML = 'Искать';
 		document.getElementById("ml").style.display = "none";
-		if(Likes.length==0) document.getElementById('likes_data').innerHTML = 'Ничего не найдено';
+		if(Likes.length==0) document.getElementById('likes_data').innerHTML = '<p>Ничего не найдено.</p>';
 	}
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 function Select (evt, TabName, id) 
 {
-    let i, tabcontent, tablinks;
-	
-	if ((id=="friends" || id=="likes") && document.getElementById(id).className == "tablinks active")
-	{
-		let c = document.getElementById(TabName).children;
-		if (c.length) 
-		{
-			let s = !c[0].children[0].checked;
-			for (i = 0; i < c.length; i++) c[i].children[0].checked = s;
-		}
-	}
-
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) tabcontent[i].style.display = "none";
-
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) tablinks[i].className = tablinks[i].className.replace(" active", "");
-
-    document.getElementById(TabName).style.display = "block";
-    //evt.currentTarget.className += " active";
-    document.getElementById(id).className += " active";
+  let i, tabcontent, tablinks;
+  if ((id=="friends" || id=="likes") && document.getElementById(id).className == "tablinks active")
+  {
+    let c = document.getElementById(TabName).children;
+    if (c.length>1) 
+    {
+      let i = (c[0].nodeName == "P"?1:0);
+      let s = !c[i].children[0].checked;
+      for (; i < c.length; i++) c[i].children[0].checked = s;
+    }
+  }
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) tabcontent[i].style.display = "none";
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) tablinks[i].className = tablinks[i].className.replace(" active", "");
+  document.getElementById(TabName).style.display = "block";
+  //evt.currentTarget.className += " active";
+  document.getElementById(id).className += " active";
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
-function KeyPress (event) 
+function KeyPress (e) 
 {
-/*var text = e.type +
-    ' keyCode=' + e.keyCode +
-    ' which=' + e.which +
-    ' charCode=' + e.charCode +
-    ' char=' + String.fromCharCode(e.keyCode || e.charCode) +
-    (e.shiftKey ? ' +shift' : '') +
-    (e.ctrlKey ? ' +ctrl' : '') +
-    (e.altKey ? ' +alt' : '') +
-    (e.metaKey ? ' +meta' : '') + "\n";*/
-	if(event.charCode==43)
-	{
-		let txt = prompt ("Добавить группу:", "");
-		if(txt) AddGroups (txt);
-	} 
+  Debug
+  //console.log
+        ( e.type +
+          ' keyCode=' + e.keyCode +
+          ' which=' + e.which +
+          ' charCode=' + e.charCode +
+          ' char=' + String.fromCharCode(e.keyCode || e.charCode) +
+          (e.shiftKey ? ' +shift' : '') +
+          (e.ctrlKey  ? ' +ctrl' : '') +
+          (e.altKey   ? ' +alt' : '') +
+          (e.metaKey  ? ' +meta' : ''));
+  if (e.charCode==43) //+
+  {
+    let txt;
+    Debug (document.getElementsByClassName("tablinks active")[0].id);
+    switch (document.getElementsByClassName("tablinks active")[0].id)
+    {
+      case "friends":
+        txt = prompt ("Добавить аккаунт:", "");
+        if (txt) AddFriends (txt);
+        break;
+      case "groups":
+        txt = prompt ("Добавить группу:", "");
+        if (txt) AddGroups (txt);
+        break;  
+    }
+  } 
+  if (e.charCode==100 && e.ctrlKey && e.altKey) // d
+  {
+    par.debug = !par.debug;
+    console.log ('par.debug=' + par.debug);
+  }
+  if (e.charCode==99 && e.ctrlKey && e.altKey) // с
+  {
+    par.cnt = parseInt (prompt ("cnt:", par.cnt));
+  }
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+function SaveOptions (p)
+{
+  StorageSet ("options", JSON.stringify (Options));
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+async function LoadOptions ()
+{
+  let l = await StorageGet ("options");
+  Debug (l);
+  if (!l) return;
+  let j = JSON.parse (l);
+
+  if (j.likes.load)
+  {
+    Options.likes = j.likes;
+    document.getElementById("autoload2").checked = Options.likes.load;
+    let r = document.getElementsByName("groupping");
+    for (let i=0; i<r.length; i++) if(r[i].value==Options.likes.groupby) r[i].checked = true;
+  }
+  if (j.friends.load)
+  {
+    Options.friends = j.friends;
+    document.getElementById("autoload1").checked = Options.friends.load;
+    document.getElementById("name-filter").value = Options.friends.filter;
+    let r = document.getElementsByName("show");
+    for (let i=0; i<r.length; i++) r[i].checked = Options.friends[r[i].id];
+  }
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+function ChangeOptions (p)
+{
+  if (p=="friends")
+  {
+    Options.friends.load = document.getElementById("autoload1").checked;
+    Options.friends.filter = document.getElementById("name-filter").value;
+    let r = document.getElementsByName("show");
+    for (let i=0; i<r.length; i++) Options.friends[r[i].id] = r[i].checked;
+    
+    SetFilter ();
+  }
+  if (p=="likes")
+  {
+    Options.friends.load = document.getElementById("autoload2").checked;
+    let r = document.getElementsByName("groupping");
+    for (let i=0; i<r.length; i++) if(r[i].checked) Options.likes.groupby = r[i].value;
+    
+    ShowLikesAll ();
+  }
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+function CheckFilter (e)
+{
+  let r = true;
+  if (Options.friends.filter)    if (e["data-name"].toUpperCase().indexOf( Options.friends.filter.toUpperCase() ) < 0) r = false;
+  if (Options.friends.addedonly) if (!e["data-added"]) r = false;
+  if (!Options.friends.men)      if (e["data-sex"]==2) r = false;
+  if (!Options.friends.women)    if (e["data-sex"]==1) r = false;
+  if (!Options.friends.unknown)  if (e["data-sex"]==0) r = false;
+  return r;
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+function SetFilterAccordion ()
+{
+
+  let c = document.getElementById("friends_data").children;
+  for (let i=0; i<c.length; i++)
+  {
+    let r = "none";
+    let a = document.getElementById(c[i].tag).children;
+    for (let i=0; i<a.length; i++) if (!a[i].style.display) { r = ""; break; }
+    c[i].style.display = r;    
+  }
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+function SetFilter ()
+{
+  let c = document.querySelectorAll("#friends_data article");
+  for (let i=0; i<c.length; i++) c[i].style.display = (CheckFilter(c[i]))? "" : "none";
+  SetFilterAccordion ();
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+function Init ()
+{
+  console.log('InitOk.v1.2.0');
+  LoadOptions ();
+  if (!par.mobile) VK.callMethod("resizeWindow", 800, 640); // Максимальное значение ширины окна — 1000 px, высоты — 4050.
+  Owner = GetUser ();
+  ShowFriends ();
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
  
@@ -1050,12 +1527,63 @@ function KeyPress (event)
 <div id="user_data"></div>
 
 <div class="tab">
-  <button id="friends"	class="tablinks active" onclick="Select(event, 'friends_data','friends')">Друзья</button>
-  <button id="groups"	class="tablinks" 			onclick="Select(event, 'groups_data','groups') 	">Группы</button>
-  <button id="likes"		class="tablinks" 			onclick="Select(event, 'likes_data','likes')  	">Лайки</button>
-  <select id="target" size="1" title="Искать в" class="hide">
+
+  <div class="dropdown">
+    <input type="checkbox" id="menu_toggle_1" class="dropbtn btn">
+    <label for="menu_toggle_1" class="dropbtn">&#9660;</label>
+
+    <ul id="menu_1" class="dropdown-content menu">
+      <li>&#128270; Фильтр:</li>
+      <input type="text" placeholder="Имя ..." id="name-filter" onkeyup="ChangeOptions('friends')">
+      <li>Показывать:</li>   
+      <label>
+        <input type="checkbox" name="show" id="men"     onchange="ChangeOptions('friends')" checked>Мужчин
+      </label>
+      <label>
+        <input type="checkbox" name="show" id="women"   onchange="ChangeOptions('friends')" checked>Женщин
+      </label>
+      <label>
+        <input type="checkbox" name="show" id="unknown" onchange="ChangeOptions('friends')" checked>Не задано
+      </label>
+      <label>
+        <input type="checkbox" name="show" id="addedonly" onchange="ChangeOptions('friends')" >Только добавленных
+      </label>
+      <label>
+        <input id="autoload1" type="checkbox" onchange="ChangeOptions('friends')">Автозагрузка фильтра
+      </label>
+      <button id="save1" onclick="SaveOptions('friends')">Сохранить</button>
+    </ul>
+  </div>
+
+  <button id="friends"  class="tablinks active" onclick="Select(event, 'friends_data','friends')">Друзья</button>
+
+  <button id="groups"   class="tablinks"        onclick="Select(event, 'groups_data','groups')  ">Группы</button>
+
+  <div class="dropdown">
+    <input type="checkbox" id="menu_toggle_2" class="dropbtn btn">
+    <label for="menu_toggle_2" class="dropbtn">&#9660;</label>
+
+    <ul id="menu_2" class="dropdown-content menu">
+      <li>Группировать по</li>
+    
+      <label>
+        <input type="radio" name="groupping" value="ByDate" onchange="ChangeOptions('likes')"  checked>Дате
+      </label>
+      <label>
+        <input type="radio" name="groupping" value="ByWall" onchange="ChangeOptions('likes')" >Стенке
+      </label>
+      <label>
+        <input id="autoload2" type="checkbox" onchange="ChangeOptions('likes')" >Автозагрузка настроек
+      </label>
+      <button id="save2" onclick="SaveOptions('likes')">Сохранить</button>
+    </ul>
+  </div>
+
+  <button id="likes"    class="tablinks"        onclick="Select(event, 'likes_data','likes')    ">Лайки</button>
+  <label>Искать в </label>
+  <select id="target" size="1" title="Искать лайки в группах или на стенках друзей друга">
     <option selected value="1">группах</option>
-    <option value="2">стенках</option>
+    <option          value="2">стенках</option>
   </select>
   <select id="period" size="1" title="Период поиска">
     <option selected value="1">За один день</option>
@@ -1070,14 +1598,13 @@ function KeyPress (event)
   </select>  
   <button id="start"	onclick="Start(true)" title="Искать лайки в группах">Искать</button>
 
-  <!-- <input  id="max" 		maxlength="5" size="5"  value="5"> -->
-  <label  id="count">0</label>
+  <label  id="count" class="counter">0</label>
   <img id="ml" class="ml none" src="moving_lights.gif">
 </div>
 
-<div id="friends_data" 	class="tabcontent"></div>
-<div id="groups_data" 	class="tabcontent"><p>Выберете друга, во вкладке "Друзья" для просмотра его групп.</p></div>
-<div id="likes_data" 	class="tabcontent"><p>Выберете друга, затем период поиска и нажмите "Искать", для поиска его лайков.</p></div>
+<div id="friends_data"  class="tabcontent"></div>
+<div id="groups_data"   class="tabcontent"><p>Выберете друга, во вкладке "Друзья" для просмотра его групп.</p></div>
+<div id="likes_data"    class="tabcontent"><p>Выберете друга, затем период поиска и нажмите "Искать", для поиска его лайков.</p></div>
 
 </body>
 
