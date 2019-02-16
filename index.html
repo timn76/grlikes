@@ -554,11 +554,9 @@ var Cancel = false;
 var CountLikes = 0;
 var Friends = [];
 var Groups = [];
-var SearchList = [];
-var AllGroups = [];
 var Likes = [];
-var par = { id:false, me:false, others:false, debug:false, mobile:false, cnt:96}
-var Options = { friends: {load:false, "filter":"", addedonly:false, "men": true, "women":true, "unknown":true}, likes: {load:false, "groupby":"ByDate"} };
+var par = { id:false, me:false, others:false, debug:false, mobile:false, cnt:24 }
+var Options = { friends: {load:false, "filter":"", addedonly:false, "men": true, "women":true, "unknown":true}, likes: {load:false, "groupby":"ByDate"}, include: {post:true, photo: false, video:false, comments:false} };
 var Data = {sgGroups:'', sgFriends:'', Friends: {Count:0, Step:500}};
 //------------------------------------------------------------------------------------------------------------------------------------------
 if (!Date.prototype.toStr) 
@@ -626,11 +624,9 @@ function Create(type,attr)
       default:      elm[key] = attr[key];
     }
   }
-  
 	//var label = document.createElement('label')
 	//label.appendChild(document.createTextNode('text for label after checkbox'));
 	//if ((typeof attr.click	!= undefined) elm.addEventListener (attr.click);
-
 	return elm;
 }//------------------------------------------------------------------------------------------------------------------------------------------
 function id2html(id,addr) 
@@ -755,15 +751,29 @@ async function GetFriends (id,offset=0)
 {
   try
   {
-    const response = await VKapi ('friends.get', {user_id:id, fields:User_fields , order:"name"/*"hints"*/, offset:offset, count:Data.Friends.Step /*, version:"5.8" */}, 60000);
+    const response = await VKapi ('friends.get', {user_id:id, fields:User_fields , order:"name"/*"hints"*/, offset:offset, count:Data.Friends.Step}, 60000);
     let friends = uvl (response.items,response);
     //if (offset==0) 
-    Data.Friends.Count = uvl (response.count,friends.length);
+    GetFriends.Count = uvl (response.count,friends.length);
     //friends.sort( function (a, b) { if (a.first_name > b.first_name) return 1; if (a.first_name < b.first_name) return -1; return 0; } );
-    for (let i = 0; i < friends.length; i++) { friends[i].id = uvl(friends[i].uid,friends[i].id); /* friends[i].IsFriend = 1; */ }
+    if (friends[0].id == undefined) for (let i = 0; i < friends.length; i++) friends[i].id = friends[i].uid;
     return friends;
   }
   catch (e) { console.log (e); return e; }
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+async function GetAllFriends (id)
+{
+  let friends = [];
+  let offset = 0;
+  do 
+  {
+    const f = await GetFriends (id,offset);
+    for (let i = 0; i < f.length; i++) friends.push (f[i]);
+    offset += Data.Friends.Step;
+  } while (friends.length<GetFriends.Count && offset<GetFriends.Count)
+  await AddFriends (Data.sgFriends = await StorageGet ('friends'));
+  return friends;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 async function ShowFriends (id,flush=false)
@@ -777,6 +787,7 @@ async function ShowFriends (id,flush=false)
   do 
   {
     const f = await GetFriends (id,offset);
+    Data.Friends.Count = GetFriends.Count;
     for (let i = 0; i < f.length; i++)
     { 
       AppendFriend (f[i]);
@@ -963,15 +974,14 @@ function CreatePost (like)
 {
   try 
   {
-  let article = Create ('article', {class:"post" /*, id:like.id*/});
+  let article = Create ('article', {class:"post" });
   let tr = article.appendChild (document.createElement ('table')).appendChild (document.createElement('tr'));
   let td;
   if (like.group.first_name !== undefined)
 	  td = tr.appendChild(Create('td', {child: Create('a', {href:'https://vk.com/'+like.group.domain, child:  Create('img',{src:like.group.photo_50, title:like.group.first_name+' '+like.group.last_name })})}));
   else 
     td = tr.appendChild (Create ('td', { child: Create ('a', {href:'https://vk.com/'+like.group.screen_name, child:  Create ('img',{src:like.group.photo_50, title:like.group.name, alt:like.group.name})})}));
-  td.appendChild (Create ('footer', {child:Create('a', {href:'https://vk.com/wall'+like.post.from_id+'_'+like.post.id,html:'<p class="date">' + d2s(like.post.date) + '</p>'})}));
-  if (like.post.copy_history != undefined && like.post.copy_history.length>0) like.post = like.post.copy_history[0]; // for repost
+  td.appendChild (Create ('footer', {child:Create('a', {href:'https://vk.com/'+like.id,html:'<p class="date">' + d2s(like[like.type].date) + '</p>'})}));
   function GetPhoto (p)
   {
     let r;
@@ -983,82 +993,93 @@ function CreatePost (like)
     return r;
   }
   let photo = null;
-  let text = like.post.text;
-  if (like.post.attachments != undefined)
+  let text = like[like.type].text;
+  if (like.type == "photo") photo = GetPhoto (like[like.type]);
+  if (like.type == "video")
   {
-    for (let a = 0; a < like.post.attachments.length; a++)
+    photo = like.video.photo_640 || like.video.photo_320 || like.video.image_medium;
+    text = text || like.video.title + "\n" + like.video.description;
+  }
+  if (like.type == "post")
+  {
+    if (like.post.copy_history != undefined && like.post.copy_history.length>0) like.post = like.post.copy_history[0]; // for repost
+    text = text || like.post.text;
+    if (like.post.attachments != undefined)
     {
-      let att = like.post.attachments[a];
-      /*
-      for (let key in att)
+      for (let a = 0; a < like.post.attachments.length; a++)
       {
-        switch (key)
+        let att = like.post.attachments[a];
+        /*
+        for (let key in att)
         {
-          case "photo": 
+          switch (key)
+          {
+            case "photo": 
+          }
         }
-      }
-      */
-      if (att.type=="photo")
-      {
-        if (att.photo != undefined)
+        */
+        if (att.type=="photo")
         {
-          text = text || att.photo.text;
-          photo = GetPhoto (att.photo);
+          if (att.photo != undefined)
+          {
+            text = text || att.photo.text;
+            photo = GetPhoto (att.photo);
+          }
         }
-      }
-      else if (att.type=="posted_photo")
-      {
-        if (att.posted_photo != undefined && att.posted_photo.photo_604) photo = att.posted_photo.photo_604;
-      }
-      else if (att.type=="graffiti")
-      {
-        if (att.graffiti != undefined && att.graffiti.photo_604) photo = att.graffiti.photo_604;
-      }
-      else if (att.type=="doc")
-      {
-        if (att.doc != undefined && att.doc.url) photo = att.doc.url;
-      }
-      else if (att.type=="video")
-      {
-        if (att.video != undefined)
+        else if (att.type=="posted_photo")
         {
-          photo = att.video.photo_640 || att.video.photo_320 || att.video.image_medium;
-          text = text || att.video.title + "\n" + att.video.description;
+          if (att.posted_photo != undefined && att.posted_photo.photo_604) photo = att.posted_photo.photo_604;
         }
-      }
-      else if (att.type=="note")
-      {
-        if (att.note != undefined)
+        else if (att.type=="graffiti")
         {
-          photo = att.note.view_url;
-          text = text || att.note.text;
+          if (att.graffiti != undefined && att.graffiti.photo_604) photo = att.graffiti.photo_604;
         }
-      }
-      else if (att.type=="page")
-      {
-        if (att.page != undefined)
+        else if (att.type=="doc")
         {
-          if (att.page.view_url) photo = att.page.view_url;
-          text = text || att.page.title + "\n" + att.page.html;
+          if (att.doc != undefined && att.doc.url) photo = att.doc.url;
         }
-      }
-      else if (att.type=="album")
-      {
-        if (att.album != undefined)
+        else if (att.type=="video")
         {
-          photo = GetPhoto (att.album.thumb);
-          text = text || att.album.title + "\n" + att.album.description || att.album.thumb.text;
+          if (att.video != undefined)
+          {
+            photo = att.video.photo_640 || att.video.photo_320 || att.video.image_medium;
+            text = text || att.video.title + "\n" + att.video.description;
+          }
         }
-      }
-      else if (att.type=="link")
-      {
-        if (att.link != undefined)
+        else if (att.type=="note")
         {
-          photo = GetPhoto (att.link.photo) || att.link.image_src;
-          text = text || att.link.title + "\n" + att.link.description || att.link.photo.text;
+          if (att.note != undefined)
+          {
+            photo = att.note.view_url;
+            text = text || att.note.text;
+          }
         }
+        else if (att.type=="page")
+        {
+          if (att.page != undefined)
+          {
+            if (att.page.view_url) photo = att.page.view_url;
+            text = text || att.page.title + "\n" + att.page.html;
+          }
+        }
+        else if (att.type=="album")
+        {
+          if (att.album != undefined)
+          {
+            photo = GetPhoto (att.album.thumb);
+            text = text || att.album.title + "\n" + att.album.description || att.album.thumb.text;
+          }
+        }
+        else if (att.type=="link")
+        {
+          if (att.link != undefined)
+          {
+            photo = GetPhoto (att.link.photo) || att.link.image_src;
+            text = text || att.link.title + "\n" + att.link.description || att.link.photo.text;
+          }
+        }
+        break;
       }
-      break;
     }
   }
   if (photo != null) td = tr.appendChild ( Create ('td', { width:180, child: Create ('img', {class:'post', src:photo}) }) );
@@ -1092,7 +1113,7 @@ function ShowLikes (likes)
 function ShowLikesAll ()
 {
 	let ld = document.getElementById('likes_data');
-	Likes.sort( function(a, b) {return (b.post.date-a.post.date);} );
+	Likes.sort( function(a, b) {return (b[b.type].date-a[a.type].date);} );
 	ld.innerHTML='';	
 	for (let i = 0; i < Likes.length; i++) AppendPost ( Likes[i] ); //ld.appendChild ( CreatePost ( Likes[i] ) );
  	//Likes.length = 0;
@@ -1135,7 +1156,36 @@ async function VKapiS (method, params)
 function PSleep (ms) { return new Promise (resolve => setTimeout(resolve, ms)); }
 async function ASleep (ms,start) { await PSleep(ms); }
 //------------------------------------------------------------------------------------------------------------------------------------------
-function GetLikesCodeNF (id,offset,cnt,ls=0)
+function GetLikesCode (id,offset,cnt)
+{
+	let nl = '\n';
+	let Code =  ''
+				+ (gr.type=="post" ?' var p = API.wall.get ({ owner_id:'+ (gr.f?'':'-') + id + ', count:' + cnt + ', offset:' + offset + ' });   ':'')
+        + (gr.type=="photo"?' var p = API.photos.getAll ({ owner_id:'+ (gr.f?'':'-') + id + ', extended:1, count:' + cnt + ', offset:' + offset + ' }); ':'')
+        + (gr.type=="video"?' var p = API.video.get ({ owner_id:'+ (gr.f?'':'-') + id + ', extended:1, count:' + cnt + ', offset:' + offset + ' }); ':'')
+				+ nl + ' var obj = p; '
+				+ nl + ' var c = p.count; '
+				+ nl + ' var res={}; '
+				+ nl + ' var all={}; '
+				+ nl + ' var i=1; '
+				+ nl + ' var e=1; '
+				+ nl + ' if (p.items.length>=0) { obj = p.items; i=0; } '
+				+ nl + ' while (i<obj.length && e<25)'
+				+ nl + ' { '
+        + nl + '   if (obj[i].likes.count>0 && e<25) '
+				+ nl + '   { '
+				+ nl + '     var likes = API.likes.isLiked ({ user_id:' + gr.uid + ', type:"' + gr.type + '", owner_id: obj[i].owner_id, item_id: obj[i].id }); '
+				+ nl + (par.debug?'     all.push ({"i":i,"id":obj[i].id,"obj":obj[i],"likes":likes}); ':'')
+				+ nl + '     if (likes.liked==1 || likes.copied==1) res.push ({type:"' + gr.type + '",' + gr.type + ':obj[i], id:"' + (gr.type=="post"?'wall':gr.type) + id + '_" + obj[i].id }); '
+				+ nl + '     e = e + 1; '
+				+ nl + '   } '
+				+ nl + '   i = i + 1; '
+				+ nl + ' }  '
+				+ nl + ' return { "date":obj[i-1].date, "count":c, "i":i, "res":res' + (par.debug?', "id":' + (gr.f?'':'-') + id + ', "e":e, "all":all, "obj": p, "cnt":' + cnt:'') + '}; ';
+	return Code;
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+function GetLikesCodeOld (id,offset,cnt,ls=0)
 {
 	let nl = '\n';
 	let Code =  ''
@@ -1165,7 +1215,7 @@ function GetLikesCodeNF (id,offset,cnt,ls=0)
 				+ nl + (!gr.fo?'   if (i<posts.length && e<25) ls = 0; ':'')
 				+ nl + ' }  '
 				+ nl + (!gr.fo?' if (ls>posts[i-1].likes.count || j>=0) ls = 0; else i = i - 1;':'')
-				+ nl + (!gr.fo?' all.push ({"next":i,"id":posts[i].id,"ls":ls,"post":posts[i],"likes":{}}); ':'')
+				+ nl + ((par.debug && !gr.fo)?' all.push ({"next":i,"id":posts[i].id,"ls":ls,"post":posts[i],"likes":{}}); ':'')
 				+ nl + ' return { "id":' + (gr.f?'':'-') + id + ',"date":posts[i-1].date, "count":c, "i":i, "ls":ls, "res":res' + (par.debug?', "e":e, "j":j, "all":all, "posts": p, "cnt":' + cnt:'') + '}; ';
 	return Code;
 }
@@ -1178,7 +1228,7 @@ function Copy (o)
 //------------------------------------------------------------------------------------------------------------------------------------------
 let gr = {};
 
-async function GetLikesGr ()
+async function GetLikesOne ()
 {
   let group;
   let i;
@@ -1192,30 +1242,32 @@ async function GetLikesGr ()
   }
   else
   {
-    if (SearchList.length == 0) { gr.sync1 = false; return; }
+    if (gr.sl.length == 0) { gr.sync1 = false; return; }
     gr.g ++;
-    if (gr.g>=SearchList.length) gr.g = 0;
-    if (SearchList[gr.g] == null) { console.log ("!!!(START) SearchList[gr.g] == null; gr.g: " + gr.g); gr.sync1 = false; return; }
-    SearchList[gr.g].offset += gr.c;
-    SearchList[gr.g].g = gr.g;
-    SearchList[gr.g].c = gr.c;
-    SearchList[gr.g].ls = 0;
-    SearchList[gr.g].IsFriendsWall = gr.f;
-    group = Copy(SearchList[gr.g]);
+    if (gr.g>=gr.sl.length) gr.g = 0;
+    if (gr.sl[gr.g] == null) { console.log ("!!!(START) gr.sl[gr.g] == null; gr.g: " + gr.g); gr.sync1 = false; return; }
+    gr.sl[gr.g].offset += gr.c;
+    gr.sl[gr.g].g = gr.g;
+    gr.sl[gr.g].c = gr.c;
+    gr.sl[gr.g].ls = 0;
+    gr.sl[gr.g].IsFriendsWall = gr.f;
+    group = Copy(gr.sl[gr.g]);
     Debug ("NEW: group.g: " + group.g + "; group.offset: " + group.offset + "; group.id: " + group.id + "; group.c: " + group.c + "; group.ls: " + group.ls);
-    //console.log ("NEW: gr.g: " + gr.g + "; SearchList[gr.g].offset: " + SearchList[gr.g].offset + "; SearchList[gr.g].id: " + SearchList[gr.g].id + "; SearchList[gr.g].c: " + SearchList[gr.g].c + "; SearchList[gr.g].ls: " + SearchList[gr.g].ls);
+    //console.log ("NEW: gr.g: " + gr.g + "; gr.sl[gr.g].offset: " + gr.sl[gr.g].offset + "; gr.sl[gr.g].id: " + gr.sl[gr.g].id + "; gr.sl[gr.g].c: " + gr.sl[gr.g].c + "; gr.sl[gr.g].ls: " + gr.sl[gr.g].ls);
   }
   gr.sync1 = false;
   try 
   {
-    //console.log (GetLikesCodeNF(group.id,group.offset,gr.f,1,User.id));
-    const response = await VKapi ('execute', {"code": GetLikesCodeNF(group.id,group.offset,group.c,group.ls)});
+    //console.log (GetLikesCode (group.id,group.offset,gr.f,1,User.id));
+    const response = await VKapi ('execute', {"code": GetLikesCode (group.id,group.offset,group.c,group.ls)});
     Debug (response);
     let likes = [];
     let res = response.res;
-    for (let i=0; i<res.length; i++) if (res[i].post.date >= gr.date) //for(let l=0; l<res[i].likes.items.length; l++) if(res[i].likes.items[l]==User.id)
+    for (let i=0; i<res.length; i++) if (res[i][gr.type].date >= gr.date)
     {
-      let like = {"post":res[i].post,"likes":res[i].likes,"group":group,"id":'wall'+res[i].post.from_id+'_'+res[i].post.id};
+      //let like = {"post":res[i].post,"group":group,"id":'wall'+res[i].post.from_id+'_'+res[i].post.id};
+      let like = res[i];
+      like["group"] = group;
       likes.push (like);
       Likes.push (like);
     }
@@ -1224,14 +1276,14 @@ async function GetLikesGr ()
     {
       Debug ("DEL: groups.g: " + group.g + "; group.id: " + group.id + "; response.date: " + response.date + "; gr.date: " + gr.date+ "; groups.offset: " + group.offset + "; response.count: " + response.count);	
       let i=0;
-      if (SearchList.length == 0) return;
+      if (gr.sl.length == 0) return;
       while (gr.sync2) { await Promise.all ([console.log ("gr.sync2"), ASleep (10)]); }
       gr.sync2 = true;
       if (group.g<0) group.g = 2;
-      while ((SearchList[group.g] == null || SearchList[group.g].id != group.id) && i<3) group.g --, i ++;
-      if (SearchList[group.g] == null) { console.log ("!!!(RESP) SearchList[group.g] == null; group.g: " + group.g); gr.sync2 = false; return; } 
-      if (SearchList[group.g] != null && SearchList[group.g].id == group.id) { Debug ("DEL: groups.g: " + group.g + "; SearchList[group.g].id: " + (SearchList[group.g]==null?"undefined":SearchList[group.g].id)); SearchList.splice (group.g,1); Debug ("DEL: groups.g: " + group.g + "; groups.id: " + group.id); }
-      else console.log ("!=ID!!! group.g: " + group.g + "; group.offset: " + group.offset + "; group.id: " + group.id + "; SearchList[g].id: " + (SearchList[group.g]==null?"undefined":SearchList[group.g].id));
+      while ((gr.sl[group.g] == null || gr.sl[group.g].id != group.id) && i<3) group.g --, i ++;
+      if (gr.sl[group.g] == null) { console.log ("!!!(RESP) gr.sl[group.g] == null; group.g: " + group.g); gr.sync2 = false; return; } 
+      if (gr.sl[group.g] != null && gr.sl[group.g].id == group.id) { Debug ("DEL: groups.g: " + group.g + "; gr.sl[group.g].id: " + (gr.sl[group.g]==null?"undefined":gr.sl[group.g].id)); gr.sl.splice (group.g,1); Debug ("DEL: groups.g: " + group.g + "; groups.id: " + group.id); }
+      else console.log ("!=ID!!! group.g: " + group.g + "; group.offset: " + group.offset + "; group.id: " + group.id + "; gr.sl[g].id: " + (gr.sl[group.g]==null?"undefined":gr.sl[group.g].id));
       gr.sync2 = false;
       return;
     }
@@ -1239,50 +1291,60 @@ async function GetLikesGr ()
     {
       group.offset += response.i;
       group.c -= response.i;
-      group.ls = response.ls;
+      if (response.ls!==undefined) group.ls = response.ls;
       gr.err_groups.push (group);
       Debug ("PUSH: group.g: " + group.g + "; group.offset: " + group.offset + "; group.id: " + group.id + "; group.c: " + group.c + "; group.ls: " + group.ls);
-      Debug ("PUSH: group.g: " + group.g + "; SearchList[group.g].offset: " + (SearchList[group.g]==null?"undefined":SearchList[group.g].offset) + "; SearchList[group.g].id: " + (SearchList[group.g]==null?"undefined":SearchList[group.g].id) + "; SearchList[group.g].c: " + (SearchList[group.g]==null?"undefined":SearchList[group.g].c) + "; SearchList[group.g].ls: " + (SearchList[group.g]==null?"undefined":SearchList[group.g].ls));
+      Debug ("PUSH: group.g: " + group.g + "; gr.sl[group.g].offset: " + (gr.sl[group.g]==null?"undefined":gr.sl[group.g].offset) + "; gr.sl[group.g].id: " + (gr.sl[group.g]==null?"undefined":gr.sl[group.g].id) + "; gr.sl[group.g].c: " + (gr.sl[group.g]==null?"undefined":gr.sl[group.g].c) + "; gr.sl[group.g].ls: " + (gr.sl[group.g]==null?"undefined":gr.sl[group.g].ls));
     }
   }
   catch (e) 
   {
     gr.err_groups.push (group);
     console.log (e);
-    Debug (GetLikesCodeNF(group.id,group.offset,group.c,group.ls));
-    console.log ("group.g: " + group.g + "; group.offset: " + group.offset + "; group.id: " + group.id + "; SearchList[g].id: " + (SearchList[group.g]==null?"undefined":SearchList[group.g].id));
+    Debug (GetLikesCode (group.id,group.offset,group.c,group.ls));
+    console.log ("group.g: " + group.g + "; group.offset: " + group.offset + "; group.id: " + group.id + "; gr.sl[g].id: " + (gr.sl[group.g]==null?"undefined":gr.sl[group.g].id));
     console.log ('------------------------------------------------------------------------------');
   }
 }
 //------------------------------------------------------
-async function GetGroupLikes (date,f=false)
+async function GetLikes (type,sl)
 {
   let start;
   let finish;
-  if(User.id==156808317 && !par.me) { sleep(10000); return; }
+  gr.sl = sl.slice ();
   gr.g = -1;
-  gr.l = SearchList.length;
-  gr.f = f;
-  gr.date = date;
-  gr.uid = User.id;
-  gr.fo = User.is_friend;
-  Debug ("par.cnt=" + par.cnt);
-  gr.c = par.cnt;  // 24 // 96
-  Debug (-gr.c);
-  gr.err_groups = [];
+  gr.l = gr.sl.length;
+  gr.type = type;
   gr.sync1 = false;
-  gr.sync2 = false;  
-  for (let i=0; i<SearchList.length; i++) SearchList[i].offset = -gr.c;
-  console.log ((start = new Date()).toStr(true) + ": " + gr.g + " / " + SearchList.length + ", c=" + gr.c);
-  while (!Cancel && (SearchList.length>0 || gr.err_groups.length>0))
+  gr.sync2 = false;
+  console.log (type + ": " + (start = new Date()).toStr(true) + ": " + gr.g + " / " + gr.sl.length + ", c=" + gr.c);
+  while (!Cancel && (gr.sl.length>0 || gr.err_groups.length>0))
   {
-    await Promise.all ([GetLikesGr (), GetLikesGr (), GetLikesGr (), ASleep (1020)]);
-    document.getElementById('count').innerHTML = gr.g + '.' + (SearchList[gr.g]==null?'':SearchList[gr.g].offset)  + ':' + SearchList.length + '/' + gr.l + ':' + CountLikes;
+    await Promise.all ([GetLikesOne (), GetLikesOne (), GetLikesOne (), ASleep (1030)]);
+    document.getElementById('count').innerHTML = (par.me?(gr.g + '.' + (gr.sl[gr.g]==null?'':gr.sl[gr.g].offset)  + ':'):"") + gr.sl.length + '/' + gr.l + ':' + CountLikes;
   }
+  console.log (type + ": " + (finish = new Date()).toStr(true) + ": " + (finish.getTime()-start.getTime()) + "ms");
+}
+//------------------------------------------------------
+async function GetLikesAll (sl,date,f=false)
+{
+  let start;
+  let finish;
+  if (User.id==156808317 && !par.me) { sleep(10000); return; }
+  gr.f    = f;
+  gr.date = date;
+  gr.uid  = User.id;
+  gr.fo   = User.is_friend;
+  gr.c    = par.cnt;
+  gr.err_groups = []; 
+  for (let i=0; i<sl.length; i++) sl[i].offset = -gr.c;
+  start = new Date();
+  if (Options.include.post)  await GetLikes ("post",sl);
+  if (Options.include.photo) await GetLikes ("photo",sl);
+  if (Options.include.video) await GetLikes ("video",sl);
   Start (false);
   ShowLikesAll ();
-  console.log ((finish = new Date()).toStr(true) + "; " + (finish.getTime()-start.getTime()) + "ms");
-  
+  console.log ("all: " + (finish = new Date()).toStr(true) + ": " + (finish.getTime()-start.getTime()) + "ms");
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 async function GetUser (id) 
@@ -1331,20 +1393,20 @@ async function SetRunCount (id)
 async function Start (state)
 {
 	let dt = new Date();
-	let btn = document.getElementById('start'); 
+	let btn = document.getElementById('start');
+  let sl = [];
 
 	if(state && btn.innerHTML == 'Искать')
 	{
-		SearchList.length = 0;
 		if(document.getElementById('target').value==2)
 		{
-			SearchList = await GetFriends (User.id);
+			sl = await GetAllFriends (User.id);
 		}
 		else
 		{
 			if(Groups.length==0) return; 
-			if(Group!=null) SearchList.push(Group);
-			else SearchList = Groups.slice();
+			if(Group!=null) sl.push(Group);
+			else sl = Groups.slice();
 		}
 		Likes.length = 0;
 		Cancel = false;
@@ -1352,7 +1414,7 @@ async function Start (state)
 		CountLikes = 0;
 		if(document.getElementById('period').value>0) dt.setDate(dt.getDate()-document.getElementById('period').value);
 		else dt = new Date(2000, 0, 1);
-		GetGroupLikes (Math.trunc((+dt)/(86400*1000))*86400,(document.getElementById('target').value==2));
+		GetLikesAll (sl,Math.trunc((+dt)/(86400*1000))*86400,(document.getElementById('target').value==2));
 		Select(null, 'likes_data','likes');
 		btn.innerHTML = 'Стоп';
 		document.getElementById("ml").style.display = "block";
@@ -1429,7 +1491,7 @@ function KeyPress (e)
   }
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
-function SaveOptions (p)
+function SaveOptions ()
 {
   StorageSet ("options", JSON.stringify (Options));
 }
@@ -1445,15 +1507,18 @@ async function LoadOptions ()
   {
     Options.likes = j.likes;
     document.getElementById("autoload2").checked = Options.likes.load;
-    let r = document.getElementsByName("groupping");
+    var r = document.getElementsByName("groupping");
     for (let i=0; i<r.length; i++) if(r[i].value==Options.likes.groupby) r[i].checked = true;
+    Options.include = j.include;
+    r = document.getElementsByName("include");
+    for (let i=0; i<r.length; i++) r[i].checked = Options.include[r[i].id];
   }
   if (j.friends.load)
   {
     Options.friends = j.friends;
     document.getElementById("autoload1").checked = Options.friends.load;
     document.getElementById("name-filter").value = Options.friends.filter;
-    let r = document.getElementsByName("show");
+    var r = document.getElementsByName("show");
     for (let i=0; i<r.length; i++) r[i].checked = Options.friends[r[i].id];
   }
 }
@@ -1464,18 +1529,21 @@ function ChangeOptions (p)
   {
     Options.friends.load = document.getElementById("autoload1").checked;
     Options.friends.filter = document.getElementById("name-filter").value;
-    let r = document.getElementsByName("show");
+    var r = document.getElementsByName("show");
     for (let i=0; i<r.length; i++) Options.friends[r[i].id] = r[i].checked;
-    
     SetFilter ();
   }
   if (p=="likes")
   {
-    Options.friends.load = document.getElementById("autoload2").checked;
-    let r = document.getElementsByName("groupping");
+    Options.likes.load = document.getElementById("autoload2").checked;
+    var r = document.getElementsByName("groupping");
     for (let i=0; i<r.length; i++) if(r[i].checked) Options.likes.groupby = r[i].value;
-    
     ShowLikesAll ();
+  }
+  if (p=="include")
+  {
+    var r = document.getElementsByName("include");
+    for (let i=0; i<r.length; i++) Options.include[r[i].id] = r[i].checked;
   }
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -1512,7 +1580,7 @@ function SetFilter ()
 //------------------------------------------------------------------------------------------------------------------------------------------
 function Init ()
 {
-  console.log('InitOk.v1.2.0');
+  console.log('InitOk.v1.3.0');
   LoadOptions ();
   if (!par.mobile) VK.callMethod("resizeWindow", 800, 640); // Максимальное значение ширины окна — 1000 px, высоты — 4050.
   Owner = GetUser ();
@@ -1535,28 +1603,17 @@ function Init ()
     <ul id="menu_1" class="dropdown-content menu">
       <li>&#128270; Фильтр:</li>
       <input type="text" placeholder="Имя ..." id="name-filter" onkeyup="ChangeOptions('friends')">
-      <li>Показывать:</li>   
-      <label>
-        <input type="checkbox" name="show" id="men"     onchange="ChangeOptions('friends')" checked>Мужчин
-      </label>
-      <label>
-        <input type="checkbox" name="show" id="women"   onchange="ChangeOptions('friends')" checked>Женщин
-      </label>
-      <label>
-        <input type="checkbox" name="show" id="unknown" onchange="ChangeOptions('friends')" checked>Не задано
-      </label>
-      <label>
-        <input type="checkbox" name="show" id="addedonly" onchange="ChangeOptions('friends')" >Только добавленных
-      </label>
-      <label>
-        <input id="autoload1" type="checkbox" onchange="ChangeOptions('friends')">Автозагрузка фильтра
-      </label>
+      <li>Показывать:</li>
+      <label><input type="checkbox" name="show" id="men"        onchange="ChangeOptions('friends')" checked>Мужчин</label>
+      <label><input type="checkbox" name="show" id="women"      onchange="ChangeOptions('friends')" checked>Женщин</label>
+      <label><input type="checkbox" name="show" id="unknown"    onchange="ChangeOptions('friends')" checked>Не задано</label>
+      <label><input type="checkbox" name="show" id="addedonly"  onchange="ChangeOptions('friends')">Только добавленных</label>
+      <label><input type="checkbox"             id="autoload1"  onchange="ChangeOptions('friends')">Автозагрузка фильтра</label>
       <button id="save1" onclick="SaveOptions('friends')">Сохранить</button>
     </ul>
   </div>
 
   <button id="friends"  class="tablinks active" onclick="Select(event, 'friends_data','friends')">Друзья</button>
-
   <button id="groups"   class="tablinks"        onclick="Select(event, 'groups_data','groups')  ">Группы</button>
 
   <div class="dropdown">
@@ -1564,26 +1621,24 @@ function Init ()
     <label for="menu_toggle_2" class="dropbtn">&#9660;</label>
 
     <ul id="menu_2" class="dropdown-content menu">
+     <li>Включить в поиск:</li>
+      <label><input type="checkbox" name="include" id="post"     onchange="ChangeOptions('include')" checked>Посты</label> 
+      <label><input type="checkbox" name="include" id="photo"     onchange="ChangeOptions('include')">Фотки</label>    
+      <label><input type="checkbox" name="include" id="video"     onchange="ChangeOptions('include')">Видео</label>
+      <!-- <label><input type="checkbox" name="include" id="comments"  onchange="ChangeOptions('include')">Комментарии</label> -->
       <li>Группировать по</li>
-    
-      <label>
-        <input type="radio" name="groupping" value="ByDate" onchange="ChangeOptions('likes')"  checked>Дате
-      </label>
-      <label>
-        <input type="radio" name="groupping" value="ByWall" onchange="ChangeOptions('likes')" >Стенке
-      </label>
-      <label>
-        <input id="autoload2" type="checkbox" onchange="ChangeOptions('likes')" >Автозагрузка настроек
-      </label>
+      <label><input type="radio" name="groupping" value="ByDate"  onchange="ChangeOptions('likes')" checked>Дате</label>
+      <label><input type="radio" name="groupping" value="ByWall"  onchange="ChangeOptions('likes')"        >Стенке</label>
+      <label><input type="checkbox"                id="autoload2" onchange="ChangeOptions('likes')">Автозагрузка настроек</label>
       <button id="save2" onclick="SaveOptions('likes')">Сохранить</button>
     </ul>
   </div>
 
-  <button id="likes"    class="tablinks"        onclick="Select(event, 'likes_data','likes')    ">Лайки</button>
+  <button id="likes"    class="tablinks"        onclick="Select(event, 'likes_data','likes')">Лайки</button>
   <label>Искать в </label>
   <select id="target" size="1" title="Искать лайки в группах или на стенках друзей друга">
     <option selected value="1">группах</option>
-    <option          value="2">стенках</option>
+    <option          value="2">друзьях</option>
   </select>
   <select id="period" size="1" title="Период поиска">
     <option selected value="1">За один день</option>
