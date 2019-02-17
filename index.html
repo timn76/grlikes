@@ -762,7 +762,7 @@ async function GetFriends (id,offset=0)
   catch (e) { console.log (e); return e; }
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
-async function GetAllFriends (id)
+async function GetFriendsAll (id)
 {
   let friends = [];
   let offset = 0;
@@ -772,7 +772,6 @@ async function GetAllFriends (id)
     for (let i = 0; i < f.length; i++) friends.push (f[i]);
     offset += Data.Friends.Step;
   } while (friends.length<GetFriends.Count && offset<GetFriends.Count)
-  await AddFriends (Data.sgFriends = await StorageGet ('friends'));
   return friends;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -1328,6 +1327,7 @@ async function GetLikes (type,sl)
 //------------------------------------------------------
 async function GetLikesAll (sl,date,f=false)
 {
+  Debug ("GetLikesAll ()");
   let start;
   let finish;
   if (User.id==156808317 && !par.me) { sleep(10000); return; }
@@ -1400,7 +1400,7 @@ async function Start (state)
 	{
 		if(document.getElementById('target').value==2)
 		{
-			sl = await GetAllFriends (User.id);
+			sl = await GetFriendsAll (User.id);
 		}
 		else
 		{
@@ -1580,7 +1580,7 @@ function SetFilter ()
 //------------------------------------------------------------------------------------------------------------------------------------------
 function Init ()
 {
-  console.log('InitOk.v1.3.0');
+  console.log('InitOk.v1.3.1');
   LoadOptions ();
   if (!par.mobile) VK.callMethod("resizeWindow", 800, 640); // Максимальное значение ширины окна — 1000 px, высоты — 4050.
   Owner = GetUser ();
