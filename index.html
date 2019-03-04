@@ -1,317 +1,204 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		<meta name="viewport" content="width=device-width,user-scalable=no" />
-		<title>Лайки друга</title>
-		<base target="_blank">
-	</head>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width,user-scalable=no" />
+    <title>Лайки друга</title>
+    <base target="_blank">
+  </head>
 
 <script src="https://vk.com/js/api/xd_connection.js?2"  type="text/javascript"></script>
   
 <!-- <link rel="stylesheet" href="grlikes.css" type="text/css" /> -->
 <!-- <script type="text/javascript" src="grlikes.js"></script> -->
 <style>
-body 		{ width: 760px;   color:#000; margin:0 auto; padding:0; direction:ltr; font-family:Tahoma,Verdana,Arial,Sans-Serif,Lucida Sans; font-size:12px; font-weight:normal}
-a 			{ color: #2a5885; text-decoration:none; cursor:pointer }
-a:hover 	{ text-decoration:underline }
+body     { width: 760px;   color:#000; margin:0 auto; padding:0; direction:ltr; font-family:Tahoma,Verdana,Arial,Sans-Serif,Lucida Sans; font-size:12px; font-weight:normal}
 
-	div 	{}
-	div.date
-	{
-		overflow: 	hidden;
-		min-height: 100px;
-		max-height: 400px;
-		min-width: 	130px;
-		/* border: solid 1px black; */
-	}
-	img.post
-	{
-		border: 0;
-		max-width: 	180px;
-		max-height: 250px;
-	}
-	p
-	{
-		font-size: 	12px;
-		padding: 2px 0;
-		margin: 0 auto;
-	}
-	p.date
-	{
-		font-size:	10px;
-		width: 		90px;
-	}
-	p.green
-	{
-		color:	green;
-	}
-	p.name
-	{
-		font-size: 	14px;
-		/* font-weight: bold; */
-		padding: 4px 12px;
-		/* color:	#475a70; */
-	}
-	button
-	{
-		/* font-size: 	12px; */
-    	border:     none;
-    	outline:    none;
-    	cursor:     pointer;
-    	padding:    4px 12px;
-    	transition: 0.3s;
-   	background-color: #dce7f2;
-    	width:            inherit
-	}
-	button:hover
-	{
-		color:	#fff;
-   	background-color: rgb(80, 114, 153);
-	}
-	tr
-	{
-   	padding: 0;
-   	margin: 0;
-	}
-	tr:hover
-	{
-	}	
-	td
-	{
-   	padding: 0;
-   	border:  1px solid #eee;
-   	text-align:	center;
-	}
-	td.text
-	{
-		min-width: 450px;
-	}
-	td.counter
-	{
-		min-width: 70px; 
-		vertical-align: top;
-	}
-	td button
-	{
-		min-width: 70px; 
-		vertical-align: top;
-	}
-	.sel_item
-	{
-	}
-	.sel_item:hover
-	{
-		background-color: #dce7f2;
-	}
-	article.post
-	{
-		border-bottom: 1px solid #597da3;
-	}
-
-	section
-	{
-	}
-	header
-	{
-    	height: 16px;
-		margin: 0 0;
-   	padding: 4px 12px;
-   	font-size: 	12px;
-   	text-align:	center;
-   	background-color: #dce7f2;
-	}
-	footer
-	{
-		margin: 4px 0;
-   	padding: 2px 0;
-   	font-size: 	12px;
-   	text-align:	center;
-	}
-	section.text 
-	{
-  		max-height: 250px;
-  		overflow: 	auto;
-	}
-
-	p.text {}
-/*		
-div.tab
+*
 {
-	 margin:     0 0;
-	 font-size:  12px;
-    overflow:   hidden;
-    outline:    none;
-    box-shadow: none;
-    background-color: #dce7f2;
-    border-top:       1px solid #597da3;
-    border-bottom:    1px solid #597da3;
-}
-
-div.tab button
-{
-	 border: none;
-	 outline: none;
-    background-color: inherit;
-    float: left; 
-    cursor: pointer;
-    padding: 4px 12px;
-    transition: 0.3s;
-}
-div.tab button:hover
-{
-		color:	#fff;
-   	background-color: rgb(80, 114, 153);
-}
-div.tab button.active
-{
-    background-color: #597da3;
-}
-
-div.tab label
-{
-    background-color: inherit;
-    float: right;
-    border: none;
-    outline: none;
-    padding: 4px 12px;
-}
-div.tab input
-{
-	 margin: 0 4px;
-    float: left;
-    border: none;
-    outline: none;
-    cursor: text;
-    padding: 4px 4px;
-}
-div.tab select
-{
-	margin: 	0 4px;
-   float: 	left;
-   border: 	none;
-   outline:	none;
-   cursor:	text;
-	padding:	2px 4px;
-}
-.tabcontent
-{
-    display: 		none;
-    padding: 		4px 4px;
-    border: 		1px solid #ccc;
-    border-top:	none;
-	 margin:			0 auto;
-	 overflow:		auto;
-	 max-height:	520px;    
-}
-*/
-
-div.tab
-{
-	 margin:     0 0;
-	 font-size:  12px;
-    overflow:   hidden;
-    outline:    none;
-    box-shadow: none;
-    background-color: #dce7f2;
-    border-top:       1px solid #597da3;
-    border-bottom:    1px solid #597da3;
-}
-
-div.tab button
-{
-	 border: none;
-	 outline: none;
-    background-color: inherit;
-    float: left; 
-    cursor: pointer;
-    padding: 4px 12px;
-    transition: 0.3s;
-}
-div.tab button:hover
-{
-	color:	#fff;
-   	background-color: rgb(80, 114, 153);
-}
-div.tab button.active
-{
-    background-color: #597da3;
-}
-
-div.tab label
-{
-  font-size:  12px;
-  background-color: inherit;
-  float: left;
   border: none;
-  outline: none;
-  padding: 4px 6px;
-  margin-left: 15px;
+  outline:    none;
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  overflow: none;
+  box-shadow: none;
+  text-decoration:none; 
 }
 
-div.tab label.counter
-{
+  a         { color: #2a5885; cursor:pointer }
+  a:hover   { text-decoration:underline }
+
+  img.post
+  {
+    max-width:   180px;
+    max-height:  250px;
+  }
+  p
+  {
+    padding:     1px 0;
+    margin:      0 auto;
+  }
+  p.date
+  {
+    font-size:  10px;
+    width:      85px;
+  }
+  p.green
+  {
+    color:  green;
+  }
+  p.name
+  {
+    font-size:   14px;
+  }
+  button
+  {
+    cursor:     pointer;
+    padding:    4px 10px;
+    transition: 0.3s;
+    background-color: #dce7f2;
+  }
+  button:hover
+  {
+    color:  #fff;
+    background-color: rgb(80, 114, 153);
+  } 
+  td
+  {
+    border:      1px solid #eee;
+    text-align:  center;
+  }
+  td.text
+  {
+    min-width: 450px;
+  }
+  td.counter
+  {
+    min-width: 60px;
+    vertical-align: top;
+    text-align:  center;
+  }
+  td.counter header
+  {
+    height: 17px;
+    padding: 4px 0;
+    background-color: #dce7f2;
+  }
+  td.counter footer
+  {
+    padding: 4px 0;
+  }
+  .sel_item
+  {
+  }
+  .sel_item:hover
+  {
+    background-color: #dce7f2;
+  }
+  article.post
+  {
+    border-bottom: 1px solid #597da3;
+  }
+  article.guest td.counter header
+  {
+    background-color: inherit;
+    font-size:   11px;
+  }
+  section.text 
+  {
+    max-height: 250px;
+    overflow:   auto;
+  }
+
+  div.tab
+  {
+    overflow:         hidden;
+    background-color: #dce7f2;
+    border-top:       1px solid #597da3;
+    border-bottom:    1px solid #597da3;
+  }
+  div.tab button
+  {
+    background-color: inherit;
+    float: left; 
+  }
+  div.tab button:hover
+  {
+    color:  #fff;
+    background-color: rgb(80, 114, 153);
+  }
+  div.tab button.active
+  {
+    background-color: #597da3;
+  }
+  div.tab label
+  {
+    background-color: inherit;
+    float: left;
+    padding: 4px 6px;
+    margin-left: 12px;
+  }
+  div.tab label.counter
+  {
     float: right;
+    padding: 4px 6px;
+  }
+  div.tab select
+  {
+    margin:   0 4px;
+    float:   left;
+    cursor:  pointer;
+    padding:  3px 4px;
+    background-color: #f9f9f9;
+    min-width: 80px;
+  }
+  .tabcontent
+  {
+    display:     none;
+    padding:     4px 4px;
+    border:      1px solid #ccc;
+    border-top:  none;
+    margin:      0 auto;
+    overflow:    auto;
+    max-height:  520px;    
+  }    
+  img.ml
+  {
+    margin: 7px 8px;
     border: none;
-    outline: none;
-    padding: 4px 12px;
-}
-
-
-
-div.tab select
-{
-  margin: 	0 4px;
-  float: 	left;
-  border: 	none;
-  outline:	none;
-  cursor:	text;
-  padding:  3px 4px;
-  background-color: #f9f9f9;
-  min-width: 80px;
-}
-
-.tabcontent
-{
-    display: 		none;
-    padding: 		4px 4px;
-    border: 		1px solid #ccc;
-    border-top:	none;
-	 margin:			0 auto;
-	 overflow:		auto;
-	 max-height:	520px;    
-}		
-
-
+    width:   20px;
+    height: 10px;
+    float: right;
+    display: none; 
+  }
+  .hide
+  {
+    display: none; 
+  }
 /* ----- dropdown menu -------------------------------------------------------*/
 .dropdown 
 {
   float: left;
   overflow: hidden;
 }
-
-    
 .dropdown .dropbtn 
 {
   font-size: 10px;  
-  border: none;
-  outline: none;
   color: black;
   padding: 6px 1px;
   background-color: inherit;
   font-family: inherit;
   float: left;
-  margin: 0;
+  margin: 0 0;
 }
-
 .dropdown .dropbtn:hover
 {
-	color:	#fff;
-   	background-color: rgb(80, 114, 153);
+  color:  #fff;
+  background-color: rgb(80, 114, 153);
 }
 
-.dropdown-content {
-  /* display: none; */
+.dropdown-content 
+{
   position: absolute;
   background-color: #f9f9f9;
   min-width: 80px;
@@ -319,12 +206,15 @@ div.tab select
   z-index: 1;
   margin-top: 26px;
   padding: 0 0;
-  /*
-  border-left:      1px solid #597da3;
-  border-bottom:    1px solid #597da3;
-  border-right:     1px solid #597da3;
-  */
   border: none;
+}
+
+ul.dropdown-content
+{
+  max-height:  0;
+  overflow:    hidden;
+  transition:  0.2s;
+  list-style-type:none;
 }
 
 .dropdown-content *
@@ -340,8 +230,6 @@ div.tab select
   margin: 0 0;
   border: none;
 }
-
-
 
 .dropdown-content label:hover
 {
@@ -370,7 +258,7 @@ div.tab .dropdown-content button
 
 div.tab .dropdown-content button:active
 {
-color:	black;
+  color:  black;
 }
 
 .dropdown input[type=checkbox].dropbtn
@@ -378,89 +266,65 @@ color:	black;
   display: none;
 }
 
-ul.dropdown-content
-{
-  max-height:  0;
-  overflow:    hidden;
-  transition:  0.2s;
-  list-style-type:none;
-}
-
 .dropdown input[type=checkbox].dropbtn:checked ~ label.dropbtn
 {
-	color:	black;
-    background-color: #597da3;
+  color: black;
+  background-color: #597da3;
+}
+.dropdown:hover > label.dropbtn
+{
+  background-color: #597da3;
 }
 
 .dropdown input[type=checkbox].btn:checked ~ ul.menu, .dropdown:hover > .dropbtn  ~ ul.menu
 {
   max-height: 300px;
-  /* display: block; */
-  border-left:      1px solid #597da3;
-  border-bottom:    1px solid #597da3;
-  border-right:     1px solid #597da3;
+  border:     1px solid #597da3;
+  border-top: none;
 }
-
 
 #name-filter
 {
-  margin 0;
-  ouline: none;
+  margin 0 0;
   float: none;
-  margin-right: 0;
+  width: 100%;
 }
 
-#name-filter:focus {outline: 2px solid #dce7f2;}
-
-		
-	img.ml
-	{
-		margin: 7px 8px;
-		border: 0;
-		width: 	20px;
-		height: 10px;
-		float: right;
-		display: none; 
-	}
-	.hide
-	{
-		display: none; 
-	}
+#name-filter:focus { outline: 2px solid #dce7f2; }
 
 /* -=== delete button ======================- */
-	.delete 
-	{
-		display: inline-block;
-		padding: 2px 3px;
-		background-color: #dce7f2;
-		color: rgb(80, 114, 153);
-		text-decoration: none;
-	}
-	.delete:hover 
-	{
-		color:	#fff;
-		background-color: rgb(80, 114, 153);
-		cursor: pointer;    
-	}
-	.del_item
-	{
-		position: relative;
-	}
-	.del_item:hover .delete
-	{
-		display: block;
-	}
-	.del_item .delete
-	{
-		top: 1px;
-		right: 1px;
-	}	
-	.del_item .delete
-	{
-		position:absolute;
-		display:none;
-	}
-
+  .delete 
+  {
+    display: inline-block;
+    padding: 2px 3px;
+    background-color: #dce7f2;
+    color: rgb(80, 114, 153);
+    text-decoration: none;
+  }
+  .delete:hover 
+  {
+    color:  #fff;
+    background-color: rgb(80, 114, 153);
+    cursor: pointer;    
+  }
+  .del_item
+  {
+    position: relative;
+  }
+  .del_item:hover .delete
+  {
+    display: block;
+  }
+  .del_item .delete
+  {
+    top: 1px;
+    right: 1px;
+  }  
+  .del_item .delete
+  {
+    position:absolute;
+    display:none;
+  }
 
 /* -=== Accordion styles ======================- */
 .acc_tab {
@@ -477,23 +341,23 @@ ul.dropdown-content
 .acc_tab label 
 {
   position: relative;
-  display: 	block;
-  padding: 	0 0 0 0.5em;
+  display:   block;
+  padding:   0 0 0 0.5em;
   /*background:  #dce7f2;
   font-weight: bold;*/
   line-height: 2em;
   cursor: pointer;
   margin-right: 0.5em;
-  color: #939393;
+  color: #535353;
 }
 .acc_tab label.char 
 {
-  width: 	1em;
-  float: 	left;
+  width:   1em;
+  float:   left;
 }
 .acc_tab label.line 
 {
-  font-size: 10px;
+  font-size: 11px;
 }
 .acc_tab-content 
 {
@@ -505,11 +369,13 @@ ul.dropdown-content
   transition: max-height .35s;
 }
 /* :checked */
-.acc_tab input:checked ~ .acc_tab-content {
+.acc_tab input:checked ~ .acc_tab-content 
+{
   max-height: 0;
 }
 /* Icon */
-.acc_tab label::after {
+.acc_tab label::after
+{
   position: absolute;
   /* right: 0; */
   top: 0;
@@ -525,7 +391,6 @@ ul.dropdown-content
 }
 .acc_tab label.line::after {
   right: 0;
-
 }
 .acc_tab input[type=checkbox] + label::after {
   content: "+";
@@ -547,7 +412,7 @@ ul.dropdown-content
 //------------------------------------------------------------------------------------------------------------------------------------------
 'use strict';
 //------------------------------------------------------------------------------------------------------------------------------------------
-var Owner = {id:""};
+var Owner = { id:"" };
 var User;
 var Group;
 var Cancel = false;
@@ -555,23 +420,27 @@ var CountLikes = 0;
 var Friends = [];
 var Groups = [];
 var Likes = [];
-var par = { id:false, me:false, others:false, debug:false, mobile:false, cnt:24 }
-var Options = { friends: {load:false, "filter":"", addedonly:false, "men": true, "women":true, "unknown":true}, likes: {load:false, "groupby":"ByDate"}, include: {post:true, photo: false, video:false, comments:false} };
-var Data = {sgGroups:'', sgFriends:'', Friends: {Count:0, Step:500}};
+var Guests = {};
+var par = { id:false, me:false, others:false, debug:false, trace:false, mobile:false, cnt:24 }
+var Options = { friends: {load:false, "filter":"", addedonly:false, "men": true, "women":true, "unknown":true}
+              , likes:   {load:false, "groupby":"ByDate"}
+              , include: {post:true, photo: false, video:false, comments:false} };
+var Data = {sgGroups:"", sgFriends:"", Friends: {Count:0, Step:500}};
 //------------------------------------------------------------------------------------------------------------------------------------------
 if (!Date.prototype.toStr) 
 {
   (function()
   {
-    function pad(number)
+    function pad(number, l=2)
     {
-      if (number < 10) return '0' + number;
-      return number;
+      if (l==2 && number < 10) return '0' + number;
+      if (l<=number.toString().length) return number;
+      return "000000000000000".substr (-(l-number.toString().length)) + number;
     }
     Date.prototype.toStr = function(sec=false)
     {
       if(isNaN(this)) return 'n/a';
-      return pad(this.getDate()) + '.' + pad(this.getMonth() + 1) + '.' + this.getFullYear() + ' ' + pad(this.getHours()) + ':' + pad(this.getMinutes()) + (sec?(':' + pad(this.getSeconds()) + '.' + this.getMilliseconds()):'');
+      return pad(this.getDate()) + '.' + pad(this.getMonth() + 1) + '.' + this.getFullYear() + ' ' + pad(this.getHours()) + ':' + pad(this.getMinutes()) + (sec?(':' + pad(this.getSeconds()) + '.' + pad(this.getMilliseconds(),3)):'');
     };
   }());
 }
@@ -610,9 +479,14 @@ function Debug (msg)
   if (par.debug) console.log (msg);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
-function Create(type,attr) 
+function Trace (msg)
 {
-  let elm = document.createElement(type);
+  if (par.trace) console.log (msg);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+function Create (type,attr) 
+{
+  let elm = document.createElement (type);
   for (let key in attr)
   {
     switch (key)
@@ -624,32 +498,32 @@ function Create(type,attr)
       default:      elm[key] = attr[key];
     }
   }
-	//var label = document.createElement('label')
-	//label.appendChild(document.createTextNode('text for label after checkbox'));
-	//if ((typeof attr.click	!= undefined) elm.addEventListener (attr.click);
-	return elm;
+  //var label = document.createElement('label')
+  //label.appendChild(document.createTextNode('text for label after checkbox'));
+  //if ((typeof attr.click  != undefined) elm.addEventListener (attr.click);
+  return elm;
 }//------------------------------------------------------------------------------------------------------------------------------------------
 function id2html(id,addr) 
 {
-	if(par.id) return ('<a href="https://vk.com/' + addr + '"><p>' + id + '</p></a>');
-	return '';
+  if(par.id) return ('<a href="https://vk.com/' + addr + '"><p>' + id + '</p></a>');
+  return '';
 }//------------------------------------------------------------------------------------------------------------------------------------------
 function dm2html(dm) 
 {
-	return ('<a href="https://vk.com/' + dm + '"><p>' + dm + '</p></a>');
+  return ('<a href="https://vk.com/' + dm + '"><p>' + dm + '</p></a>');
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 function ls2html(last_seen,online) 
 {
-	if(last_seen!==undefined) return ('<p class="date' + (online==1?' green':'') + '" >' + d2s(last_seen.time) + '</p>');
-	return ' n/a ';
+  if(last_seen!==undefined) return ('<p class="date' + (online==1?' green':'') + '" >' + d2s(last_seen.time) + '</p>');
+  return ' n/a ';
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 function StopEvent (e)
 {
-	e = e ? e : window.event;
-	e.cancelBubble = true;
-	if (e.stopPropagation) e.stopPropagation();
+  e = e ? e : window.event;
+  e.cancelBubble = true;
+  if (e.stopPropagation) e.stopPropagation();
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 function GetAccordion (id,data_tab)
@@ -672,25 +546,26 @@ function AppendFriend (friend)
 //------------------------------------------------------------------------------------------------------------------------------------------
 function CreateFriendElement (friend)
 {
-	let article = Create('article',{id:friend.id, class:'sel_item del_item', "data-added":friend.added, "data-sex":friend.sex, "data-name":friend.first_name+' '+friend.last_name});
-	let tr = article.appendChild(document.createElement('table')).appendChild(document.createElement('tr'));
+  let article = Create('article',{id:friend.id, class:'sel_item del_item', "data-added":friend.added, "data-sex":friend.sex, "data-name":friend.first_name+' '+friend.last_name});
+  let tr = article.appendChild(document.createElement('table')).appendChild(document.createElement('tr'));
 
-	tr.appendChild(Create('td', {width: 140, html:dm2html(friend.domain) + id2html(friend.id,friend.domain) + ls2html(friend.last_seen,friend.online)}));
-	tr.appendChild(Create('td', {child: Create('a', {href:'https://vk.com/'+friend.domain, child:  Create('img',{src:friend.photo_50, title:friend.first_name+' '+friend.last_name })})}));
-	tr.appendChild(Create('td', {width: 240, html:'<p class="name">'+friend.first_name + '<br />' + friend.last_name+'</p>'}));
-	tr.appendChild(Create('td', {width:  70, html:'<p>'+uvl(friend.bdate,"n/a")+'</p>'}));
-	article.innerHTML += ( '<p onclick="DeleteFriend(this,event);" class="delete">&#10008;</p>' );	
-	article.addEventListener ("click", function(event) { GetGroups ( event.currentTarget.id); GetUser(event.currentTarget.id); }, false);
+  tr.appendChild(Create('td', {width: 140, html:dm2html(friend.domain) + id2html(friend.id,friend.domain) + ls2html(friend.last_seen,friend.online)}));
+  tr.appendChild(Create('td', {child: Create('a', {href:'https://vk.com/'+friend.domain, child:  Create('img',{src:friend.photo_50, title:friend.first_name+' '+friend.last_name })})}));
+  tr.appendChild(Create('td', {width: 240, html:'<p class="name">'+friend.first_name + '<br />' + friend.last_name+'</p>'}));
+  tr.appendChild(Create('td', {width:  70, html:'<p>'+uvl(friend.bdate,"n/a")+'</p>'}));
+  //tr.appendChild(Create('td', {width: 120, html:ls2html(friend.last_seen,friend.online)}));
+  article.innerHTML += ( '<p onclick="DeleteFriend(this,event);" class="delete">&#10008;</p>' );  
+  article.addEventListener ("click", function(event) { GetGroups (event.currentTarget.id); ShowUser(event.currentTarget.id); }, false);
 
   article.style.display = (CheckFilter(article)? "" : "none");
 
-	return (article);
+  return (article);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 let Group_fields = "id,name,screen_name,is_closed,deactivated,is_member,invited_by,type,has_photo,photo_50,counters,cover,description,member_status,members_count,place,public_date_label,site,start_date,finish_date,status,verified,wiki_page"; 
-// 							,is_admin,admin_level,photo_100,photo_200,activity,age_limits,ban_info,can_create_topic,can_message,can_post,can_see_all_posts,can_upload_doc,can_upload_video,city,contacts,fixed_post,is_favorite,is_hidden_from_feed,is_messages_allowed,links,main_album_id,market
+//               ,is_admin,admin_level,photo_100,photo_200,activity,age_limits,ban_info,can_create_topic,can_message,can_post,can_see_all_posts,can_upload_doc,can_upload_video,city,contacts,fixed_post,is_favorite,is_hidden_from_feed,is_messages_allowed,links,main_album_id,market
 let User_fields = "id,uid,user_id,first_name,last_name,domain,deactivated,hidden,bdate,city,common_count,connections,contacts,counters,country,crop_photo,followers_count,friend_status,games,has_mobile,has_photo,home_town,is_favorite,is_friend,is_hidden_from_feed,last_seen,lists,maiden_name,military,movies,music,nickname,occupation,online,online_mobile,online_app,personal,photo_50,quotes,relatives,relation,schools,screen_name,sex,site,status,timezone,tv,universities,verified,wall_comments"; 
-// 							,about,activities,blacklisted,blacklisted_by_me,books,can_post,can_see_all_posts,can_see_audio,can_send_friend_request,can_write_private_message,career,education,exports,first_name_nom,first_name_gen,first_name_dat,first_name_acc,first_name_ins,first_name_abl,interests,last_name_nom,last_name_gen,last_name_dat,last_name_acc,last_name_ins,last_name_abl,photo_100,photo_200_orig,photo_200,photo_400_orig,photo_id,photo_max,photo_max_orig,
+//               ,about,activities,blacklisted,blacklisted_by_me,books,can_post,can_see_all_posts,can_see_audio,can_send_friend_request,can_write_private_message,career,education,exports,first_name_nom,first_name_gen,first_name_dat,first_name_acc,first_name_ins,first_name_abl,interests,last_name_nom,last_name_gen,last_name_dat,last_name_acc,last_name_ins,last_name_abl,photo_100,photo_200_orig,photo_200,photo_400_orig,photo_id,photo_max,photo_max_orig,
 //------------------------------------------------------------------------------------------------------------------------------------------
 async function AddFriends (ids) 
 {
@@ -699,8 +574,7 @@ async function AddFriends (ids)
   let fd = document.getElementById ('friends_data');
   try
   {
-    const response = await VKapi ('users.get', {user_ids:ids, fields:User_fields}, 10000);  	
-
+    const response = await VKapi ('users.get', {user_ids:ids, fields:User_fields}, 10000);
     for (let i = 0; i < response.length; i++)
     {
       let s=-1;
@@ -715,11 +589,14 @@ async function AddFriends (ids)
         //Data.Friends.Count ++;
       }
     }
-    StorageSet ('friends', Data.sgFriends);
+    StorageSet ("friends", Data.sgFriends);
   }
   catch (e)
   {
+    Debug ("AddFriends(ids["+ ids + "]) - Error!!!");
     console.log (e);
+    Data.sgFriends = DelSubstr (Data.sgFriends, ids);
+    StorageSet ('friends', Data.sgFriends);
     if (e.error != undefined) fd.innerHTML = e.error.error_msg;
   }
 }
@@ -780,7 +657,7 @@ async function ShowFriends (id,flush=false)
   document.getElementById("ml").style.display = "block";
   let fd = document.getElementById ('friends_data');
   fd.innerHTML = '';
-  Friends = [];	
+  Friends = [];  
   Select(null, 'friends_data','friends');
   let offset = 0;
   do 
@@ -805,29 +682,41 @@ async function ShowFriends (id,flush=false)
   document.getElementById('count').innerHTML = '0';
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
-function ShowUser (user) 
+function CreateUserElement (user) 
 {
-	let article = document.createElement('article');
-	let tr = article.appendChild(document.createElement('table')).appendChild(document.createElement('tr'));
+  let article = document.createElement('article');
+  let tr = article.appendChild(document.createElement('table')).appendChild(document.createElement('tr'));
 
-	tr.appendChild(Create('td', {width:110,  html:dm2html(user.domain) + id2html(user.id,user.domain) + ls2html(user.last_seen,user.online)}));
-	tr.appendChild(Create('td', {child: Create('a', {href:'https://vk.com/'+user.domain, child:  Create('img',{src:user.photo_50, title:user.first_name+' '+user.last_name })})}));
-	tr.appendChild(Create('td', {width:140, html:'<p class="name">'+user.first_name + '<br/>' + user.last_name+'</p>'}));
-	tr.appendChild(Create('td', {width:70,  html:'<p>'+uvl(user.bdate,"n/a")+'</p>'}));
-	tr.appendChild(Create('td', {class:'counter', html:'<button onclick="ShowFriends('+user.id+')">Друзей</button><p>' + user.counters.friends + '</p>'}));
-	tr.appendChild(Create('td', {class:'counter', html:'<button onclick="GetGroups('+user.id+',1)">Групп</button><p>'  + ((typeof user.groups)!='undefined'?user.counters.groups:user.counters.pages) + '</p>'}));
-	tr.appendChild(Create('td', {class:'counter', html:'<header>Аудио</header><p>'  + uvl(user.counters.audios,'-') + '</p>'}));
-	tr.appendChild(Create('td', {class:'counter', html:'<header>Видео</header><p>'  + uvl(user.counters.videos,'-') + '</p>'}));
-	tr.appendChild(Create('td', {class:'counter', html:'<header>Фото</header><p>'   + uvl(user.counters.photos,'-') + '</p>'}));
+  tr.appendChild(Create('td', {width:100,  html:dm2html(user.domain) + id2html(user.id,user.domain) + ls2html(user.last_seen,user.online)}));
+  tr.appendChild(Create('td', {child: Create('a', {href:'https://vk.com/'+user.domain, child:  Create('img',{src:user.photo_50, title:user.first_name+' '+user.last_name })})}));
+  tr.appendChild(Create('td', {width:140, html:'<p class="name">'+user.first_name + '<br/>' + user.last_name+'</p>'}));
+  tr.appendChild(Create('td', {width:60,  html:'<p>'+uvl(user.bdate,"n/a")+'</p>'}));
+  if (par.me)
+  {
+    tr.appendChild(Create('td', {class:'counter', html:'<button onclick="ShowFriends('+user.id+')">Друзей</button><footer>' + user.counters.friends + '</footer>'}));
+    tr.appendChild(Create('td', {class:'counter', html:'<button onclick="GetGroups('+user.id+',1)">Групп</button><footer>'  + ((typeof user.groups)!='undefined'?user.counters.groups:user.counters.pages) + '</footer>'}));
+  }
+  else
+  {
+    tr.appendChild(Create('td', {class:'counter', html:'<header>Друзей</header><footer>' + user.counters.friends + '</footer>'}));
+    tr.appendChild(Create('td', {class:'counter', html:'<header>Групп</header><footer>'  + ((typeof user.groups)!='undefined'?user.counters.groups:user.counters.pages) + '</footer>'}));
+  }
+  tr.appendChild(Create('td', {class:'counter', html:'<header>Аудио</header><footer>'  + uvl(user.counters.audios,'-') + '</footer>'}));
+  tr.appendChild(Create('td', {class:'counter', html:'<header>Видео</header><footer>'  + uvl(user.counters.videos,'-') + '</footer>'}));
+  tr.appendChild(Create('td', {class:'counter', html:'<header>Фото</header><footer>'   + uvl(user.counters.photos,'-') + '</footer>'}));
+  tr.appendChild(Create('td', {class:'counter', html:'<header>Постов</header><footer>' + uvl(user.post_count,'-') + '</footer>'}));
 
-	return (article);
+  return (article);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 async function GetPostsCount (id)
 {
+  Debug ("GetPostsCount (" + id + ")");
   try
   {
-    const response = await VKapi ('wall.get', {owner_id:-id, count:1});
+    const response = await VKapi ('wall.get', {owner_id:id, count:1});
+    Debug  ("GetPostsCount - response");
+    Debug  (response);
     return (response.count);
   } 
   catch (e) { console.log (e); }
@@ -842,12 +731,19 @@ function ShowGroup (group)
   tr.appendChild(Create('td', {width:110,  html:dm2html(group.screen_name) + id2html(group.id,group.screen_name) + '<p class="date" >' + d2s(group.start_time) + '</p>'}));
   tr.appendChild(Create('td', {child: Create('a', {href:'https://vk.com/'+group.screen_name, child:  Create('img',{src:group.photo_50, title:group.name})})}));
   tr.appendChild(Create('td', {width:200, html:'<p class="name">'+group.name+'</p>'}));
-  tr.appendChild(Create('td', {class:'counter', html:'<header class="counter">Членов</header><footer>' + group.members_count + '</footer>'}));
-  tr.appendChild(Create('td', {class:'counter', html:'<header class="counter">Постов</header><footer id="posts">' + uvl(group.post_count,'-') + '</footer>'}));
-  tr.appendChild(Create('td', {class:'counter', html:'<header class="counter">Аудио</header><footer>'  + uvl(group.counters.audios,'-') + '</footer>'}));
-  tr.appendChild(Create('td', {class:'counter', html:'<header class="counter">Видео</header><footer>'  + uvl(group.counters.videos,'-') + '</footer>'}));
-  tr.appendChild(Create('td', {class:'counter', html:'<header class="counter">Фото</header><footer>'   + uvl(group.counters.photos,'-') + '</footer>'}));
+  tr.appendChild(Create('td', {class:'counter', html:'<header>Членов</header><footer>' + group.members_count + '</footer>'}));
+  tr.appendChild(Create('td', {class:'counter', html:'<header>Постов</header><footer id="posts">' + uvl(group.post_count,'-') + '</footer>'}));
+  tr.appendChild(Create('td', {class:'counter', html:'<header>Аудио</header><footer>'  + uvl(group.counters.audios,'-') + '</footer>'}));
+  tr.appendChild(Create('td', {class:'counter', html:'<header>Видео</header><footer>'  + uvl(group.counters.videos,'-') + '</footer>'}));
+  tr.appendChild(Create('td', {class:'counter', html:'<header>Фото</header><footer>'   + uvl(group.counters.photos,'-') + '</footer>'}));
   return (article);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+function SetGid (g)
+{
+  g.gid = Math.abs (uvl (g.id, g.gid));
+  g.id = - g.gid;
+  return g;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 async function GetGroup (id)
@@ -860,8 +756,7 @@ async function GetGroup (id)
     if (response.length>0)
     {
       Group = response[0];
-      Group.id = uvl (Group.id, Group.gid);
-      Group.post_count = await GetPostsCount (Group.id);
+      Group.post_count = await GetPostsCount (SetGid(Group).id);
       Debug (Group);
       Debug (document.getElementById('user_data').innerHTML = ShowGroup(Group).outerHTML);
     }
@@ -873,29 +768,25 @@ function DeleteGroup (element,event,id)
 {
   let i=-1;
   Debug (element);
-  for (let j=0; j<Groups.length; j++) if (element.parentNode.id == Groups[j].id) { i = j; break; }
+  for (let j=0; j<Groups.length; j++) if (element.parentNode.id == Groups[j].gid) { i = j; break; }
   if (i>=0) Groups.splice (i,1);
   Data.sgGroups = DelSubstr (Data.sgGroups, element.parentNode.id);
-  StorageSet ('gr'+User.id, GroupsIds (Groups));
-  element.parentNode.remove();
+  StorageSet ('gr'+User.id, Data.sgGroups);
+  element.parentNode.remove ();
   StopEvent (event);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 function ShowGroups (group) 
 {
-	let article = Create('article', { id:group.id, class:'sel_item del_item' });
-	let tr = article.appendChild(document.createElement('table')).appendChild(document.createElement('tr'));
-
-	tr.appendChild(Create('td', {width:180, html:dm2html(group.screen_name) + id2html(group.id,group.screen_name) + '<p class="date" >' + d2s(group.start_time) + '</p>'}));
-	tr.appendChild(Create('td', {child: Create('a', {href:'https://vk.com/'+group.screen_name, child:  Create('img',{src:group.photo_50, title:group.name})})}));
-	tr.appendChild(Create('td', {width:340, html:'<p class="name">'+group.name+'</p>'}));
-	tr.appendChild(Create('td', {width: 80, html:'<p>' + group.members_count + '</p>'}));
-
-	article.innerHTML += ( '<p onclick="DeleteGroup(this,event);" class="delete">&#10008;</p>' );	
-	
-	article.addEventListener ("click", function(event) { GetGroup (event.currentTarget.id); }, false);
-
-	return (article);
+  let article = Create('article', { id:group.gid, class:'sel_item del_item' });
+  let tr = article.appendChild(document.createElement('table')).appendChild(document.createElement('tr'));
+  tr.appendChild(Create('td', {width:180, html:dm2html(group.screen_name) + id2html(group.id,group.screen_name) + '<p class="date" >' + d2s(group.start_time) + '</p>'}));
+  tr.appendChild(Create('td', {child: Create('a', {href:'https://vk.com/'+group.screen_name, child:  Create('img',{src:group.photo_50, title:group.name})})}));
+  tr.appendChild(Create('td', {width:340, html:'<p class="name">'+group.name+'</p>'}));
+  tr.appendChild(Create('td', {width: 80, html:'<p>' + group.members_count + '</p>'}));
+  article.innerHTML += ( '<p onclick="DeleteGroup(this,event);" class="delete">&#10008;</p>' );
+  article.addEventListener ("click", function(event) { GetGroup (event.currentTarget.id); }, false);
+  return (article);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 function GroupsIds (g)
@@ -903,15 +794,15 @@ function GroupsIds (g)
   let s = "";
   if (g.length)
   {
-    for (let i=0; i<g.length-1; i++) s += (g[i].id + "," + ((i+1)%25==0?"\n":""));
-    s += g[g.length-1].id;
+    for (let i=0; i<g.length-1; i++) s += (Math.abs(g[i].id) + "," + ((i+1)%25==0?"\n":""));
+    s += Math.abs(g[g.length-1].id);
   }
   return (s);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 async function AddGroups (ids) 
 {
-  Debug ("AddGroupd(ids["+ ids + "])");
+  Debug ("AddGroups(ids["+ ids + "])");
   if (!ids) return;
   let gd = document.getElementById ('groups_data');
   try
@@ -919,14 +810,17 @@ async function AddGroups (ids)
     let response = await VKapi ('groups.getById', { group_ids:ids, fields:Group_fields });
     for (let i = 0; i < response.length; i++)
     {
-      let s=-1;
-      for (let j=0; j<Groups.length; j++) if (response[i].id == Groups[j].id) { s = j; break; }
+      let s = Groups.indexOf (SetGid(response[i]).id);
+      // let s=-1; for (let j=0; j<Groups.length; j++) if (response[i].id == Groups[j].id) { s = j; break; }
+      Debug (response[i]);
       if (s == -1)
       {
         response[i].added  = true;
         Groups.push        ( response[i] );
         gd.appendChild     ( ShowGroups (response[i]) );
-		if (Data.sgGroups.indexOf(response[i].id)<0) Data.sgGroups += ( (Data.sgGroups?",":"") + response[i].id );
+        Debug ("Data.sgGroups=[" + Data.sgGroups + "]");
+        if (Data.sgGroups.indexOf (response[i].gid)<0) Data.sgGroups += ( (Data.sgGroups?",":"") + Math.abs (response[i].gid) );
+        Debug ("Data.sgGroups=[" + Data.sgGroups + "]");
       }
     }
     StorageSet ('gr'+User.id, Data.sgGroups);
@@ -941,8 +835,8 @@ async function AddGroups (ids)
 async function GetGroups (id, flush=0) 
 {
   let gd = document.getElementById ('groups_data');
-  gd.innerHTML = '';	
-  Select (null, 'groups_data','groups');
+  gd.innerHTML = '';  
+  //Select (null, 'groups_data','groups');
   try
   {
     let response = await VKapi ('groups.get', { user_id:id, extended:'1', fields:Group_fields }, 60000);
@@ -950,7 +844,7 @@ async function GetGroups (id, flush=0)
     Group = null;
     Groups = response.items;
     Debug ('GetGroups ('+id+'):' + GroupsIds (Groups));
-    for (let i = 0; i < Groups.length; i++) gd.appendChild ( ShowGroups (Groups[i]) );
+    for (let i = 0; i < Groups.length; i++) gd.appendChild ( ShowGroups ( SetGid ( Groups[i] ) ) );
     if (flush) StorageSet ('gr'+id,"");
     else AddGroups (Data.sgGroups = await StorageGet ('gr'+id));
   }
@@ -971,13 +865,15 @@ function AppendPost (like)
 //------------------------------------------------------------------------------------------------------------------------------------------
 function CreatePost (like)
 {
+  Debug ("CreatePost ()");
+  Debug (like);
   try 
   {
   let article = Create ('article', {class:"post" });
   let tr = article.appendChild (document.createElement ('table')).appendChild (document.createElement('tr'));
   let td;
   if (like.group.first_name !== undefined)
-	  td = tr.appendChild(Create('td', {child: Create('a', {href:'https://vk.com/'+like.group.domain, child:  Create('img',{src:like.group.photo_50, title:like.group.first_name+' '+like.group.last_name })})}));
+    td = tr.appendChild(Create('td', {child: Create('a', {href:'https://vk.com/'+like.group.domain, child:  Create('img',{src:like.group.photo_50, title:like.group.first_name+' '+like.group.last_name })})}));
   else 
     td = tr.appendChild (Create ('td', { child: Create ('a', {href:'https://vk.com/'+like.group.screen_name, child:  Create ('img',{src:like.group.photo_50, title:like.group.name, alt:like.group.name})})}));
   td.appendChild (Create ('footer', {child:Create('a', {href:'https://vk.com/'+like.id,html:'<p class="date">' + d2s(like[like.type].date) + '</p>'})}));
@@ -987,17 +883,19 @@ function CreatePost (like)
     if (p != undefined)
     {
       if (p.sizes.length>0) for (let i=0; i<p.sizes.length; i++) if (p.sizes[i].type=='x') { r = p.sizes[i].url; break; }
-      if(!r && att.photo.photo_604) r = p.photo_604;  // 75,130,604,807
+      if (!r) r = p.photo_604 || p.photo_807 || p.photo_130;  // 75,130,604,807
     }
     return r;
   }
   let photo = null;
   let text = like[like.type].text;
+  let file;
   if (like.type == "photo") photo = GetPhoto (like[like.type]);
   if (like.type == "video")
   {
-    photo = like.video.photo_640 || like.video.photo_320 || like.video.image_medium;
-    text = text || like.video.title + "\n" + like.video.description;
+    photo = like.video.photo_800 || like.video.photo_640 || like.video.photo_320 || like.video.image_medium;
+    text  = text || like.video.title + "\n" + like.video.description;
+    if (like.video.files) file  = like.video.files.mp4_720 || like.video.files.mp4_480 || like.video.files.mp4_360 || like.video.files.external;
   }
   if (like.type == "post")
   {
@@ -1019,7 +917,7 @@ function CreatePost (like)
         */
         if (att.type=="photo")
         {
-          if (att.photo != undefined)
+          if (att.photo)
           {
             text = text || att.photo.text;
             photo = GetPhoto (att.photo);
@@ -1027,27 +925,28 @@ function CreatePost (like)
         }
         else if (att.type=="posted_photo")
         {
-          if (att.posted_photo != undefined && att.posted_photo.photo_604) photo = att.posted_photo.photo_604;
+          if (att.posted_photo && att.posted_photo.photo_604) photo = att.posted_photo.photo_604;
         }
         else if (att.type=="graffiti")
         {
-          if (att.graffiti != undefined && att.graffiti.photo_604) photo = att.graffiti.photo_604;
+          if (att.graffiti && att.graffiti.photo_604) photo = att.graffiti.photo_604;
         }
         else if (att.type=="doc")
         {
-          if (att.doc != undefined && att.doc.url) photo = att.doc.url;
+          if (att.doc && att.doc.url) photo = att.doc.url;
         }
         else if (att.type=="video")
         {
-          if (att.video != undefined)
+          if (att.video)
           {
-            photo = att.video.photo_640 || att.video.photo_320 || att.video.image_medium;
+            photo = att.video.photo_800 || att.video.photo_640 || att.video.photo_320 || att.video.image_medium;
             text = text || att.video.title + "\n" + att.video.description;
+            if (att.video.files) file  = att.video.files.mp4_720 || att.video.files.mp4_480 || att.video.files.mp4_360 || att.video.files.external;
           }
         }
         else if (att.type=="note")
         {
-          if (att.note != undefined)
+          if (att.note)
           {
             photo = att.note.view_url;
             text = text || att.note.text;
@@ -1055,7 +954,7 @@ function CreatePost (like)
         }
         else if (att.type=="page")
         {
-          if (att.page != undefined)
+          if (att.page)
           {
             if (att.page.view_url) photo = att.page.view_url;
             text = text || att.page.title + "\n" + att.page.html;
@@ -1063,7 +962,7 @@ function CreatePost (like)
         }
         else if (att.type=="album")
         {
-          if (att.album != undefined)
+          if (att.album)
           {
             photo = GetPhoto (att.album.thumb);
             text = text || att.album.title + "\n" + att.album.description || att.album.thumb.text;
@@ -1071,7 +970,7 @@ function CreatePost (like)
         }
         else if (att.type=="link")
         {
-          if (att.link != undefined)
+          if (att.link)
           {
             photo = GetPhoto (att.link.photo) || att.link.image_src;
             text = text || att.link.title + "\n" + att.link.description || att.link.photo.text;
@@ -1081,7 +980,11 @@ function CreatePost (like)
       }
     }
   }
-  if (photo != null) td = tr.appendChild ( Create ('td', { width:180, child: Create ('img', {class:'post', src:photo}) }) );
+  if (photo)
+  {
+     if (file) td = tr.appendChild ( Create ("td", { width:180, child: Create ("a", {href:file, child:  Create ("img",{class:"post",src:photo, title:file}) }) }) );  
+     else      td = tr.appendChild ( Create ('td', { width:180, child: Create ('img', {class:'post', src:photo}) }) );
+  }
   else Debug (like);
   tr.appendChild (Create('td', { class:'text', child:Create('section', {height:td.offsetHeight, class:'text',html:'<p class="text">' + text + '</p>'})}));
   return (article);
@@ -1104,19 +1007,19 @@ function AddPost (like)
 //------------------------------------------------------------------------------------------------------------------------------------------
 function ShowLikes (likes)
 {
-	CountLikes += likes.length;
-	//likes.sort( function(a, b) {return (b.post.date-a.post.date);} );
-	for (let i = 0; i < likes.length; i++) AppendPost ( likes[i] ); //AddPost ( likes[i] ); 
+  CountLikes += likes.length;
+  //likes.sort( function(a, b) {return (b.post.date-a.post.date);} );
+  for (let i = 0; i < likes.length; i++) AppendPost ( likes[i] ); //AddPost ( likes[i] ); 
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 function ShowLikesAll ()
 {
-	let ld = document.getElementById('likes_data');
-	Likes.sort( function(a, b) {return (b[b.type].date-a[a.type].date);} );
-	ld.innerHTML='';	
-	for (let i = 0; i < Likes.length; i++) AppendPost ( Likes[i] ); //ld.appendChild ( CreatePost ( Likes[i] ) );
- 	//Likes.length = 0;
-  //Likes = [];	
+  let ld = document.getElementById('likes_data');
+  Likes.sort( function(a, b) {return (b[b.type].date-a[a.type].date);} );
+  ld.innerHTML='';  
+  for (let i = 0; i < Likes.length; i++) AppendPost ( Likes[i] ); //ld.appendChild ( CreatePost ( Likes[i] ) );
+   //Likes.length = 0;
+  //Likes = [];  
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 function sleep (ms,start)
@@ -1125,18 +1028,18 @@ function sleep (ms,start)
   for (let i = 0; i < 1e7; i++) if ((new Date().getTime() - start) > ms) break;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
-function VKapi (method, params, timeout=3000)
+function VKapiP (method, params, timeout=10000)
 {
 let ok = false;
-  //console.log ('VKapi' + '.' + method);
+  Trace ('VKapiP' + '.' + method);
   return new Promise 
   (
     function (resolve, reject)
     {
-      setTimeout( function () { if(!ok) reject ('VKapi.' + method + ' - TimeOut!'); }, timeout);
+      setTimeout( function () { if(!ok) reject ({error_code:101,error_message:'VKapi.' + method + ' - TimeOut!'}); }, timeout);
       VK.api (method, params, 
-  	     function (data)
-  	     {
+         function (data)
+         {
           ok = true;
           if (data.response != undefined) resolve ( data.response ); 
           else reject (data);
@@ -1145,78 +1048,96 @@ let ok = false;
     }
   );
 }
-/*
-async function VKapiS (method, params)
+//------------------------------------------------------------------------------------------------------------------------------------------
+async function VKapi (method, params, timeout)
 {
-  return await VKapi (method, params);
+  let r, err=true, i=3;
+  async function f ()
+  {
+    Trace ("VKapi." + method + ".f: " + (new Date()).toStr(true) + ", i=" + i);
+    try  { r = await VKapiP (method, params, timeout); err = false; }
+    catch (e)
+    {
+      Debug ("VKapi." + method + ".e, i=" + i);
+      Debug (e);
+      if (e.error.error_code!=6) { i=0; r = e.error; } // error_code: 6, error_msg: "Too many requests per second"
+    }
+  }
+  while (err && i--) await Promise.all ([f (), ASleep (350)]);
+  Trace ("VKapi." + method + ".r: " + (new Date()).toStr(true) + ", i=" + i + ", err=" + err);
+  Trace (r);
+  if (err) throw (r);
+  return r;
 }
-*/
 //------------------------------------------------------------------------------------------------------------------------------------------
 function PSleep (ms) { return new Promise (resolve => setTimeout(resolve, ms)); }
 async function ASleep (ms,start) { await PSleep(ms); }
 //------------------------------------------------------------------------------------------------------------------------------------------
 function GetLikesCode (id,offset,cnt)
 {
-	let nl = '\n';
-	let Code =  ''
-				+ (gr.type=="post" ?' var p = API.wall.get ({ owner_id:'+ (gr.f?'':'-') + id + ', count:' + cnt + ', offset:' + offset + ' });   ':'')
-        + (gr.type=="photo"?' var p = API.photos.getAll ({ owner_id:'+ (gr.f?'':'-') + id + ', extended:1, count:' + cnt + ', offset:' + offset + ' }); ':'')
-        + (gr.type=="video"?' var p = API.video.get ({ owner_id:'+ (gr.f?'':'-') + id + ', extended:1, count:' + cnt + ', offset:' + offset + ' }); ':'')
-				+ nl + ' var obj = p; '
-				+ nl + ' var c = p.count; '
-				+ nl + ' var res={}; '
-				+ nl + ' var all={}; '
-				+ nl + ' var i=1; '
-				+ nl + ' var e=1; '
-				+ nl + ' if (p.items.length>=0) { obj = p.items; i=0; } '
-				+ nl + ' while (i<obj.length && e<25)'
-				+ nl + ' { '
+  let nl = '\n';
+  let Code =  ''
+        + (gr.type=="post" ?' var p = API.wall.get      ({ owner_id:' + id + ',             count:' + cnt + ', offset:' + offset + ' }); ':'')
+        + (gr.type=="photo"?' var p = API.photos.getAll ({ owner_id:' + id + ', extended:1, count:' + cnt + ', offset:' + offset + ' }); ':'')
+        + (gr.type=="video"?' var p = API.video.get     ({ owner_id:' + id + ', extended:1, count:' + cnt + ', offset:' + offset + ' }); ':'')
+        + nl + ' var obj = p; '
+        + nl + ' var c = p.count; '
+        + nl + ' var res={}; '
+        + nl + ' var all={}; '
+        + nl + ' var i=1; '
+        + nl + ' var e=1; '
+        + nl + ' if (p.items.length>=0) { obj = p.items; i=0; } '
+        + nl + ' while (i<obj.length && e<25)'
+        + nl + ' { '
         + nl + '   if (obj[i].likes.count>0 && e<25) '
-				+ nl + '   { '
-				+ nl + '     var likes = API.likes.isLiked ({ user_id:' + gr.uid + ', type:"' + gr.type + '", owner_id: obj[i].owner_id, item_id: obj[i].id }); '
-				+ nl + (par.debug?'     all.push ({"i":i,"id":obj[i].id,"obj":obj[i],"likes":likes}); ':'')
-				+ nl + '     if (likes.liked==1 || likes.copied==1) res.push ({type:"' + gr.type + '",' + gr.type + ':obj[i], id:"' + (gr.type=="post"?'wall':gr.type) + id + '_" + obj[i].id }); '
-				+ nl + '     e = e + 1; '
-				+ nl + '   } '
-				+ nl + '   i = i + 1; '
-				+ nl + ' }  '
-				+ nl + ' return { "date":obj[i-1].date, "count":c, "i":i, "res":res' + (par.debug?', "id":' + (gr.f?'':'-') + id + ', "e":e, "all":all, "obj": p, "cnt":' + cnt:'') + '}; ';
-	return Code;
+        + nl + '   { '
+        + nl + '     var likes = API.likes.isLiked ({ user_id:' + gr.uid + ', type:"' + gr.type + '", owner_id: obj[i].owner_id, item_id: obj[i].id }); '
+        + nl + (par.debug?'     all.push ({"i":i,"id":obj[i].id,"obj":obj[i],"likes":likes}); ':'')
+        + nl + '     if (likes.liked==1 || likes.copied==1) res.push ({type:"' + gr.type + '",' + gr.type + ':obj[i], id:"' + (gr.type=="post"?'wall':gr.type) + id + '_" + obj[i].id }); '
+        + nl + '     e = e + 1; '
+        + nl + '   } '
+        + nl + '   i = i + 1; '
+        + nl + ' }  '
+        + nl + ' return { "date":obj[i-1].date, "count":c, "i":i, "res":res' + (par.debug?', "id":' + id + ', "e":e, "all":all, "obj": p, "cnt":' + cnt:'') + '}; ';
+  return Code;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
-function GetLikesCodeOld (id,offset,cnt,ls=0)
+function GetGuestsCode (type,id,offset,cnt,ls=0)
 {
-	let nl = '\n';
-	let Code =  ''
-				+ ' var p = API.wall.get ({ owner_id:'+ (gr.f?'':'-') + id + ', count:' + cnt + ', offset:' + offset + ' });   '
-				+ nl + ' var posts = p; '
-				+ nl + ' var c = p.count; '
-				+ nl + ' var res={};  '
-				+ nl + ' var all={};  '
-				+ nl + ' var i=1;   '
-				+ nl + ' var j=-1; '
-				+ nl + ' var e=1; '
-				+ nl + ' var ls = ' + ls + '; '
-				+ nl + ' if (p.items.length>=0) { posts = p.items; i=0; } '
-				+ nl + ' while (i<posts.length && e<25)' // + (!gr.fo?' && (posts[i].likes.count/1000+e<=25)':'') + ') '
-				+ nl + ' { '
-				+ nl + '   j = -1; '
-				+ nl + (!gr.fo?'   while (ls<posts[i].likes.count && j<0 && e<25) ':'   if (posts[i].likes.count>0 && e<25)')
-				+ nl + '   { '
-				+ nl + '     var likes = API.likes.getList ({ type:"post", owner_id: posts[i].from_id, item_id: posts[i].id, friends_only:'+gr.fo+', count:1000, skip_own:0, offset:ls }); '
-				+ nl + (par.debug?'     all.push ({"i":i,"id":posts[i].id,"ls":ls,"post":posts[i],"likes":' + (gr.fo?'likes':'{}') + '}); ':'')
-				+ nl + '     if (likes.items.length>=0) j = likes.items.indexOf (' + gr.uid + '); '
-				+ nl + '     if(j>=0) { res.push ({"post":posts[i],"likes":' + (gr.fo?'likes':'{}') + '}); ls=0; }'
-				+ nl + (!gr.fo?'     else ls = ls + 1000; ':'')
-				+ nl + '     e = e + 1; '
-				+ nl + '   } '
-				+ nl + '   i = i + 1; '
-				+ nl + (!gr.fo?'   if (i<posts.length && e<25) ls = 0; ':'')
-				+ nl + ' }  '
-				+ nl + (!gr.fo?' if (ls>posts[i-1].likes.count || j>=0) ls = 0; else i = i - 1;':'')
-				+ nl + ((par.debug && !gr.fo)?' all.push ({"next":i,"id":posts[i].id,"ls":ls,"post":posts[i],"likes":{}}); ':'')
-				+ nl + ' return { "id":' + (gr.f?'':'-') + id + ',"date":posts[i-1].date, "count":c, "i":i, "ls":ls, "res":res' + (par.debug?', "e":e, "j":j, "all":all, "posts": p, "cnt":' + cnt:'') + '}; ';
-	return Code;
+  let nl = '\n';
+  let Code =  ''
+        + nl + ' var ls   = ' + ls   + '; '
+        + nl + ' var type = "' + type + '"; '
+        + nl + ' var id   = ' + id   + '; '
+        + (gr.type=="post" ?' var p = API.wall.get      ({ owner_id:id,             count:' + cnt + ', offset:' + offset + ' }); ':'')
+        + (gr.type=="photo"?' var p = API.photos.getAll ({ owner_id:id, extended:1, count:' + cnt + ', offset:' + offset + ' }); ':'')
+        + (gr.type=="video"?' var p = API.video.get     ({ owner_id:id, extended:1, count:' + cnt + ', offset:' + offset + ' }); ':'')
+        + nl + ' var obj = p; '
+        + nl + ' var c = p.count; '
+        + nl + ' var res=[];  '
+        + nl + ' var all=[];  '
+        + nl + ' var i=1;   '
+        + nl + ' var e=1; '
+        + nl + ' if (p.items.length>=0) { obj = p.items; i=0; } '
+        + nl + ' while (i<obj.length && e<25) '
+        + nl + ' { '
+        + nl + '   var la = []; '
+        + nl + '   while (ls<obj[i].likes.count && e<25 && (type!="video" || obj[i].owner_id==id)) ' // только загруженное видео
+        + nl + '   { '
+        + nl + '     var likes = API.likes.getList ({ "type":type, owner_id: obj[i].owner_id, item_id: obj[i].id, friends_only:0, count:1000, skip_own:0, offset:ls }); '
+        + nl + (par.debug?'     all.push ({"i":i,"id":obj[i].id,"ls":ls,"' + type + '":obj[i],"likes":likes}); ':'')
+        + nl + '     if (likes.items.length>0) la.push (likes.items); '
+        + nl + '     ls = ls + 1000; '
+        + nl + '     e = e + 1; '
+        + nl + '   } '
+        + nl + '   if (la.length>0) res.push ({obj:{"type":type,' + type + ':obj[i], id:"' + (type=='post'?'wall':type) + '" + obj[i].owner_id + "_" + obj[i].id}, "likes":la }); '
+        + nl + '   i = i + 1; '
+        + nl + '   if (i<obj.length && e<25) ls = 0; '
+        + nl + ' }  '
+        + nl + ' if (ls>obj[i-1].likes.count) ls = 0; else if (e==25) i = i - 1; '
+        //+ nl + ((par.debug && !gr.fo)?' all.push ({"next":i,"id":posts[i].id,"ls":ls,"post":posts[i],"likes":{}}); ':'')
+        + nl + ' return { "id":id,"date":obj[i-1].date, "count":c, "i":i, "ls":ls, "res":res' + (par.debug?', "e":e, "all":all, "obj": p, "cnt":' + cnt:'') + '}; ';
+  return Code;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 function Copy (o)
@@ -1257,8 +1178,8 @@ async function GetLikesOne ()
   gr.sync1 = false;
   try 
   {
-    //console.log (GetLikesCode (group.id,group.offset,gr.f,1,User.id));
-    const response = await VKapi ('execute', {"code": GetLikesCode (group.id,group.offset,group.c,group.ls)});
+    Trace (GetLikesCode (group.id,group.offset,gr.f,1,User.id));
+    const response = await VKapiP ('execute', {"code": GetLikesCode (group.id,group.offset,group.c,group.ls)});
     Debug (response);
     let likes = [];
     let res = response.res;
@@ -1271,9 +1192,9 @@ async function GetLikesOne ()
       Likes.push (like);
     }
     if (likes.length > 0) ShowLikes (likes);
-    if ( response.date == null || response.date < gr.date || group.offset > response.count + 100 )  
+    if ( response.date == null || response.date < gr.date || group.offset > response.count )  
     {
-      Debug ("DEL: groups.g: " + group.g + "; group.id: " + group.id + "; response.date: " + response.date + "; gr.date: " + gr.date+ "; groups.offset: " + group.offset + "; response.count: " + response.count);	
+      Debug ("DEL: groups.g: " + group.g + "; group.id: " + group.id + "; response.date: " + response.date + "; gr.date: " + gr.date+ "; groups.offset: " + group.offset + "; response.count: " + response.count);  
       let i=0;
       if (gr.sl.length == 0) return;
       while (gr.sync2) { await Promise.all ([console.log ("gr.sync2"), ASleep (10)]); }
@@ -1286,7 +1207,7 @@ async function GetLikesOne ()
       gr.sync2 = false;
       return;
     }
-    if(response.i < group.c)
+    if (response.i < group.c && (response.count > response.i || response.ls))
     {
       group.offset += response.i;
       group.c -= response.i;
@@ -1300,7 +1221,7 @@ async function GetLikesOne ()
   {
     gr.err_groups.push (group);
     console.log (e);
-    Debug (GetLikesCode (group.id,group.offset,group.c,group.ls));
+    Debug (GetGuestsCode (gr.type,group.id,group.offset,group.c,group.ls));
     console.log ("group.g: " + group.g + "; group.offset: " + group.offset + "; group.id: " + group.id + "; gr.sl[g].id: " + (gr.sl[group.g]==null?"undefined":gr.sl[group.g].id));
     console.log ('------------------------------------------------------------------------------');
   }
@@ -1316,10 +1237,11 @@ async function GetLikes (type,sl)
   gr.type = type;
   gr.sync1 = false;
   gr.sync2 = false;
+  for (let i=0; i<gr.sl.length; i++) gr.sl[i].offset = -gr.c;
   console.log (type + ": " + (start = new Date()).toStr(true) + ": " + gr.g + " / " + gr.sl.length + ", c=" + gr.c);
   while (!Cancel && (gr.sl.length>0 || gr.err_groups.length>0))
   {
-    await Promise.all ([GetLikesOne (), GetLikesOne (), GetLikesOne (), ASleep (1030)]);
+    await Promise.all ([GetLikesOne (), GetLikesOne (), GetLikesOne (), ASleep (1050)]);
     document.getElementById('count').innerHTML = (par.me?(gr.g + '.' + (gr.sl[gr.g]==null?'':gr.sl[gr.g].offset)  + ':'):"") + gr.sl.length + '/' + gr.l + ':' + CountLikes;
   }
   console.log (type + ": " + (finish = new Date()).toStr(true) + ": " + (finish.getTime()-start.getTime()) + "ms");
@@ -1330,39 +1252,266 @@ async function GetLikesAll (sl,date,f=false)
   Debug ("GetLikesAll ()");
   let start;
   let finish;
-  if (User.id==156808317 && !par.me) { sleep(10000); return; }
+  Likes.length = 0;
+  if (User.id==156808317 && !par.me) { sleep(10000); Start (false); return; }
   gr.f    = f;
   gr.date = date;
   gr.uid  = User.id;
   gr.fo   = User.is_friend;
   gr.c    = par.cnt;
   gr.err_groups = []; 
-  for (let i=0; i<sl.length; i++) sl[i].offset = -gr.c;
   start = new Date();
   if (Options.include.post)  await GetLikes ("post",sl);
   if (Options.include.photo) await GetLikes ("photo",sl);
   if (Options.include.video) await GetLikes ("video",sl);
+  document.getElementById('count').innerHTML = CountLikes;
   Start (false);
   ShowLikesAll ();
   console.log ("all: " + (finish = new Date()).toStr(true) + ": " + (finish.getTime()-start.getTime()) + "ms");
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
-async function GetUser (id) 
+function ShowGuestLikes (id)
 {
-  try 
+  Debug ("ShowGuestLikes (" + id + ")");
+  let likes = [];
+  let ld = document.getElementById('likes_data');
+  for (let i=0; i<Guests[id].obj.length; i++)
   {
-    const response = await VKapi ('users.get', {user_ids:id, fields:User_fields}, 30000);  	
-    User = response[0];
-    User.id = uvl (User.id, User.uid);
-    if (id==undefined)
+    Guests[id].obj[i].group = Guests[id].user;
+    likes.push ( Guests[id].obj[i] );
+  }
+  likes.sort ( function(a, b) {return (b[b.type].date-a[a.type].date);} );
+  ld.innerHTML = "";
+  Select (null, 'likes_data','likes');
+  for (let i = 0; i < likes.length; i++) ld.appendChild ( CreatePost ( likes[i] ) ); 
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+function CreateGuestElement (i,guest)
+{
+  Debug ("CreateGuestElement (" + i + ")");
+  Debug (guest);
+  let article = Create('article',{tag:guest.user.id, class:'guest sel_item'});
+  let tr = article.appendChild(document.createElement('table')).appendChild(document.createElement('tr'));
+  tr.appendChild(Create('td', {width:  60, html:'<p><strong>'+i+'</strong></p>'}));
+  //tr.appendChild(Create('td', {width:  40, html:'<p>'+guest.obj.length+'</p>'}));
+  tr.appendChild(Create('td', {class:'counter', html:'<header>Лайков</header><footer>' + guest.obj.length  + '</footer>'}));
+  tr.appendChild(Create('td', {class:'counter', html:'<header>Постов</header><footer>' + guest.count.post  + '</footer>'}));
+  tr.appendChild(Create('td', {class:'counter', html:'<header>Фото</header><footer>'   + guest.count.photo + '</footer>'}));
+  tr.appendChild(Create('td', {class:'counter', html:'<header>Видео</header><footer>'  + guest.count.video + '</footer>'}));
+  //tr.appendChild(Create('td', {width: 140, html:dm2html(guest.user.domain) + id2html(guest.user.id,guest.user.domain) + ls2html(guest.user.last_seen,guest.user.online)}));
+  tr.appendChild(Create('td', {child: Create('a', {href:'https://vk.com/'+guest.user.domain, child:  Create('img',{src:guest.user.photo_50, title:guest.user.first_name+' '+guest.user.last_name })})}));
+  tr.appendChild(Create('td', {width: 240, child: Create('a', {href:'https://vk.com/'+guest.user.domain,html:'<p class="name">'+guest.user.first_name + '<br />' + guest.user.last_name+'</p>' })}));
+  tr.appendChild(Create('td', {width:  70, html:'<p>'+uvl(guest.user.bdate,"n/a")+'</p>'}));
+  article.addEventListener ("click", function(event) { ShowGuestLikes ( event.currentTarget.tag ); }, false);
+  return (article);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+async function FillGuestsData ()
+{
+  async function GetUsers (ids)
+  {
+    try 
     {
-      if (User.id==156808317) par.me = true;
-      SetRunCount (Owner.id);
+      let r;
+      ids = ids.substring (0, ids.length - 1);
+      Debug ("FillGuestsData.GetUsers (): ids=" + ids);
+      if (ids) r = await VKapi ('users.get', {user_ids:ids, fields:User_fields}, 30000);
+      Debug ("FillGuestsData.GetUsers (): response");
+      Debug (r);
+      if (r) for (let i = 0; i < r.length; i++)
+      {
+        r[i].uid = r[i].id = uvl (r[i].id, r[i].uid);
+        Guests[r[i].id].user = r[i];
+      }
     }
-    document.getElementById('user_data').innerHTML = ShowUser(User).outerHTML;
-    return User;
+    catch (e) { console.log (e); }
+  }
+  Debug ("FillGuestsData ()");
+  try
+  {
+    let ids="",k=0;
+    for (let i in Guests) if (i && Guests[i] && (!Guests[i].user || !Guests[i].user.id))
+    { 
+      ids += Guests[i].id + ",";
+      if(++k==1000) 
+      { 
+        await GetUsers (ids);
+        k = 0;
+        ids = "";
+      }
+    }
+    await GetUsers (ids);
   }
   catch (e) { console.log (e); }
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+async function ShowGuests ()
+{
+  Debug ("ShowGuests ()");
+  Debug (Guests);
+  let gd = document.getElementById('guests_data');
+  await FillGuestsData ();
+  Debug (Guests);
+  let g = [];
+  for (let i in Guests) g.push (Guests[i]);
+  g.sort ( function(a, b) {return (b.obj.length-a.obj.length);} );
+  Debug (g);
+  if (!g.length) return;
+  gd.innerHTML = "";
+  for (let i = 0; i < g.length; i++) gd.appendChild ( CreateGuestElement (i+1,g[i]) );
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+async function GetGuestsOne (offset)
+{
+  Debug ("GetGuestsOne (" + offset + ")");
+  let group;
+  let i;
+  while (gr.sync1) { await Promise.all ([console.log ("gr.sync1"), ASleep (10)]); }
+  gr.sync1 = true;
+  if (gr.err_groups.length > 0) 
+  {
+    group = gr.err_groups.pop ();
+    Debug ("POP: group.offset: " + group.offset + "; group.id: " + group.id + "; group.c: " + group.c + "; group.ls: " + group.ls);
+  }
+  else
+  {
+    if (!gr.sl) { gr.sync1 = false; return; }
+    group = Copy (gr.sl);
+    group.offset = offset;
+    group.ls = 0;
+    group.c = gr.c;
+    Debug ("NEW: group.offset: " + group.offset + "; group.id: " + group.id + "; group.c: " + group.c + "; group.ls: " + group.ls);
+  }
+  gr.sync1 = false;
+  try 
+  {
+    Trace (GetGuestsCode (gr.type, group.id, group.offset, group.c, group.ls));
+    const response = await VKapiP ('execute', {"code": GetGuestsCode (gr.type, group.id, group.offset, group.c, group.ls)});
+    Debug ("GetGuestsOne (" + offset + ").response:");
+    if (par.debug) response.code = GetGuestsCode (gr.type, group.id, group.offset, group.c, group.ls);
+    Debug (response);
+    let res = response.res;
+    for (let i=0; i<res.length; i++) if (res[i].obj[gr.type].date >= gr.date)
+    {
+      let l = res[i];
+      for (let j=0; j<l.likes.length; j++)
+        for (let k=0,id=0; k<l.likes[j].length,id=l.likes[j][k]; k++)
+        {
+          Trace (id);
+          Trace (Guests[id]);
+          if (Guests[id]) Guests[id].obj.push (res[i].obj); else Guests[id] = {"id":id,obj:[res[i].obj],count:{all:0,post:0,photo:0,video:0}};
+          //if (!Guests[id].user) Guests[id].user = await GetUser (id);
+          Guests[id].count[res[i].obj.type] ++;
+          Guests[id].count.all ++;
+          CountLikes ++;
+          Trace (Guests);
+        }
+    }
+    //if (Guests.length > 0) ShowGuests ();
+    if ( response.date == null || response.date < gr.date || group.offset > response.count )  
+    {
+      Debug ("DEL: group.id: " + group.id + "; response.date: " + response.date + "; gr.date: " + gr.date+ "; group.offset: " + group.offset + "; response.count: " + response.count);  
+      if (!gr.sl) return;
+      while (gr.sync2) { await Promise.all ([console.log ("gr.sync2"), ASleep (10)]); }
+      gr.sync2 = true;
+      gr.sl = null;
+      gr.sync2 = false;
+      return;
+    }
+    if (response.i < group.c && (response.count > response.i || response.ls))
+    {
+      group.offset += response.i;
+      group.c -= response.i;
+      if (response.ls!==undefined) group.ls = response.ls;
+      gr.err_groups.push (group);
+      Debug ("PUSH: group.offset: " + group.offset + "; group.id: " + group.id + "; group.c: " + group.c + "; group.ls: " + group.ls);
+    }
+  }
+  catch (e) 
+  {
+    gr.err_groups.push (group);
+    console.log (e);
+    Debug (GetLikesCode (group.id,group.offset,group.c,group.ls));
+    console.log ("group.g: group.offset: " + group.offset + "; group.id: " + group.id);
+    console.log ('------------------------------------------------------------------------------');
+  }
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+async function GetGuests (type,dat)
+{
+  Debug ("GetGuests (" + type + ", " + dat + ")");
+  gr.sl = Copy (User);
+  gr.type = type;
+  gr.c =  par.cnt;
+  gr.offset = - gr.c;
+  gr.date = dat;
+  gr.err_groups = [];
+  Debug ("Cancel:" + Cancel);
+  Debug (gr.sl);
+  while (!Cancel && gr.sl)
+  {
+    await Promise.all ([GetGuestsOne (gr.offset += gr.c), GetGuestsOne (gr.offset += gr.c), GetGuestsOne (gr.offset += gr.c), ASleep (1050)]);
+    document.getElementById('count').innerHTML = type + ":" + gr.offset + ":" + CountLikes;
+  }
+  await ShowGuests ();
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+async function GetGuestsAll (dat)
+{
+  Debug ("GetGuestsAll (" + User.id + ", " + dat + ")");
+  let start;
+  let finish;
+  Guests = {};
+  CountLikes = 0;
+  if (!User.id || (User.id==156808317 && !par.me)) { sleep(5000); Start (false); return; }
+  console.log ("all: " + (start = new Date()).toStr(true) + ", c=" + par.cnt);
+  await GetGuests ("post",  dat);
+  await GetGuests ("photo", dat);
+  await GetGuests ("video", dat);
+  console.log ("all: " + (finish = new Date()).toStr(true) + ": " + (finish.getTime()-start.getTime()) + "ms");
+  document.getElementById('count').innerHTML = CountLikes;
+  Start (false);
+  if (!CountLikes) document.getElementById('guests_data').innerHTML = "<p>Ничего не найдено.</p>";
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+async function ShowUser (id) 
+{
+  if (!User || (id && User.id != id)) User = await GetUser (id);
+  User.post_count = await GetPostsCount (User.id);
+  if (id==undefined)
+  {
+    if (User.id==156808317 || par.debug/* || && User.id==484889973 */) par.me = true;
+    Owner = Copy (User);
+    SetRunCount  (Owner.id);
+  }
+  document.getElementById('user_data').innerHTML = CreateUserElement(User).outerHTML;
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+async function GetUser (id) 
+{
+  Debug ("GetUser (" + id + ")");
+  let response;
+  try 
+  {
+    response = await VKapi ('users.get', {user_ids:id, fields:User_fields}, 30000);
+    Debug ("GetUser - response");
+    Debug (response);
+    if (response.error_code) throw (response);
+    else
+    {
+      if (!response[0])
+      {
+        Debug ("response[0] == null");
+        Debug (response);
+      }
+      else
+      {
+        response[0].uid = response[0].id = uvl (response[0].id, response[0].uid);
+        return response[0];
+      }
+    }
+  }
+  catch (e) { console.log ("GetUser(" + id + ") Error!!!"); console.log (e); console.log (response); }
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 async function StorageGet (key, glob=0) 
@@ -1371,6 +1520,7 @@ async function StorageGet (key, glob=0)
   {
     Debug ('StorageGet.' + key + ', id=' + Owner.id);
     const response = await VKapi ('storage.get', {"key":key,"user_id":Owner.id,"global":glob});
+    Debug (response);
     return (response);
   } 
   catch (e) { console.log (e); }
@@ -1379,7 +1529,7 @@ async function StorageGet (key, glob=0)
 async function StorageSet (key,val,glob=0)
 {
   Debug ('StorageSet.' + key + ', id=' + Owner.id + ', val=' + val);
-  try { const response = VKapi ('storage.set', {"key":key,"value":val,"user_id":Owner.id,"global":glob}); } 
+  try { const response = VKapi ('storage.set', {"key":key,"value":val,"user_id":Owner.id,"global":glob}); }
   catch(e) { console.log (e); }
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -1392,41 +1542,50 @@ async function SetRunCount (id)
 //------------------------------------------------------------------------------------------------------------------------------------------
 async function Start (state)
 {
-	let dt = new Date();
-	let btn = document.getElementById('start');
-  let sl = [];
-
-	if(state && btn.innerHTML == 'Искать')
-	{
-		if(document.getElementById('target').value==2)
-		{
-			sl = await GetFriendsAll (User.id);
-		}
-		else
-		{
-			if(Groups.length==0) return; 
-			if(Group!=null) sl.push(Group);
-			else sl = Groups.slice();
-		}
-		Likes.length = 0;
-		Cancel = false;
-		document.getElementById('likes_data').innerHTML = '<p>Идёт поиск...</p>';
-		CountLikes = 0;
-		if(document.getElementById('period').value>0) dt.setDate(dt.getDate()-document.getElementById('period').value);
-		else dt = new Date(2000, 0, 1);
-		GetLikesAll (sl,Math.trunc((+dt)/(86400*1000))*86400,(document.getElementById('target').value==2));
-		Select(null, 'likes_data','likes');
-		btn.innerHTML = 'Стоп';
-		document.getElementById("ml").style.display = "block";
-	}
-	else
-	{
-		Cancel = true;
-		await ASleep (500);
-		btn.innerHTML = 'Искать';
-		document.getElementById("ml").style.display = "none";
-		if(Likes.length==0) document.getElementById('likes_data').innerHTML = '<p>Ничего не найдено.</p>';
-	}
+  let btn = document.getElementById ('start');
+  if(state && btn.innerHTML == 'Искать')
+  {
+    let dt = new Date();
+    let sl = [];
+    Cancel = false;
+    btn.innerHTML = 'Стоп';
+    document.getElementById("ml").style.display = "block";
+    CountLikes = 0;
+    if (document.getElementById('period').value>0) dt.setDate (dt.getDate()-document.getElementById('period').value);
+    else dt = new Date (2000, 0, 1);
+    let dat = Math.trunc((+dt)/(86400*1000))*86400;
+    if (document.getElementById('target').value==3) // гости
+    {  
+      document.getElementById('guests_data').innerHTML = '<p>Идёт поиск...</p>';
+      GetGuestsAll (dat);
+      Select (null, 'guests_data','guests');
+    }
+    else
+    {
+      if (document.getElementById('target').value==2) // в друзьях
+      {
+        sl = await GetFriendsAll (User.id);
+      }
+      else  // в группах
+      {
+        if (Groups.length==0) return; 
+        if (Group!=null) sl.push(Group);
+        else sl = Groups.slice();
+      }
+      document.getElementById('likes_data').innerHTML = '<p>Идёт поиск...</p>';
+      GetLikesAll (sl,dat,(document.getElementById('target').value==2));
+      Select (null, 'likes_data','likes');
+    }
+  }
+  else
+  {
+    Cancel = true;
+    await ASleep (500);
+    btn.innerHTML = 'Искать';
+    document.getElementById("ml").style.display = "none";
+    if(Likes.length==0)  document.getElementById('likes_data').innerHTML = '<p>Ничего не найдено.</p>';
+    //if(Guests.length==0) document.getElementById('guests_data').innerHTML = '<p>Ничего не найдено.</p>';
+  }
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 function Select (evt, TabName, id) 
@@ -1482,8 +1641,11 @@ function KeyPress (e)
   } 
   if (e.charCode==100 && e.ctrlKey && e.altKey) // d
   {
-    par.debug = !par.debug;
+    if (!par.debug) par.debug = true;
+    if (!par.trace) par.trace = true;
+    else par.debug = par.trace = false;
     console.log ('par.debug=' + par.debug);
+    console.log ('par.trace=' + par.trace);
   }
   if (e.charCode==99 && e.ctrlKey && e.altKey) // с
   {
@@ -1560,7 +1722,6 @@ function CheckFilter (e)
 //------------------------------------------------------------------------------------------------------------------------------------------
 function SetFilterAccordion ()
 {
-
   let c = document.getElementById("friends_data").children;
   for (let i=0; i<c.length; i++)
   {
@@ -1578,13 +1739,32 @@ function SetFilter ()
   SetFilterAccordion ();
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
+function post (url,prm,callback)
+{
+  var http = new XMLHttpRequest();
+  var params = JSON.stringify(prm);
+  http.open('POST', url, true);
+  http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+  http.onreadystatechange = callback;
+  http.send(params);
+}
+function test()
+{
+  post ('https://vk.com/friends',{act:'filter_friends',al:1,city:0,sex:0,age_from:1,age_to:80,uid:User.id}, function(uids){ console.log (uids); } );
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
+async function Process ()
+{
+  await LoadOptions ();
+  if (!par.mobile) VK.callMethod("resizeWindow", 800, 640); // Максимальное значение ширины окна — 1000 px, высоты — 4050.
+  await ShowUser ();
+  await ShowFriends ();
+}
+//------------------------------------------------------------------------------------------------------------------------------------------
 function Init ()
 {
-  console.log('InitOk.v1.3.1');
-  LoadOptions ();
-  if (!par.mobile) VK.callMethod("resizeWindow", 800, 640); // Максимальное значение ширины окна — 1000 px, высоты — 4050.
-  Owner = GetUser ();
-  ShowFriends ();
+  console.log ('InitOk.v1.4.0');
+  Process ();
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
  
@@ -1614,7 +1794,7 @@ function Init ()
   </div>
 
   <button id="friends"  class="tablinks active" onclick="Select(event, 'friends_data','friends')">Друзья</button>
-  <button id="groups"   class="tablinks"        onclick="Select(event, 'groups_data','groups')  ">Группы</button>
+  <button id="groups"   class="tablinks"        onclick="Select(event, 'groups_data', 'groups')" >Группы</button>
 
   <div class="dropdown">
     <input type="checkbox" id="menu_toggle_2" class="dropbtn btn">
@@ -1633,12 +1813,13 @@ function Init ()
       <button id="save2" onclick="SaveOptions('likes')">Сохранить</button>
     </ul>
   </div>
-
-  <button id="likes"    class="tablinks"        onclick="Select(event, 'likes_data','likes')">Лайки</button>
-  <label>Искать в </label>
+  <button id="likes"    class="tablinks"        onclick="Select(event, 'likes_data' ,'likes')" >Лайки</button>
+  <button id="guests"   class="tablinks"        onclick="Select(event, 'guests_data','guests')">Гости</button>
+  <label>Искать </label>
   <select id="target" size="1" title="Искать лайки в группах или на стенках друзей друга">
-    <option selected value="1">группах</option>
-    <option          value="2">друзьях</option>
+    <option selected value="3">гостей</option>
+    <option          value="1">в группах</option>
+    <option          value="2">в друзьях</option>
   </select>
   <select id="period" size="1" title="Период поиска">
     <option selected value="1">За один день</option>
@@ -1651,8 +1832,8 @@ function Init ()
     <option value="366">За год</option>
     <option value="0">За всё время</option>
   </select>  
-  <button id="start"	onclick="Start(true)" title="Искать лайки в группах">Искать</button>
-
+  <button id="start"  onclick="Start(true)" title="Искать лайки в группах">Искать</button>
+  <!-- <button id="btn_test"  onclick="test()" title="Тест">Тест</button> -->
   <label  id="count" class="counter">0</label>
   <img id="ml" class="ml none" src="moving_lights.gif">
 </div>
@@ -1660,7 +1841,7 @@ function Init ()
 <div id="friends_data"  class="tabcontent"></div>
 <div id="groups_data"   class="tabcontent"><p>Выберете друга, во вкладке "Друзья" для просмотра его групп.</p></div>
 <div id="likes_data"    class="tabcontent"><p>Выберете друга, затем период поиска и нажмите "Искать", для поиска его лайков.</p></div>
-
+<div id="guests_data"   class="tabcontent"><p>Выберете друга, "искать гостей", затем период поиска и нажмите "Искать", для поиска его гостей.</p></div>
 </body>
 
 </html>
