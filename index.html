@@ -1664,7 +1664,8 @@ async function LoadOptions ()
   let j = {};
   Debug (l);
   if (!l) return;
-  try { j = JSON.parse (l); } catch(e) { console.log (e); console.log (l); }
+  
+  try { j = JSON.parse (l); } catch(e) { console.log (e); console.log (l); return; }
   
   if (j.likes.load)
   {
