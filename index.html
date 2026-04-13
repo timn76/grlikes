@@ -1663,9 +1663,9 @@ async function LoadOptions ()
   let l = await StorageGet ("options");
   let j = {};
   Debug (l);
-  if (!l) return;
+  if (!l || !l.options) return;
   
-  try { j = JSON.parse (l); } catch(e) { console.log (e); console.log (l); return; }
+  try { j = JSON.parse (l.options); } catch(e) { console.log (e); console.log (l); return; }
   
   if (j.likes.load)
   {
