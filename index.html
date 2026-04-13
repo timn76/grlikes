@@ -1661,9 +1661,10 @@ function SaveOptions ()
 async function LoadOptions ()
 {
   let l = await StorageGet ("options");
+  let j = {};
   Debug (l);
   if (!l) return;
-  try { let j = JSON.parse (l); } catch(e) { console.log (e); console.log (l); }
+  try { j = JSON.parse (l); } catch(e) { console.log (e); console.log (l); }
   
   if (j.likes.load)
   {
